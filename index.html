@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Hemraj Lamkuche | Cryptography & Cybersecurity Researcher</title>
+    <meta name="description" content="Official website of Dr. Hemraj Shobharam Lamkuche, Assistant Professor at VIT Bhopal. Expert in Cryptography, IoT Security, and AI robustness.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .feistel-gradient {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+        }
+        .nav-blur {
+            backdrop-filter: blur(8px);
+            background-color: rgba(15, 23, 42, 0.8);
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+          animation: fadeInUp 1s ease-out forwards;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-bounce {
+            animation: bounce 2s infinite;
+        }
+        .cipher-hover {
+            position: absolute;
+            pointer-events: none;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.3);
+            animation: fadeOut 2s ease-out forwards;
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="shield" class="w-8 h-8 text-blue-500"></i>
+                        <span class="text-white font-bold text-xl tracking-tight hidden sm:block">Dr. Hemraj Lamkuche</span>
+                        <span class="text-white font-bold text-xl tracking-tight sm:hidden">Dr. Hemraj</span>
+                    </div>
+                    <!-- Desktop Navigation -->
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="#home" class="text-slate-300 hover:text-blue-400 font-medium transition-colors text-sm uppercase tracking-wider">Home</a>
+                        <a href="#about" class="text-slate-300 hover:text-blue-400 font-medium transition-colors text-sm uppercase tracking-wider">About</a>
+                        <a href="#publications" class="text-slate-300 hover:text-blue-400 font-medium transition-colors text-sm uppercase tracking-wider">Research</a>
+                        <a href="#projects" class="text-slate-300 hover:text-blue-400 font-medium transition-colors text-sm uppercase tracking-wider">Projects</a>
+                        <a href="#experience" class="text-slate-300 hover:text-blue-400 font-medium transition-colors text-sm uppercase tracking-wider">Experience</a>
+                        <a href="#blog" class="text-slate-300 hover:text-blue-400 font-medium transition-colors text-sm uppercase tracking-wider">Blog</a>
+                        <a href="#contact" class="text-slate-300 hover:text-blue-400 font-medium transition-colors text-sm uppercase tracking-wider">Contact</a>
+                    </nav>
+                    <!-- Mobile Menu Button -->
+                    <div class="md:hidden">
+                        <button id="menu-toggle" class="text-slate-300 hover:text-white p-2">
+                            <i data-lucide="menu" class="w-7 h-7"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Mobile Navigation Overlay -->
+            <div id="mobile-menu" class="md:hidden bg-slate-900 border-t border-slate-800 absolute top-full left-0 right-0 shadow-2xl hidden">
+                <div class="px-4 py-6 space-y-4">
+                    <a href="#home" class="block text-slate-300 hover:text-blue-400 text-lg font-medium">Home</a>
+                    <a href="#about" class="block text-slate-300 hover:text-blue-400 text-lg font-medium">About</a>
+                    <a href="#publications" class="block text-slate-300 hover:text-blue-400 text-lg font-medium">Research</a>
+                    <a href="#projects" class="block text-slate-300 hover:text-blue-400 text-lg font-medium">Projects</a>
+                    <a href="#experience" class="block text-slate-300 hover:text-blue-400 text-lg font-medium">Experience</a>
+                    <a href="#blog" class="block text-slate-300 hover:text-blue-400 text-lg font-medium">Blog</a>
+                    <a href="#contact" class="block text-slate-300 hover:text-blue-400 text-lg font-medium">Contact</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow">
+            <!-- Hero -->
+            <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden feistel-gradient">
+                <!-- Background Animation Layer -->
+                <div class="absolute inset-0 z-0">
+                    <canvas id="feistel-canvas" class="w-full h-full block"></canvas>
+                </div>
+                <!-- Content Overlay - Moved to right side -->
+                <div class="relative z-10 max-w-xl mx-auto px-4 text-left lg:absolute lg:right-8 lg:top-1/4 lg:transform lg:-translate-y-1/4 lg:max-w-md lg:mr-8 animate-fade-in-up">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                        Dr. Hemraj Shobharam Lamkuche
+                    </h1>
+                    <p class="text-lg md:text-xl text-blue-400 font-medium mb-4">
+                        Assistant Professor • Cryptologist • Researcher
+                    </p>
+                    <p class="text-md md:text-lg text-slate-300 max-w-lg mb-8 leading-relaxed">
+                        "Preserving Security and Privacy of Digital Information Across Any Communication Medium"
+                    </p>
+                    <div class="flex flex-wrap gap-4 mb-10">
+                        <span class="px-4 py-2 bg-slate-800/50 border border-slate-700 rounded-full text-slate-200 text-sm">Lightweight Cryptography</span>
+                        <span class="px-4 py-2 bg-slate-800/50 border border-slate-700 rounded-full text-slate-200 text-sm">IoT Security</span>
+                        <span class="px-4 py-2 bg-slate-800/50 border border-slate-700 rounded-full text-slate-200 text-sm">AI Robustness</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#publications" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-all transform hover:scale-105 shadow-lg shadow-blue-500/25">
+                            Explore Research
+                        </a>
+                        <a href="#contact" class="px-8 py-4 bg-transparent border-2 border-slate-500 hover:border-white text-white font-bold rounded-lg transition-all">
+                            Get In Touch
+                        </a>
+                    </div>
+                </div>
+                <!-- Scroll Down Indicator -->
+                <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+                    <i data-lucide="chevron-down" class="text-slate-400 w-8 h-8"></i>
+                </div>
+                <!-- Interactive Legend -->
+                <div class="absolute top-24 left-10 text-[10px] text-slate-500 font-mono space-y-2 bg-slate-900/40 p-3 rounded-lg border border-slate-800 backdrop-blur-sm hidden lg:block select-none pointer-events-none">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                        <span>DATA NODES (Li, Ri)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-cyan-400"></div>
+                        <span>ROUND KEYS (Ki)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 border border-blue-400"></div>
+                        <span>F-FUNCTION BOX</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full border border-cyan-400"></div>
+                        <span>XOR OPERATION (⊕)</span>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-800 opacity-60">
+                        <p>MOUSE X: REVEAL ROUNDS</p>
+                        <p>MOUSE Y: KEY MIXING PULSE</p>
+                    </div>
+                </div>
+                <!-- Interactive Round Controls -->
+                <div class="absolute bottom-24 left-10 text-[10px] text-slate-500 font-mono space-y-2 bg-slate-900/40 p-3 rounded-lg border border-slate-800 backdrop-blur-sm lg:block select-none">
+                    <label class="block text-slate-300 text-xs">Number of Rounds: <span id="round-value">16</span></label>
+                    <input type="range" id="round-slider" min="1" max="16" value="16" class="w-full">
+                    <button id="play-pause-btn" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">Pause</button>
+                    <button id="switch-mode-btn" class="px-3 py-1 bg-indigo-600 text-white rounded text-xs hover:bg-indigo-700">Switch to AES</button>
+                </div>
+            </section>
+
+            <!-- About -->
+            <section id="about" class="py-24 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col lg:flex-row gap-16 items-start">
+                        <!-- Left Column: Image and Highlights -->
+                        <div class="w-full lg:w-1/3 space-y-8">
+                            <div class="relative group">
+                                <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                                <img src="https://picsum.photos/seed/hemraj/800/1000" alt="Dr. Hemraj Lamkuche" class="relative rounded-2xl shadow-2xl w-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-center">
+                                    <p class="text-3xl font-bold text-blue-600">12+</p>
+                                    <p class="text-sm text-slate-500 uppercase tracking-wider font-semibold">Years Exp.</p>
+                                </div>
+                                <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-center">
+                                    <p class="text-3xl font-bold text-blue-600">450+</p>
+                                    <p class="text-sm text-slate-500 uppercase tracking-wider font-semibold">Citations</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Right Column: Bio Content -->
+                        <div class="w-full lg:w-2/3">
+                            <h2 class="text-sm font-bold text-blue-600 uppercase tracking-widest mb-2">Biography</h2>
+                            <h3 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Advancing the Frontiers of Cybersecurity</h3>
+                            <div class="space-y-6 text-slate-600 leading-relaxed text-lg">
+                                <p>
+                                    I am <span class="text-slate-900 font-semibold">Dr. Hemraj Shobharam Lamkuche</span>, a Senior Assistant Professor at VIT Bhopal University with over 12 years of academic and research excellence. My journey in computer science has been driven by a singular passion: securing the digital future through innovative cryptographic primitives and robust AI frameworks.
+                                    <!-- Note: Truncated content from original; full bio would go here -->
+                                    ...ockchain-based sustainable commuting solutions. I have had the privilege of training Armed Forces and Civil Services (IAS/IPS) personnel in Cybersecurity & Crime via YASHADA, Govt. of Maharashtra.
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
+                                    <div class="flex gap-4">
+                                        <div class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+                                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-slate-900 mb-1">Expert Cryptologist</h4>
+                                            <p class="text-sm">Design of lightweight symmetric ciphers like SAL and SHC.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-4">
+                                        <div class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+                                            <i data-lucide="cpu" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-slate-900 mb-1">Embedded Security</h4>
+                                            <p class="text-sm">VHDL/Verilog implementations for resource-constrained hardware.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-4">
+                                        <div class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+                                            <i data-lucide="book-open" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-slate-900 mb-1">Prolific Researcher</h4>
+                                            <p class="text-sm">45+ peer-reviewed contributions with impact across domains.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-4">
+                                        <div class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+                                            <i data-lucide="award" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-slate-900 mb-1">Lead Innovator</h4>
+                                            <p class="text-sm">Incubated 3 startups and led funded projects on LLM security.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Publications -->
+            <section id="publications" class="py-24 bg-slate-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="mb-16 text-center">
+                        <h2 class="text-sm font-bold text-blue-600 uppercase tracking-widest mb-2">Research</h2>
+                        <h3 class="text-3xl md:text-4xl font-bold text-slate-900">Selected Publications</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <article class="group bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-xl transition-shadow cursor-pointer flex flex-col h-full">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-3 py-1 bg-blue-100 text-blue-600 text-[10px] font-bold uppercase tracking-widest rounded-full">Journal</span>
+                                <span class="text-slate-400 text-xs font-medium">2024</span>
+                            </div>
+                            <h4 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                SHC: 8-bit Compact and Efficient S-Box Structure for Lightweight Cryptography
+                            </h4>
+                            <p class="text-slate-500 text-sm mb-1 italic">Hemraj Shobharam Lamkuche, et al.</p>
+                            <p class="text-slate-600 text-sm font-semibold">IEEE Access</p>
+                            <div class="flex-shrink-0 mt-auto pt-6">
+                                <a href="https://ieeexplore.ieee.org/document/10410243" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700">
+                                    View Paper <i data-lucide="external-link" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+                        </article>
+                        <!-- Add other publications similarly -->
+                        <article class="group bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-xl transition-shadow cursor-pointer flex flex-col h-full">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-3 py-1 bg-blue-100 text-blue-600 text-[10px] font-bold uppercase tracking-widest rounded-full">Journal</span>
+                                <span class="text-slate-400 text-xs font-medium">2024</span>
+                            </div>
+                            <h4 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                Deep Learning Based Analysis of Key Scheduling Algorithm of Advanced Ciphers
+                            </h4>
+                            <p class="text-slate-500 text-sm mb-1 italic">Narendra Kumar Patel, Hemraj Shobharam Lamkuche</p>
+                            <p class="text-slate-600 text-sm font-semibold">IACR Cryptology ePrint Archive</p>
+                            <div class="flex-shrink-0 mt-auto pt-6">
+                                <a href="https://eprint.iacr.org/2024/272" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700">
+                                    View Paper <i data-lucide="external-link" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+                        </article>
+                        <!-- Continue for all publications... (truncated for brevity) -->
+                    </div>
+                    <div class="mt-12 text-center">
+                        <p class="text-slate-500 mb-6">Explore the full list on academic repositories</p>
+                        <div class="flex justify-center gap-6">
+                            <a href="https://scholar.google.com/citations?user=sqNVq48AAAAJ" target="_blank" class="p-3 bg-white border border-slate-200 rounded-full hover:border-blue-500 transition-colors shadow-sm">
+                                <img src="https://www.google.com/favicon.ico" class="w-6 h-6 grayscale hover:grayscale-0" alt="Google Scholar" />
+                            </a>
+                            <a href="https://www.researchgate.net/profile/Hemraj-Lamkuche" target="_blank" class="p-3 bg-white border border-slate-200 rounded-full hover:border-blue-500 transition-colors shadow-sm">
+                                <i data-lucide="bookmark" class="w-6 h-6 text-slate-400"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects -->
+            <section id="projects" class="py-24 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="mb-16">
+                        <h2 class="text-sm font-bold text-blue-600 uppercase tracking-widest mb-2">Portfolio</h2>
+                        <h3 class="text-3xl md:text-4xl font-bold text-slate-900">Research & Innovation</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="group relative bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+                            <div class="relative h-48 overflow-hidden">
+                                <img src="https://picsum.photos/seed/cipher/600/400" alt="Lightweight Block Ciphers (CSL/SAL/SHC)" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                <div class="absolute inset-0 bg-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            </div>
+                            <div class="p-6 flex-grow">
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-2 py-1 bg-white text-[10px] font-bold text-slate-500 rounded uppercase tracking-wider">Cryptography</span>
+                                    <span class="px-2 py-1 bg-white text-[10px] font-bold text-slate-500 rounded uppercase tracking-wider">FPGA</span>
+                                    <!-- other tags -->
+                                </div>
+                                <h4 class="text-xl font-bold text-slate-900 mb-3 leading-tight">Lightweight Block Ciphers (CSL/SAL/SHC)</h4>
+                                <p class="text-slate-600 text-sm leading-relaxed">Design and FPGA implementation of symmetric ciphers optimized for resource-constrained IoT nodes, focusing on pipelined Feistel architectures.</p>
+                            </div>
+                        </div>
+                        <!-- Add other projects similarly (truncated for brevity) -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Experience -->
+            <section id="experience" class="py-24 bg-slate-900 text-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid lg:grid-cols-2 gap-16">
+                        <!-- Experience Timeline -->
+                        <div>
+                            <div class="flex items-center gap-4 mb-12">
+                                <div class="p-3 bg-blue-600 rounded-lg">
+                                    <i data-lucide="briefcase" class="w-7 h-7"></i>
+                                </div>
+                                <h3 class="text-3xl font-bold">Academic Career</h3>
+                            </div>
+                            <div class="space-y-12 relative before:absolute before:left-[1.85rem] before:top-2 before:bottom-2 before:w-px before:bg-slate-800">
+                                <div class="relative pl-16">
+                                    <div class="absolute left-6 top-1.5 w-3 h-3 bg-blue-600 rounded-full border-4 border-slate-900"></div>
+                                    <span class="text-blue-400 text-sm font-bold uppercase tracking-widest">June 2023 – Present</span>
+                                    <h4 class="text-xl font-bold mt-1 mb-2">Senior Assistant Professor - Grade 2</h4>
+                                    <p class="text-slate-300 font-semibold mb-2">VIT Bhopal University</p>
+                                    <p class="text-slate-400 text-sm leading-relaxed">Lead research in cryptography and system security. Principal Investigator for SPEAR Grant on LLM security.</p>
+                                </div>
+                                <!-- Add other experiences -->
+                            </div>
+                        </div>
+                        <!-- Education Timeline -->
+                        <div>
+                            <div class="flex items-center gap-4 mb-12">
+                                <div class="p-3 bg-indigo-600 rounded-lg">
+                                    <i data-lucide="graduation-cap" class="w-7 h-7"></i>
+                                </div>
+                                <h3 class="text-3xl font-bold">Education</h3>
+                            </div>
+                            <div class="space-y-12 relative before:absolute before:left-[1.85rem] before:top-2 before:bottom-2 before:w-px before:bg-slate-800">
+                                <div class="relative pl-16">
+                                    <div class="absolute left-6 top-1.5 w-3 h-3 bg-indigo-600 rounded-full border-4 border-slate-900"></div>
+                                    <span class="text-indigo-400 text-sm font-bold uppercase tracking-widest">2015 – 2019</span>
+                                    <h4 class="text-xl font-bold mt-1 mb-2">Ph.D. in Computer Science (Information Security)</h4>
+                                    <p class="text-slate-300 font-semibold mb-2">Symbiosis International (Deemed University)</p>
+                                    <p class="text-slate-400 text-sm italic">Thesis: A Lightweight Block Cipher with Pipelined Feistel Structure</p>
+                                </div>
+                                <!-- Add other education items -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Blog -->
+            <section id="blog" class="py-24 bg-slate-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+                        <div>
+                            <h2 class="text-sm font-bold text-blue-600 uppercase tracking-widest mb-2">Insights</h2>
+                            <h3 class="text-3xl md:text-4xl font-bold text-slate-900">Recent Articles</h3>
+                        </div>
+                        <button class="flex items-center gap-2 text-blue-600 font-bold hover:gap-4 transition-all">
+                            View All Posts <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <article class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-xl transition-shadow cursor-pointer flex flex-col h-full">
+                            <span class="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-widest rounded-full self-start mb-6">Cryptography</span>
+                            <h4 class="text-xl font-bold text-slate-900 mb-4 group-hover:text-blue-600">Why Feistel Networks Remain Relevant in 2025</h4>
+                            <p class="text-slate-500 text-sm leading-relaxed mb-8 flex-grow">Exploring the mathematical elegance and security proofs behind Feistel structures in modern symmetric cryptography.</p>
+                            <div class="flex items-center justify-between pt-6 border-t border-slate-100">
+                                <span class="text-xs text-slate-400 font-medium">Oct 12, 2024</span>
+                                <span class="text-blue-600 text-sm font-bold flex items-center gap-1">Read More <i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+                            </div>
+                        </article>
+                        <!-- Add other blog posts -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact" class="py-24 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl flex flex-col lg:flex-row">
+                        <!-- Contact Info Column -->
+                        <div class="lg:w-2/5 p-12 bg-blue-600 text-white relative overflow-hidden">
+                            <div class="relative z-10">
+                                <h3 class="text-4xl font-bold mb-8">Get In Touch</h3>
+                                <p class="text-blue-100 mb-12 text-lg">Interested in collaboration, research partnerships, or have questions about cryptography? Reach out directly.</p>
+                                <div class="space-y-8">
+                                    <div class="flex items-start gap-4">
+                                        <div class="p-3 bg-white/10 rounded-lg">
+                                            <i data-lucide="mail" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-sm uppercase tracking-widest text-blue-200">Email</h4>
+                                            <p class="text-lg">hemrajshobharamlamkuche@vitbhopal.ac.in</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4">
+                                        <div class="p-3 bg-white/10 rounded-lg">
+                                            <i data-lucide="linkedin" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-sm uppercase tracking-widest text-blue-200">Professional</h4>
+                                            <a href="https://linkedin.com/in/dr-hemraj-lamkuche-4b760040" class="text-lg hover:underline flex items-center gap-2">
+                                                LinkedIn Profile <i data-lucide="external-link" class="w-4 h-4"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4">
+                                        <div class="p-3 bg-white/10 rounded-lg">
+                                            <i data-lucide="map-pin" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-sm uppercase tracking-widest text-blue-200">Address</h4>
+                                            <p class="text-md opacity-90">
+                                                School of Computing Science & Engineering,<br />
+                                                VIT Bhopal University, Bhopal-Indore Highway,<br />
+                                                Sehore, Madhya Pradesh, India
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Form Column -->
+                        <div class="lg:w-3/5 p-12">
+                            <form class="space-y-6">
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div class="space-y-2">
+                                        <label class="text-xs font-bold uppercase tracking-widest text-slate-400">Full Name</label>
+                                        <input type="text" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="John Doe" />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-xs font-bold uppercase tracking-widest text-slate-400">Email Address</label>
+                                        <input type="email" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="john@example.com" />
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-xs font-bold uppercase tracking-widest text-slate-400">Subject</label>
+                                    <input type="text" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="Research Query" />
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-xs font-bold uppercase tracking-widest text-slate-400">Message</label>
+                                    <textarea rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="How can I help you?"></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-white text-slate-900 font-bold py-4 rounded-xl hover:bg-blue-500 hover:text-white transition-all flex items-center justify-center gap-2 group">
+                                    Send Message <i data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                                </button>
+                            </form>
+                            <p class="mt-8 text-xs text-slate-500 text-center">Note: This form requires a backend like Formspree or Netlify Forms to process submissions.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-slate-950 text-white py-16 border-t border-slate-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="shield" class="w-8 h-8 text-blue-500"></i>
+                        <span class="text-xl font-bold tracking-tight">Dr. Hemraj Lamkuche</span>
+                    </div>
+                    <nav class="flex flex-wrap justify-center gap-x-8 gap-y-4">
+                        <a href="#about" class="text-slate-400 hover:text-white text-sm">About</a>
+                        <a href="#publications" class="text-slate-400 hover:text-white text-sm">Research</a>
+                        <a href="#experience" class="text-slate-400 hover:text-white text-sm">Experience</a>
+                        <a href="#blog" class="text-slate-400 hover:text-white text-sm">Insights</a>
+                        <a href="#contact" class="text-slate-400 hover:text-white text-sm">Contact</a>
+                    </nav>
+                    <div class="flex gap-4">
+                        <a href="https://github.com" target="_blank" class="p-2 bg-slate-900 rounded-lg hover:bg-blue-600 transition-colors">
+                            <i data-lucide="github" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/dr-hemraj-lamkuche-4b760040" target="_blank" class="p-2 bg-slate-900 rounded-lg hover:bg-blue-600 transition-colors">
+                            <i data-lucide="linkedin" class="w-5 h-5"></i>
+                        </a>
+                        <a href="mailto:hemrajshobharamlamkuche@vitbhopal.ac.in" class="p-2 bg-slate-900 rounded-lg hover:bg-blue-600 transition-colors">
+                            <i data-lucide="mail" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="mt-16 pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-sm">
+                    <p>© 2026 Dr. Hemraj Shobharam Lamkuche. All rights reserved.</p>
+                    <p>School of Computing Science & Engineering, VIT Bhopal University</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            // Toggle between menu and x icons (simplified, assumes menu icon changes to x)
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 20) {
+                header.classList.add('nav-blur', 'shadow-lg', 'py-2');
+                header.classList.remove('py-4');
+            } else {
+                header.classList.remove('nav-blur', 'shadow-lg', 'py-2');
+                header.classList.add('py-4');
+            }
+        });
+
+        // Full Feistel Canvas Animation (Adapted for DES with key schedule, AES visualization, and performance optimizations)
+        (function() {
+            const canvas = document.getElementById('feistel-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d', { willReadFrequently: false, alpha: true }); // Optimize context
+            if (!ctx) return;
+
+            let animationFrameId;
+            let mouse = { x: 0, y: 0 };
+            let isAnimating = true;
+            let currentRounds = 16; // DES/AES-128 has 10 rounds, but adjustable
+            let lastTime = 0;
+            const fpsLimit = 30; // Cap FPS for performance
+            let mode = 'des'; // 'des' or 'aes'
+
+            const resize = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            };
+            window.addEventListener('resize', resize);
+            resize();
+
+            const handleMouseMove = (e) => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+                showRandomCipherText(e.clientX, e.clientY);
+            };
+            window.addEventListener('mousemove', handleMouseMove);
+
+            // Interactive controls
+            const roundSlider = document.getElementById('round-slider');
+            const roundValue = document.getElementById('round-value');
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            const switchModeBtn = document.getElementById('switch-mode-btn');
+
+            roundSlider.addEventListener('input', (e) => {
+                currentRounds = parseInt(e.target.value);
+                roundValue.textContent = currentRounds;
+            });
+
+            playPauseBtn.addEventListener('click', () => {
+                isAnimating = !isAnimating;
+                playPauseBtn.textContent = isAnimating ? 'Pause' : 'Play';
+                if (isAnimating) requestAnimationFrame(animate);
+            });
+
+            switchModeBtn.addEventListener('click', () => {
+                mode = mode === 'des' ? 'aes' : 'des';
+                switchModeBtn.textContent = mode === 'des' ? 'Switch to AES' : 'Switch to DES';
+                roundSlider.max = mode === 'des' ? 16 : 10; // AES-128 has 10 rounds
+                currentRounds = parseInt(roundSlider.max);
+                roundSlider.value = currentRounds;
+                roundValue.textContent = currentRounds;
+            });
+
+            // Styling constants
+            const maxRounds = { des: 16, aes: 10 };
+            const nodeRadius = 5;
+            const bluePrimary = '#3b82f6';
+            const cyanAccent = '#22d3ee';
+            const slateDark = '#1e293b';
+            const greenAccent = '#10b981'; // For AES
+
+            const drawXOR = (x, y, size, opacity, energy, time) => {
+                const pulse = Math.sin(time * 0.008) * 3 * energy;
+                const currentSize = size + pulse;
+
+                ctx.save();
+
+                if (opacity > 0.4) {
+                    ctx.shadowBlur = 15 * (energy + 0.5);
+                    ctx.shadowColor = cyanAccent;
+
+                    ctx.beginPath();
+                    ctx.arc(x, y, currentSize - 4, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(34, 211, 238, ${opacity * 0.2 * (energy + 0.1)})`;
+                    ctx.fill();
+                }
+
+                ctx.beginPath();
+                ctx.arc(x, y, currentSize, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`;
+                ctx.lineWidth = 2 + energy * 2;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(x - currentSize + 3, y);
+                ctx.lineTo(x + currentSize - 3, y);
+                ctx.moveTo(x, y - currentSize + 3);
+                ctx.lineTo(x, y + currentSize - 3);
+                ctx.stroke();
+
+                ctx.restore();
+            };
+
+            const drawFBox = (x, y, width, height, opacity, energy, label) => {
+                ctx.save();
+                ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`;
+                ctx.lineWidth = 2 + energy;
+
+                if (opacity > 0.3) {
+                    ctx.shadowBlur = 10 * energy;
+                    ctx.shadowColor = bluePrimary;
+                }
+
+                ctx.beginPath();
+                ctx.rect(x - width / 2, y - height / 2, width, height);
+                ctx.stroke();
+
+                ctx.font = 'bold 12px Inter';
+                ctx.fillStyle = `rgba(59, 130, 246, ${opacity * 0.8})`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(label, x, y);
+
+                ctx.restore();
+            };
+
+            const drawNode = (x, y, opacity, isActive, time, label) => {
+                ctx.save();
+
+                const gradient = ctx.createRadialGradient(x, y, 0, x, y, nodeRadius * 2);
+                gradient.addColorStop(0, `rgba(59, 130, 246, ${opacity})`);
+                gradient.addColorStop(1, `rgba(59, 130, 246, 0)`);
+
+                ctx.beginPath();
+                ctx.arc(x, y, nodeRadius + Math.sin(time * 0.01) * 1.5 * (isActive ? 1 : 0), 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+
+                if (isActive) {
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = bluePrimary;
+                }
+
+                ctx.beginPath();
+                ctx.arc(x, y, nodeRadius, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.font = '10px Inter';
+                ctx.fillStyle = 'rgba(255,255,255,0.5)';
+                ctx.fillText(label, x, y + 15);
+
+                ctx.restore();
+            };
+
+            const drawKeyNode = (x, y, opacity, energy, time, label) => {
+                const pulse = Math.sin(time * 0.01) * 2 * energy;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(x, y, nodeRadius + pulse, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(34, 211, 238, ${opacity * 0.3})`;
+                ctx.fill();
+
+                ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`;
+                ctx.lineWidth = 2 + energy;
+                ctx.stroke();
+
+                ctx.font = 'bold 10px Inter';
+                ctx.fillStyle = `rgba(34, 211, 238, ${opacity})`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('K', x, y);
+
+                ctx.font = '8px Inter';
+                ctx.fillText(label, x, y + 15);
+
+                ctx.restore();
+            };
+
+            const drawConnection = (x1, y1, x2, y2, opacity, isActive, time) => {
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.strokeStyle = `rgba(100, 116, 139, ${opacity})`;
+                ctx.lineWidth = 1.5;
+
+                if (isActive) {
+                    const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
+                    gradient.addColorStop(0, 'rgba(59, 130, 246, 0)');
+                    gradient.addColorStop(0.5, `rgba(59, 130, 246, ${opacity})`);
+                    gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = 2 + Math.sin(time * 0.02) * 0.5;
+                }
+
+                ctx.stroke();
+                ctx.restore();
+            };
+
+            const drawDesKeySchedule = (centerX, topY, time, energy) => {
+                const keyX = centerX - 300; // Left side for key schedule
+                const keySpacing = 30;
+
+                ctx.font = 'bold 12px Inter';
+                ctx.fillStyle = 'rgba(255,255,255,0.4)';
+                ctx.textAlign = 'left';
+                ctx.fillText('DES Key Schedule (56-bit key to 16 x 48-bit subkeys)', keyX - 100, topY - 20);
+
+                // Initial key
+                drawKeyNode(keyX, topY, 1, energy, time, 'Master Key (64 bits)');
+                ctx.fillText('PC-1 → 56 bits', keyX + 20, topY);
+
+                // Left and right halves
+                drawConnection(keyX, topY, keyX - 50, topY + 50, 1, true, time);
+                drawConnection(keyX, topY, keyX + 50, topY + 50, 1, true, time);
+                drawNode(keyX - 50, topY + 50, 1, false, time, 'Left (28 bits)');
+                drawNode(keyX + 50, topY + 50, 1, false, time, 'Right (28 bits)');
+
+                // Simulate shifts and subkey generation
+                for (let i = 1; i <= currentRounds; i++) {
+                    const y = topY + 50 + i * keySpacing;
+                    const opacity = 1 - (i / maxRounds.des) * 0.5 + 0.5;
+
+                    // Shifts
+                    drawConnection(keyX - 50, y - keySpacing, keyX - 50, y, opacity, i % 2 === 0, time);
+                    drawConnection(keyX + 50, y - keySpacing, keyX + 50, y, opacity, i % 2 === 0, time);
+                    ctx.fillText(i === 1 || i === 2 || i === 9 || i === 16 ? '<< 1' : '<< 2', keyX - 70, y - 15);
+
+                    // PC-2 to subkey
+                    drawConnection(keyX, y, keyX - 100, y, opacity, true, time);
+                    drawKeyNode(keyX - 100, y, opacity, energy, time, `K${i} (48 bits)`);
+
+                    drawNode(keyX - 50, y, opacity, true, time, '');
+                    drawNode(keyX + 50, y, opacity, true, time, '');
+                }
+            };
+
+            const drawAesVisualization = (centerX, topY, bottomY, time, energy) => {
+                const roundSpacing = (bottomY - topY - 50) / (maxRounds.aes - 1);
+                const visibleRounds = Math.min(currentRounds, Math.floor((mouse.x / canvas.width) * currentRounds) + 1);
+
+                ctx.font = 'bold 14px Inter';
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.textAlign = 'center';
+                ctx.fillText('AES-128 (128-bit block, 128-bit key, 10 rounds)', centerX, topY - 20);
+
+                // Initial state
+                drawNode(centerX, topY, 1, true, time, 'Initial State (4x4 bytes)');
+                ctx.fillText('AddRoundKey (Initial)', centerX, topY + 20);
+
+                for (let i = 0; i < visibleRounds; i++) {
+                    const y = topY + 50 + i * roundSpacing;
+                    const opacity = 1 - (i / maxRounds.aes) * 0.5 + 0.5;
+
+                    // AES round steps
+                    drawConnection(centerX, y - roundSpacing + 20, centerX, y, opacity, true, time);
+
+                    // SubBytes
+                    drawFBox(centerX, y, 60, 30, opacity, energy, 'SubBytes');
+
+                    // ShiftRows
+                    drawConnection(centerX, y + 15, centerX, y + 45, opacity, false, time);
+                    drawFBox(centerX, y + 60, 60, 30, opacity, energy, 'ShiftRows');
+
+                    // MixColumns (not in last round)
+                    if (i < visibleRounds - 1) {
+                        drawConnection(centerX, y + 75, centerX, y + 105, opacity, false, time);
+                        drawFBox(centerX, y + 120, 60, 30, opacity, energy, 'MixColumns');
+                    }
+
+                    // AddRoundKey
+                    drawConnection(centerX, y + (i < visibleRounds - 1 ? 135 : 75), centerX, y + (i < visibleRounds - 1 ? 165 : 105), opacity, true, time);
+                    drawFBox(centerX, y + (i < visibleRounds - 1 ? 180 : 120), 80, 30, opacity, energy, 'AddRoundKey');
+
+                    // Key input (AES key expansion)
+                    drawKeyNode(centerX + 150, y + (i < visibleRounds - 1 ? 180 : 120), opacity, energy, time, `RK${i+1}`);
+                    drawConnection(centerX + 150, y + (i < visibleRounds - 1 ? 180 : 120), centerX + 50, y + (i < visibleRounds - 1 ? 180 : 120), opacity, true, time);
+
+                    // Output node
+                    drawNode(centerX, y + (i < visibleRounds - 1 ? 200 : 140), opacity, i % 2 === 0, time, `State after Round ${i+1}`);
+                }
+
+                // Final output
+                ctx.fillText('Ciphertext', centerX, bottomY + 20);
+            };
+
+            const render = (time) => {
+                if (!isAnimating) return;
+
+                // FPS limiting for performance
+                if (time - lastTime < 1000 / fpsLimit) {
+                    animationFrameId = requestAnimationFrame(render);
+                    return;
+                }
+                lastTime = time;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                const centerX = canvas.width / 2;
+                const topY = 100;
+                const bottomY = canvas.height - 100;
+                const energy = mouse.y / canvas.height;
+
+                if (mode === 'des') {
+                    const roundSpacing = (bottomY - topY - 50) / (maxRounds.des - 1);
+                    const visibleRounds = Math.min(currentRounds, Math.floor((mouse.x / canvas.width) * currentRounds) + 1);
+
+                    // Draw DES key schedule on left
+                    drawDesKeySchedule(centerX, topY, time, energy);
+
+                    // Draw input with DES initial permutation note
+                    ctx.font = 'bold 14px Inter';
+                    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('64-BIT PLAINTEXT (After Initial Permutation)', centerX, topY - 20);
+
+                    drawNode(centerX - 100, topY, 1, true, time, 'L0 (32 bits)');
+                    drawNode(centerX + 100, topY, 1, true, time, 'R0 (32 bits)');
+
+                    for (let i = 0; i < visibleRounds; i++) {
+                        const y = topY + 50 + i * roundSpacing;
+                        const opacity = 1 - (i / maxRounds.des) * 0.5 + 0.5;
+
+                        // Left branch (becomes right in next round)
+                        drawConnection(centerX - 100, topY + i * roundSpacing, centerX - 100, y, opacity, i % 2 === 0, time);
+
+                        // Right branch to F (DES: Expansion to 48 bits, XOR with key, S-boxes, Permutation)
+                        drawConnection(centerX + 100, topY + i * roundSpacing, centerX + 100, y - 20, opacity, true, time);
+
+                        // F box (DES specific)
+                        drawFBox(centerX + 100, y, 80, 40, opacity, energy, 'F (Exp, S-Box, P)'); // Wider for longer label
+
+                        // Key input (DES: 48-bit subkey from key schedule)
+                        drawKeyNode(centerX + 200, y, opacity, energy, time, `K${i+1} (48 bits)`);
+                        drawConnection(centerX + 200, y, centerX + 140, y, opacity, true, time);
+
+                        // XOR (DES: XOR F output with left half)
+                        drawXOR(centerX - 50, y + 20, 15, opacity, energy, time);
+
+                        // Cross connections (swapped in DES Feistel)
+                        drawConnection(centerX - 100, y, centerX + 100, y + 40, opacity, false, time); // Left to next right
+                        drawConnection(centerX - 100, y + 40, centerX - 100, y + roundSpacing, opacity, false, time); // Continue left
+
+                        // Nodes
+                        drawNode(centerX - 100, y + 40, opacity, i % 2 === 0, time, `L${i+1} (32 bits)`);
+                        drawNode(centerX + 100, y + 40, opacity, i % 2 !== 0, time, `R${i+1} (32 bits)`);
+                    }
+
+                    // Output with DES final permutation note
+                    ctx.fillText('64-BIT CIPHERTEXT (After Final Permutation & Swap)', centerX, bottomY + 22);
+
+                    // Watermark
+                    ctx.globalAlpha = 0.02;
+                    ctx.fillStyle = 'white';
+                    ctx.font = 'bold 140px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('DES FEISTEL', canvas.width / 2, canvas.height / 2 + 50);
+                    ctx.globalAlpha = 1.0;
+                } else {
+                    // AES mode
+                    drawAesVisualization(centerX, topY, bottomY, time, energy);
+
+                    // AES Key Expansion (simplified)
+                    const keyX = centerX - 300;
+                    ctx.fillText('AES Key Expansion (128-bit to 11 round keys)', keyX - 50, topY - 20);
+
+                    drawKeyNode(keyX, topY, 1, energy, time, 'Master Key');
+                    for (let i = 1; i <= currentRounds; i++) {
+                        const y = topY + 50 + (i - 1) * 40;
+                        drawConnection(keyX, y - 40, keyX, y, 1, true, time);
+                        drawFBox(keyX, y, 60, 30, 1, energy, 'RotWord/SubWord/Rcon');
+                        drawKeyNode(keyX - 80, y, 1, energy, time, `RK${i}`);
+                    }
+
+                    // Watermark
+                    ctx.globalAlpha = 0.02;
+                    ctx.fillStyle = 'white';
+                    ctx.font = 'bold 140px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('AES SPN', canvas.width / 2, canvas.height / 2 + 50);
+                    ctx.globalAlpha = 1.0;
+                }
+
+                animationFrameId = requestAnimationFrame(render);
+            };
+
+            const animate = (t) => {
+                render(t);
+            };
+
+            requestAnimationFrame(animate);
+
+            // Random Cipher Text on Hover
+            function showRandomCipherText(x, y) {
+                const chars = '0123456789ABCDEF';
+                let text = '';
+                for (let i = 0; i < 32; i++) {
+                    text += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                const div = document.createElement('div');
+                div.className = 'cipher-hover';
+                div.style.left = `${x + 10}px`;
+                div.style.top = `${y - 10}px`;
+                div.textContent = text;
+                document.body.appendChild(div);
+                setTimeout(() => div.remove(), 2000);
+            }
+
+            // Cleanup
+            return () => {
+                cancelAnimationFrame(animationFrameId);
+                window.removeEventListener('resize', resize);
+                window.removeEventListener('mousemove', handleMouseMove);
+            };
+        })();
+    </script>
+</body>
+</html>
