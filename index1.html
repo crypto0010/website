@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Hemraj Lamkuche | Cryptography in the Age of AI</title>
+    <meta name="description" content="Dr. Hemraj Lamkuche - Pioneering Post-Quantum Cryptography and AI Security Research">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        :root {
+            --neural-blue: #00d4ff;
+            --quantum-purple: #a855f7;
+            --cyber-green: #10b981;
+            --dark-base: #0a0e1a;
+            --dark-elevated: #131820;
+            --accent-glow: rgba(0, 212, 255, 0.15);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-base);
+            color: #e2e8f0;
+        }
+        
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .hero-gradient {
+            background: radial-gradient(ellipse at top, #1e1b4b 0%, var(--dark-base) 50%);
+            position: relative;
+        }
+        
+        .glass-morphism {
+            background: rgba(19, 24, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .neural-grid {
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: -1px -1px;
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 20px var(--neural-blue), 0 0 40px var(--neural-blue);
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            border-color: var(--neural-blue);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.1);
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .gradient-border {
+            position: relative;
+            background: var(--dark-elevated);
+        }
+        
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--neural-blue), var(--quantum-purple), var(--cyber-green));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+        
+        .tech-badge {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .section-title::before {
+            content: '>';
+            color: var(--neural-blue);
+            margin-right: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .quantum-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neural-blue);
+            border-radius: 50%;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neural-blue), var(--quantum-purple));
+            transition: width 0.3s;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        @keyframes scan-line {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+        
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neural-blue), transparent);
+            animation: scan-line 8s linear infinite;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        
+        .metric-display {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .research-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--neural-blue), var(--quantum-purple));
+        }
+        
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 3px solid var(--neural-blue);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+        }
+        
+        @keyframes matrix-rain {
+            0% { transform: translateY(-100%); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 50px;
+            background: linear-gradient(180deg, transparent, var(--neural-blue), transparent);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-[var(--dark-base)] text-slate-200 neural-grid">
+    <!-- Scan Line Effect -->
+    <div class="scan-line"></div>
+    
+    <!-- Navigation -->
+    <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--neural-blue)] to-[var(--quantum-purple)] flex items-center justify-center">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-white mono text-sm">DR.HEMRAJ.LAMKUCHE</div>
+                        <div class="text-[10px] text-[var(--neural-blue)] mono">CRYPTOGRAPHER.AI</div>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-sm mono text-slate-300 hover:text-white">HOME</a>
+                    <a href="#research" class="nav-link text-sm mono text-slate-300 hover:text-white">RESEARCH</a>
+                    <a href="#expertise" class="nav-link text-sm mono text-slate-300 hover:text-white">EXPERTISE</a>
+                    <a href="#publications" class="nav-link text-sm mono text-slate-300 hover:text-white">PUBLICATIONS</a>
+                    <a href="#contact" class="nav-link text-sm mono text-slate-300 hover:text-white">CONTACT</a>
+                </div>
+                
+                <button id="mobile-menu-btn" class="md:hidden text-white">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-[var(--dark-base)] transform translate-x-full transition-transform duration-300 md:hidden">
+        <div class="flex flex-col items-center justify-center h-full space-y-8">
+            <a href="#home" class="mobile-nav-link text-2xl mono text-slate-300 hover:text-[var(--neural-blue)]">HOME</a>
+            <a href="#research" class="mobile-nav-link text-2xl mono text-slate-300 hover:text-[var(--neural-blue)]">RESEARCH</a>
+            <a href="#expertise" class="mobile-nav-link text-2xl mono text-slate-300 hover:text-[var(--neural-blue)]">EXPERTISE</a>
+            <a href="#publications" class="mobile-nav-link text-2xl mono text-slate-300 hover:text-[var(--neural-blue)]">PUBLICATIONS</a>
+            <a href="#contact" class="mobile-nav-link text-2xl mono text-slate-300 hover:text-[var(--neural-blue)]">CONTACT</a>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen hero-gradient relative overflow-hidden flex items-center pt-20">
+        <canvas id="neural-canvas" class="absolute inset-0 z-0"></canvas>
+        
+        <div class="max-w-7xl mx-auto px-6 relative z-10 py-20">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <div class="inline-block mb-6 px-4 py-2 tech-badge rounded-full">
+                        <span class="text-xs mono text-[var(--neural-blue)]">⚡ POST-QUANTUM CRYPTOGRAPHY SPECIALIST</span>
+                    </div>
+                    
+                    <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
+                        <span class="block text-white">Dr. Hemraj</span>
+                        <span class="block text-white">Lamkuche</span>
+                    </h1>
+                    
+                    <div class="mb-8 space-y-2">
+                        <p class="text-xl text-[var(--neural-blue)] mono">// Securing Intelligence</p>
+                        <p class="text-lg text-slate-400 leading-relaxed max-w-xl">
+                            Pioneering lightweight cryptographic systems and AI robustness frameworks at the intersection of quantum computing and machine learning security.
+                        </p>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-3 mb-10">
+                        <span class="tech-badge px-4 py-2 rounded-lg text-sm mono">Quantum-Resistant</span>
+                        <span class="tech-badge px-4 py-2 rounded-lg text-sm mono">IoT Security</span>
+                        <span class="tech-badge px-4 py-2 rounded-lg text-sm mono">ML Adversarial</span>
+                        <span class="tech-badge px-4 py-2 rounded-lg text-sm mono">FPGA/ASIC</span>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#research" class="group px-8 py-4 bg-gradient-to-r from-[var(--neural-blue)] to-[var(--quantum-purple)] rounded-lg font-bold text-white mono text-sm hover:shadow-lg hover:shadow-[var(--neural-blue)]/50 transition-all flex items-center justify-center gap-2">
+                            EXPLORE RESEARCH
+                            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="#publications" class="px-8 py-4 glass-morphism rounded-lg font-bold text-white mono text-sm hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+                            VIEW PUBLICATIONS
+                            <i data-lucide="file-text" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="relative aspect-square max-w-md mx-auto">
+                        <!-- AI-Generated Profile Frame -->
+                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-[var(--neural-blue)] to-[var(--quantum-purple)] opacity-20 blur-3xl"></div>
+                        <div class="relative gradient-border rounded-2xl overflow-hidden">
+                            <img src="https://picsum.photos/seed/hemraj-ai/800/800" alt="Dr. Hemraj Lamkuche" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-[var(--dark-base)] via-transparent to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 right-0 p-6 glass-morphism m-4 rounded-lg">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs mono text-[var(--neural-blue)]">PROFILE.STATUS</span>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-2 h-2 rounded-full bg-[var(--cyber-green)] pulse-glow"></div>
+                                        <span class="text-xs mono">ACTIVE</span>
+                                    </div>
+                                </div>
+                                <div class="text-2xl font-bold mono">SENIOR_PROFESSOR</div>
+                                <div class="text-sm text-slate-400">VIT Bhopal University</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Floating Metrics -->
+                        <div class="absolute -top-4 -right-4 glass-morphism px-6 py-4 rounded-xl float-animation">
+                            <div class="text-3xl font-bold text-[var(--neural-blue)] metric-display">12+</div>
+                            <div class="text-xs mono text-slate-400">YEARS EXP</div>
+                        </div>
+                        
+                        <div class="absolute -bottom-4 -left-4 glass-morphism px-6 py-4 rounded-xl float-animation" style="animation-delay: -3s;">
+                            <div class="text-3xl font-bold text-[var(--quantum-purple)] metric-display">450+</div>
+                            <div class="text-xs mono text-slate-400">CITATIONS</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll-indicator"></div>
+    </section>
+    
+    <!-- Research Focus Section -->
+    <section id="research" class="py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16">
+                <h2 class="section-title text-sm mono text-[var(--neural-blue)] uppercase tracking-widest mb-4">RESEARCH_DOMAINS</h2>
+                <h3 class="text-4xl md:text-5xl font-bold text-white mb-6">AI-Era Cryptography</h3>
+                <p class="text-lg text-slate-400 max-w-3xl">
+                    Developing next-generation cryptographic primitives that withstand both quantum computing threats and AI-powered adversarial attacks.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Research Card 1 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[var(--neural-blue)] to-transparent opacity-10 rounded-bl-full"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--neural-blue)]/20 to-[var(--quantum-purple)]/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="cpu" class="w-7 h-7 text-[var(--neural-blue)]"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3 mono">Post-Quantum Algorithms</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Designing and implementing NIST-compliant lattice-based and code-based cryptosystems optimized for resource-constrained environments.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--neural-blue)]">CRYSTALS-Kyber</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--neural-blue)]">ML-KEM</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--neural-blue)]">HQC</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Research Card 2 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[var(--quantum-purple)] to-transparent opacity-10 rounded-bl-full"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--quantum-purple)]/20 to-[var(--cyber-green)]/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="brain" class="w-7 h-7 text-[var(--quantum-purple)]"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3 mono">AI Security & Robustness</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Adversarial ML defense mechanisms, prompt injection mitigation, and cryptographic authentication for large language models.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--quantum-purple)]">LLM Security</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--quantum-purple)]">Adversarial ML</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--quantum-purple)]">Model Watermarking</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Research Card 3 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[var(--cyber-green)] to-transparent opacity-10 rounded-bl-full"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--cyber-green)]/20 to-[var(--neural-blue)]/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="radio" class="w-7 h-7 text-[var(--cyber-green)]"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3 mono">Lightweight IoT Crypto</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Hardware-optimized ciphers (SAL, SHC, CSL) with FPGA/ASIC implementations for medical IoT and edge computing devices.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--cyber-green)]">FPGA</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--cyber-green)]">Medical IoT</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--cyber-green)]">Edge Security</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Research Card 4 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[var(--neural-blue)] to-transparent opacity-10 rounded-bl-full"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--neural-blue)]/20 to-[var(--quantum-purple)]/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="microscope" class="w-7 h-7 text-[var(--neural-blue)]"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3 mono">Medical Imaging Security</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Hybrid deep learning architectures for CBCT analysis with HIPAA-compliant encryption and DNA-based long-term storage solutions.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--neural-blue)]">CBCT</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--neural-blue)]">DNA Storage</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--neural-blue)]">HIPAA</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Research Card 5 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[var(--quantum-purple)] to-transparent opacity-10 rounded-bl-full"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--quantum-purple)]/20 to-[var(--cyber-green)]/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="git-branch" class="w-7 h-7 text-[var(--quantum-purple)]"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3 mono">Blockchain & DLT</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Quantum-resistant consensus mechanisms and smart contract security auditing for next-generation distributed systems.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--quantum-purple)]">Consensus</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--quantum-purple)]">Smart Contracts</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--quantum-purple)]">ZKP</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Research Card 6 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[var(--cyber-green)] to-transparent opacity-10 rounded-bl-full"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--cyber-green)]/20 to-[var(--neural-blue)]/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="shield-alert" class="w-7 h-7 text-[var(--cyber-green)]"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3 mono">Indigenous Knowledge Systems</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Exploring cryptographic principles in ancient texts and integrating traditional knowledge with modern post-quantum research.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--cyber-green)]">IKS Research</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--cyber-green)]">Cultural Heritage</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--cyber-green)]">Interdisciplinary</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Expertise Timeline -->
+    <section id="expertise" class="py-24 bg-[var(--dark-elevated)] relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16">
+                <h2 class="section-title text-sm mono text-[var(--neural-blue)] uppercase tracking-widest mb-4">TECHNICAL_STACK</h2>
+                <h3 class="text-4xl md:text-5xl font-bold text-white mb-6">Core Competencies</h3>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- Left Column: Technical Skills -->
+                <div class="space-y-8">
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <h4 class="text-xl font-bold text-white mb-6 mono flex items-center gap-3">
+                            <i data-lucide="code-2" class="w-5 h-5 text-[var(--neural-blue)]"></i>
+                            Cryptographic Design
+                        </h4>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm mono text-slate-400">Symmetric Ciphers (Feistel, SPN)</span>
+                                    <span class="text-sm mono text-[var(--neural-blue)]">Expert</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-[var(--neural-blue)] to-[var(--quantum-purple)] rounded-full" style="width: 95%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm mono text-slate-400">Post-Quantum (Lattice, Code-based)</span>
+                                    <span class="text-sm mono text-[var(--neural-blue)]">Advanced</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-[var(--neural-blue)] to-[var(--quantum-purple)] rounded-full" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm mono text-slate-400">Cryptanalysis (Differential, Linear)</span>
+                                    <span class="text-sm mono text-[var(--neural-blue)]">Expert</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-[var(--neural-blue)] to-[var(--quantum-purple)] rounded-full" style="width: 88%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm mono text-slate-400">Hardware Security (FPGA/ASIC)</span>
+                                    <span class="text-sm mono text-[var(--neural-blue)]">Advanced</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-[var(--neural-blue)] to-[var(--quantum-purple)] rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <h4 class="text-xl font-bold text-white mb-6 mono flex items-center gap-3">
+                            <i data-lucide="zap" class="w-5 h-5 text-[var(--quantum-purple)]"></i>
+                            AI & Machine Learning
+                        </h4>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm mono text-slate-400">Deep Learning (PyTorch, TensorFlow)</span>
+                                    <span class="text-sm mono text-[var(--quantum-purple)]">Advanced</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-[var(--quantum-purple)] to-[var(--cyber-green)] rounded-full" style="width: 82%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm mono text-slate-400">Adversarial ML & Robustness</span>
+                                    <span class="text-sm mono text-[var(--quantum-purple)]">Expert</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-[var(--quantum-purple)] to-[var(--cyber-green)] rounded-full" style="width: 87%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm mono text-slate-400">Computer Vision (Medical Imaging)</span>
+                                    <span class="text-sm mono text-[var(--quantum-purple)]">Advanced</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-[var(--quantum-purple)] to-[var(--cyber-green)] rounded-full" style="width: 80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column: Career Timeline -->
+                <div class="space-y-8">
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <h4 class="text-xl font-bold text-white mb-8 mono flex items-center gap-3">
+                            <i data-lucide="briefcase" class="w-5 h-5 text-[var(--cyber-green)]"></i>
+                            Career Trajectory
+                        </h4>
+                        <div class="space-y-8 research-timeline pl-6 relative">
+                            <div class="relative">
+                                <div class="absolute -left-[25px] top-2 w-4 h-4 rounded-full bg-[var(--neural-blue)] border-4 border-[var(--dark-elevated)]"></div>
+                                <div class="mb-2">
+                                    <span class="text-xs mono text-[var(--neural-blue)]">2023 - PRESENT</span>
+                                </div>
+                                <h5 class="text-lg font-bold text-white mb-2">Senior Assistant Professor</h5>
+                                <p class="text-sm text-slate-400 mb-2">VIT Bhopal University</p>
+                                <p class="text-xs text-slate-500">Leading PQC research, PI for SPEAR Grant on LLM security</p>
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="absolute -left-[25px] top-2 w-4 h-4 rounded-full bg-[var(--quantum-purple)] border-4 border-[var(--dark-elevated)]"></div>
+                                <div class="mb-2">
+                                    <span class="text-xs mono text-[var(--quantum-purple)]">2015 - 2019</span>
+                                </div>
+                                <h5 class="text-lg font-bold text-white mb-2">Ph.D. Computer Science</h5>
+                                <p class="text-sm text-slate-400 mb-2">Symbiosis International University</p>
+                                <p class="text-xs text-slate-500">Thesis: Lightweight Block Cipher with Pipelined Feistel Structure</p>
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="absolute -left-[25px] top-2 w-4 h-4 rounded-full bg-[var(--cyber-green)] border-4 border-[var(--dark-elevated)]"></div>
+                                <div class="mb-2">
+                                    <span class="text-xs mono text-[var(--cyber-green)]">2013 - 2015</span>
+                                </div>
+                                <h5 class="text-lg font-bold text-white mb-2">M.Tech Computer Science</h5>
+                                <p class="text-sm text-slate-400 mb-2">SRTMU Nanded</p>
+                                <p class="text-xs text-slate-500">Specialized in Information Security & Cryptography</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <h4 class="text-xl font-bold text-white mb-6 mono flex items-center gap-3">
+                            <i data-lucide="award" class="w-5 h-5 text-[var(--neural-blue)]"></i>
+                            Key Achievements
+                        </h4>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-[var(--cyber-green)] mt-1 flex-shrink-0"></i>
+                                <p class="text-sm text-slate-300">45+ peer-reviewed publications in top-tier journals</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-[var(--cyber-green)] mt-1 flex-shrink-0"></i>
+                                <p class="text-sm text-slate-300">3 patented lightweight cipher designs (SAL, SHC, CSL)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-[var(--cyber-green)] mt-1 flex-shrink-0"></i>
+                                <p class="text-sm text-slate-300">SPEAR Grant PI for LLM security research (₹5L+)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-[var(--cyber-green)] mt-1 flex-shrink-0"></i>
+                                <p class="text-sm text-slate-300">Trained IAS/IPS officers in cybersecurity via YASHADA</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-[var(--cyber-green)] mt-1 flex-shrink-0"></i>
+                                <p class="text-sm text-slate-300">Incubated 3 tech startups in blockchain & IoT security</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Publications Section -->
+    <section id="publications" class="py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16">
+                <h2 class="section-title text-sm mono text-[var(--neural-blue)] uppercase tracking-widest mb-4">RESEARCH_OUTPUT</h2>
+                <h3 class="text-4xl md:text-5xl font-bold text-white mb-6">Featured Publications</h3>
+                <p class="text-lg text-slate-400">Recent contributions to cryptography and AI security</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-8 mb-12">
+                <!-- Publication 1 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="px-3 py-1 bg-[var(--neural-blue)]/20 text-[var(--neural-blue)] text-xs font-bold mono rounded-full">IEEE ACCESS 2024</span>
+                        <i data-lucide="external-link" class="w-5 h-5 text-slate-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3 leading-tight">
+                        SHC: 8-bit Compact and Efficient S-Box Structure for Lightweight Cryptography
+                    </h4>
+                    <p class="text-sm text-slate-400 mb-4 flex-grow">
+                        Novel S-box design achieving optimal nonlinearity with minimal hardware footprint for IoT devices. Published in IEEE Access with significant industry impact.
+                    </p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="quote" class="w-4 h-4 text-[var(--neural-blue)]"></i>
+                            <span class="text-xs mono text-slate-500">CITATIONS: 23</span>
+                        </div>
+                        <a href="https://ieeexplore.ieee.org/document/10410243" target="_blank" class="text-sm mono text-[var(--neural-blue)] hover:text-white transition-colors flex items-center gap-2">
+                            READ PAPER <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Publication 2 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="px-3 py-1 bg-[var(--quantum-purple)]/20 text-[var(--quantum-purple)] text-xs font-bold mono rounded-full">IACR ePRINT 2024</span>
+                        <i data-lucide="external-link" class="w-5 h-5 text-slate-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3 leading-tight">
+                        Deep Learning Based Analysis of Key Scheduling Algorithm of Advanced Ciphers
+                    </h4>
+                    <p class="text-sm text-slate-400 mb-4 flex-grow">
+                        Pioneering work using neural networks to analyze cryptographic key schedules, revealing patterns invisible to traditional cryptanalysis methods.
+                    </p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="quote" class="w-4 h-4 text-[var(--quantum-purple)]"></i>
+                            <span class="text-xs mono text-slate-500">CITATIONS: 18</span>
+                        </div>
+                        <a href="https://eprint.iacr.org/2024/272" target="_blank" class="text-sm mono text-[var(--quantum-purple)] hover:text-white transition-colors flex items-center gap-2">
+                            READ PAPER <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Publication 3 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="px-3 py-1 bg-[var(--cyber-green)]/20 text-[var(--cyber-green)] text-xs font-bold mono rounded-full">CONFERENCE 2024</span>
+                        <i data-lucide="external-link" class="w-5 h-5 text-slate-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3 leading-tight">
+                        Lightweight Cipher SAL: Design, Analysis, and FPGA Implementation
+                    </h4>
+                    <p class="text-sm text-slate-400 mb-4 flex-grow">
+                        A novel 64-bit block cipher with 128-bit key optimized for resource-constrained devices, demonstrating superior performance on Xilinx FPGAs.
+                    </p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="quote" class="w-4 h-4 text-[var(--cyber-green)]"></i>
+                            <span class="text-xs mono text-slate-500">CITATIONS: 31</span>
+                        </div>
+                        <a href="#" class="text-sm mono text-[var(--cyber-green)] hover:text-white transition-colors flex items-center gap-2">
+                            READ PAPER <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Publication 4 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="px-3 py-1 bg-[var(--neural-blue)]/20 text-[var(--neural-blue)] text-xs font-bold mono rounded-full">SPRINGER 2023</span>
+                        <i data-lucide="external-link" class="w-5 h-5 text-slate-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3 leading-tight">
+                        Post-Quantum Cryptography for IoT: Challenges and Implementation Strategies
+                    </h4>
+                    <p class="text-sm text-slate-400 mb-4 flex-grow">
+                        Comprehensive analysis of implementing NIST PQC candidates on resource-constrained IoT platforms with practical benchmarks and optimization techniques.
+                    </p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="quote" class="w-4 h-4 text-[var(--neural-blue)]"></i>
+                            <span class="text-xs mono text-slate-500">CITATIONS: 42</span>
+                        </div>
+                        <a href="#" class="text-sm mono text-[var(--neural-blue)] hover:text-white transition-colors flex items-center gap-2">
+                            READ PAPER <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Research Metrics -->
+            <div class="grid md:grid-cols-4 gap-6 mb-12">
+                <div class="glass-morphism rounded-xl p-6 text-center">
+                    <div class="text-4xl font-bold text-[var(--neural-blue)] mb-2 metric-display">45+</div>
+                    <div class="text-sm mono text-slate-400">PUBLICATIONS</div>
+                </div>
+                <div class="glass-morphism rounded-xl p-6 text-center">
+                    <div class="text-4xl font-bold text-[var(--quantum-purple)] mb-2 metric-display">450+</div>
+                    <div class="text-sm mono text-slate-400">CITATIONS</div>
+                </div>
+                <div class="glass-morphism rounded-xl p-6 text-center">
+                    <div class="text-4xl font-bold text-[var(--cyber-green)] mb-2 metric-display">18</div>
+                    <div class="text-sm mono text-slate-400">H-INDEX</div>
+                </div>
+                <div class="glass-morphism rounded-xl p-6 text-center">
+                    <div class="text-4xl font-bold text-[var(--neural-blue)] mb-2 metric-display">3</div>
+                    <div class="text-sm mono text-slate-400">PATENTS</div>
+                </div>
+            </div>
+            
+            <!-- Academic Profiles -->
+            <div class="flex flex-wrap items-center justify-center gap-6">
+                <a href="https://scholar.google.com/citations?user=sqNVq48AAAAJ" target="_blank" class="glass-morphism px-8 py-4 rounded-xl hover:bg-white/5 transition-all flex items-center gap-3 group">
+                    <i data-lucide="graduation-cap" class="w-5 h-5 text-[var(--neural-blue)]"></i>
+                    <span class="mono text-sm text-white group-hover:text-[var(--neural-blue)] transition-colors">GOOGLE SCHOLAR</span>
+                    <i data-lucide="external-link" class="w-4 h-4 text-slate-400"></i>
+                </a>
+                <a href="https://www.researchgate.net/profile/Hemraj-Lamkuche" target="_blank" class="glass-morphism px-8 py-4 rounded-xl hover:bg-white/5 transition-all flex items-center gap-3 group">
+                    <i data-lucide="flask" class="w-5 h-5 text-[var(--quantum-purple)]"></i>
+                    <span class="mono text-sm text-white group-hover:text-[var(--quantum-purple)] transition-colors">RESEARCHGATE</span>
+                    <i data-lucide="external-link" class="w-4 h-4 text-slate-400"></i>
+                </a>
+                <a href="https://orcid.org" target="_blank" class="glass-morphism px-8 py-4 rounded-xl hover:bg-white/5 transition-all flex items-center gap-3 group">
+                    <i data-lucide="fingerprint" class="w-5 h-5 text-[var(--cyber-green)]"></i>
+                    <span class="mono text-sm text-white group-hover:text-[var(--cyber-green)] transition-colors">ORCID</span>
+                    <i data-lucide="external-link" class="w-4 h-4 text-slate-400"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-[var(--dark-elevated)] relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="section-title text-sm mono text-[var(--neural-blue)] uppercase tracking-widest mb-4">CONNECT</h2>
+                    <h3 class="text-4xl md:text-5xl font-bold text-white mb-6">Let's Collaborate</h3>
+                    <p class="text-lg text-slate-400 mb-8">
+                        Open to research collaborations, PhD supervision, industry consultations, and speaking engagements on cryptography and AI security.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="glass-morphism rounded-xl p-6 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-lg bg-[var(--neural-blue)]/20 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="mail" class="w-6 h-6 text-[var(--neural-blue)]"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs mono text-slate-400 mb-1">EMAIL</div>
+                                <a href="mailto:hemrajshobharamlamkuche@vitbhopal.ac.in" class="text-white hover:text-[var(--neural-blue)] transition-colors mono text-sm">
+                                    hemrajshobharamlamkuche@vitbhopal.ac.in
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-morphism rounded-xl p-6 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-lg bg-[var(--quantum-purple)]/20 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="map-pin" class="w-6 h-6 text-[var(--quantum-purple)]"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs mono text-slate-400 mb-1">LOCATION</div>
+                                <div class="text-white mono text-sm">
+                                    VIT Bhopal University<br/>
+                                    Bhopal-Indore Highway, Sehore, MP, India
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-morphism rounded-xl p-6 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-lg bg-[var(--cyber-green)]/20 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="linkedin" class="w-6 h-6 text-[var(--cyber-green)]"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs mono text-slate-400 mb-1">PROFESSIONAL NETWORK</div>
+                                <a href="https://linkedin.com/in/dr-hemraj-lamkuche-4b760040" target="_blank" class="text-white hover:text-[var(--cyber-green)] transition-colors mono text-sm flex items-center gap-2">
+                                    LinkedIn Profile <i data-lucide="external-link" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 pt-8 border-t border-white/10">
+                        <div class="text-sm mono text-slate-400 mb-4">CONNECT ON</div>
+                        <div class="flex gap-4">
+                            <a href="https://github.com" target="_blank" class="w-12 h-12 rounded-lg glass-morphism flex items-center justify-center hover:bg-white/10 transition-all group">
+                                <i data-lucide="github" class="w-5 h-5 text-slate-400 group-hover:text-white"></i>
+                            </a>
+                            <a href="https://twitter.com" target="_blank" class="w-12 h-12 rounded-lg glass-morphism flex items-center justify-center hover:bg-white/10 transition-all group">
+                                <i data-lucide="twitter" class="w-5 h-5 text-slate-400 group-hover:text-white"></i>
+                            </a>
+                            <a href="https://youtube.com" target="_blank" class="w-12 h-12 rounded-lg glass-morphism flex items-center justify-center hover:bg-white/10 transition-all group">
+                                <i data-lucide="youtube" class="w-5 h-5 text-slate-400 group-hover:text-white"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-morphism rounded-2xl p-8">
+                    <form class="space-y-6">
+                        <div>
+                            <label class="block text-xs mono text-slate-400 mb-2 uppercase">NAME</label>
+                            <input type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--neural-blue)] transition-colors mono" placeholder="Your name" />
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs mono text-slate-400 mb-2 uppercase">EMAIL</label>
+                            <input type="email" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--neural-blue)] transition-colors mono" placeholder="your@email.com" />
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs mono text-slate-400 mb-2 uppercase">SUBJECT</label>
+                            <input type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--neural-blue)] transition-colors mono" placeholder="Research collaboration" />
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs mono text-slate-400 mb-2 uppercase">MESSAGE</label>
+                            <textarea rows="5" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--neural-blue)] transition-colors mono resize-none" placeholder="Your message..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-gradient-to-r from-[var(--neural-blue)] to-[var(--quantum-purple)] rounded-lg py-4 font-bold text-white mono hover:shadow-lg hover:shadow-[var(--neural-blue)]/50 transition-all flex items-center justify-center gap-2 group">
+                            SEND MESSAGE
+                            <i data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </form>
+                    <p class="mt-6 text-xs text-slate-500 text-center mono">
+                        // This form requires backend integration (Formspree, Netlify Forms, etc.)
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--neural-blue)] to-[var(--quantum-purple)] flex items-center justify-center">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-white mono text-sm">DR.HEMRAJ.LAMKUCHE</div>
+                        <div class="text-[10px] text-slate-400 mono">© 2026 ALL RIGHTS RESERVED</div>
+                    </div>
+                </div>
+                
+                <div class="text-xs mono text-slate-500 text-center md:text-right">
+                    CRAFTED WITH <span class="text-[var(--neural-blue)]">◆</span> FOR THE AI ERA<br/>
+                    VIT BHOPAL UNIVERSITY • SCHOOL OF COMPUTING
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('translate-x-full');
+        });
+        
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('translate-x-full');
+            });
+        });
+        
+        // Navigation scroll effect
+        let lastScroll = 0;
+        const nav = document.getElementById('main-nav');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                nav.classList.add('glass-morphism', 'shadow-2xl');
+            } else {
+                nav.classList.remove('glass-morphism', 'shadow-2xl');
+            }
+            
+            lastScroll = currentScroll;
+        });
+        
+        // Neural Network Canvas Animation
+        const canvas = document.getElementById('neural-canvas');
+        const ctx = canvas.getContext('2d');
+        let animationId;
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        
+        class Neuron {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 1;
+                this.connections = [];
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 212, 255, 0.6)';
+                ctx.fill();
+                
+                // Glow effect
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#00d4ff';
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+        
+        const neurons = [];
+        const neuronCount = Math.floor((canvas.width * canvas.height) / 15000);
+        
+        for (let i = 0; i < neuronCount; i++) {
+            neurons.push(new Neuron(
+                Math.random() * canvas.width,
+                Math.random() * canvas.height
+            ));
+        }
+        
+        function drawConnections() {
+            for (let i = 0; i < neurons.length; i++) {
+                for (let j = i + 1; j < neurons.length; j++) {
+                    const dx = neurons[i].x - neurons[j].x;
+                    const dy = neurons[i].y - neurons[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 150) {
+                        const opacity = (1 - distance / 150) * 0.3;
+                        ctx.beginPath();
+                        ctx.moveTo(neurons[i].x, neurons[i].y);
+                        ctx.lineTo(neurons[j].x, neurons[j].y);
+                        ctx.strokeStyle = `rgba(0, 212, 255, ${opacity})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            drawConnections();
+            
+            neurons.forEach(neuron => {
+                neuron.update();
+                neuron.draw();
+            });
+            
+            animationId = requestAnimationFrame(animate);
+        }
+        
+        animate();
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all cards
+        document.querySelectorAll('.card-hover').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
