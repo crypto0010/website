@@ -36,17 +36,6 @@
         .animate-bounce {
             animation: bounce 2s infinite;
         }
-        .cipher-hover {
-            position: absolute;
-            pointer-events: none;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.3);
-            animation: fadeOut 2s ease-out forwards;
-        }
-        @keyframes fadeOut {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(-20px); }
-        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -515,7 +504,6 @@
         const mobileMenu = document.getElementById('mobile-menu');
         menuToggle.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
-            // Toggle between menu and x icons (simplified, assumes menu icon changes to x)
         });
 
         // Header scroll effect
@@ -530,20 +518,20 @@
             }
         });
 
-        // Full Feistel Canvas Animation (Adapted for DES with key schedule, AES visualization, and performance optimizations)
+        // Full Feistel Canvas Animation
         (function() {
             const canvas = document.getElementById('feistel-canvas');
             if (!canvas) return;
-            const ctx = canvas.getContext('2d', { willReadFrequently: false, alpha: true }); // Optimize context
+            const ctx = canvas.getContext('2d', { willReadFrequently: false, alpha: true });
             if (!ctx) return;
 
             let animationFrameId;
             let mouse = { x: 0, y: 0 };
             let isAnimating = true;
-            let currentRounds = 16; // DES/AES-128 has 10 rounds, but adjustable
+            let currentRounds = 16;
             let lastTime = 0;
-            const fpsLimit = 30; // Cap FPS for performance
-            let mode = 'des'; // 'des' or 'aes'
+            const fpsLimit = 30;
+            let mode = 'des';
 
             const resize = () => {
                 canvas.width = window.innerWidth;
@@ -555,7 +543,6 @@
             const handleMouseMove = (e) => {
                 mouse.x = e.clientX;
                 mouse.y = e.clientY;
-                showRandomCipherText(e.clientX, e.clientY);
             };
             window.addEventListener('mousemove', handleMouseMove);
 
@@ -579,7 +566,7 @@
             switchModeBtn.addEventListener('click', () => {
                 mode = mode === 'des' ? 'aes' : 'des';
                 switchModeBtn.textContent = mode === 'des' ? 'Switch to AES' : 'Switch to DES';
-                roundSlider.max = mode === 'des' ? 16 : 10; // AES-128 has 10 rounds
+                roundSlider.max = mode === 'des' ? 16 : 10;
                 currentRounds = parseInt(roundSlider.max);
                 roundSlider.value = currentRounds;
                 roundValue.textContent = currentRounds;
@@ -591,7 +578,7 @@
             const bluePrimary = '#3b82f6';
             const cyanAccent = '#22d3ee';
             const slateDark = '#1e293b';
-            const greenAccent = '#10b981'; // For AES
+            const greenAccent = '#10b981';
 
             const drawXOR = (x, y, size, opacity, energy, time) => {
                 const pulse = Math.sin(time * 0.008) * 3 * energy;
@@ -725,7 +712,7 @@
             };
 
             const drawDesKeySchedule = (centerX, topY, time, energy) => {
-                const keyX = centerX - 300; // Left side for key schedule
+                const keyX = centerX - 300;
                 const keySpacing = 30;
 
                 ctx.font = 'bold 12px Inter';
@@ -733,27 +720,22 @@
                 ctx.textAlign = 'left';
                 ctx.fillText('DES Key Schedule (56-bit key to 16 x 48-bit subkeys)', keyX - 100, topY - 20);
 
-                // Initial key
                 drawKeyNode(keyX, topY, 1, energy, time, 'Master Key (64 bits)');
                 ctx.fillText('PC-1 → 56 bits', keyX + 20, topY);
 
-                // Left and right halves
                 drawConnection(keyX, topY, keyX - 50, topY + 50, 1, true, time);
                 drawConnection(keyX, topY, keyX + 50, topY + 50, 1, true, time);
                 drawNode(keyX - 50, topY + 50, 1, false, time, 'Left (28 bits)');
                 drawNode(keyX + 50, topY + 50, 1, false, time, 'Right (28 bits)');
 
-                // Simulate shifts and subkey generation
                 for (let i = 1; i <= currentRounds; i++) {
                     const y = topY + 50 + i * keySpacing;
                     const opacity = 1 - (i / maxRounds.des) * 0.5 + 0.5;
 
-                    // Shifts
                     drawConnection(keyX - 50, y - keySpacing, keyX - 50, y, opacity, i % 2 === 0, time);
                     drawConnection(keyX + 50, y - keySpacing, keyX + 50, y, opacity, i % 2 === 0, time);
                     ctx.fillText(i === 1 || i === 2 || i === 9 || i === 16 ? '<< 1' : '<< 2', keyX - 70, y - 15);
 
-                    // PC-2 to subkey
                     drawConnection(keyX, y, keyX - 100, y, opacity, true, time);
                     drawKeyNode(keyX - 100, y, opacity, energy, time, `K${i} (48 bits)`);
 
@@ -771,7 +753,6 @@
                 ctx.textAlign = 'center';
                 ctx.fillText('AES-128 (128-bit block, 128-bit key, 10 rounds)', centerX, topY - 20);
 
-                // Initial state
                 drawNode(centerX, topY, 1, true, time, 'Initial State (4x4 bytes)');
                 ctx.fillText('AddRoundKey (Initial)', centerX, topY + 20);
 
@@ -779,42 +760,33 @@
                     const y = topY + 50 + i * roundSpacing;
                     const opacity = 1 - (i / maxRounds.aes) * 0.5 + 0.5;
 
-                    // AES round steps
                     drawConnection(centerX, y - roundSpacing + 20, centerX, y, opacity, true, time);
 
-                    // SubBytes
                     drawFBox(centerX, y, 60, 30, opacity, energy, 'SubBytes');
 
-                    // ShiftRows
                     drawConnection(centerX, y + 15, centerX, y + 45, opacity, false, time);
                     drawFBox(centerX, y + 60, 60, 30, opacity, energy, 'ShiftRows');
 
-                    // MixColumns (not in last round)
                     if (i < visibleRounds - 1) {
                         drawConnection(centerX, y + 75, centerX, y + 105, opacity, false, time);
                         drawFBox(centerX, y + 120, 60, 30, opacity, energy, 'MixColumns');
                     }
 
-                    // AddRoundKey
                     drawConnection(centerX, y + (i < visibleRounds - 1 ? 135 : 75), centerX, y + (i < visibleRounds - 1 ? 165 : 105), opacity, true, time);
                     drawFBox(centerX, y + (i < visibleRounds - 1 ? 180 : 120), 80, 30, opacity, energy, 'AddRoundKey');
 
-                    // Key input (AES key expansion)
                     drawKeyNode(centerX + 150, y + (i < visibleRounds - 1 ? 180 : 120), opacity, energy, time, `RK${i+1}`);
                     drawConnection(centerX + 150, y + (i < visibleRounds - 1 ? 180 : 120), centerX + 50, y + (i < visibleRounds - 1 ? 180 : 120), opacity, true, time);
 
-                    // Output node
                     drawNode(centerX, y + (i < visibleRounds - 1 ? 200 : 140), opacity, i % 2 === 0, time, `State after Round ${i+1}`);
                 }
 
-                // Final output
                 ctx.fillText('Ciphertext', centerX, bottomY + 20);
             };
 
             const render = (time) => {
                 if (!isAnimating) return;
 
-                // FPS limiting for performance
                 if (time - lastTime < 1000 / fpsLimit) {
                     animationFrameId = requestAnimationFrame(render);
                     return;
@@ -832,14 +804,12 @@
                     const roundSpacing = (bottomY - topY - 50) / (maxRounds.des - 1);
                     const visibleRounds = Math.min(currentRounds, Math.floor((mouse.x / canvas.width) * currentRounds) + 1);
 
-                    // Draw DES key schedule on left
-                    drawDesKeySchedule(centerX, topY, time, energy);
-
-                    // Draw input with DES initial permutation note
                     ctx.font = 'bold 14px Inter';
                     ctx.fillStyle = 'rgba(255,255,255,0.3)';
                     ctx.textAlign = 'center';
                     ctx.fillText('64-BIT PLAINTEXT (After Initial Permutation)', centerX, topY - 20);
+
+                    drawDesKeySchedule(centerX, topY, time, energy);
 
                     drawNode(centerX - 100, topY, 1, true, time, 'L0 (32 bits)');
                     drawNode(centerX + 100, topY, 1, true, time, 'R0 (32 bits)');
@@ -848,35 +818,26 @@
                         const y = topY + 50 + i * roundSpacing;
                         const opacity = 1 - (i / maxRounds.des) * 0.5 + 0.5;
 
-                        // Left branch (becomes right in next round)
                         drawConnection(centerX - 100, topY + i * roundSpacing, centerX - 100, y, opacity, i % 2 === 0, time);
 
-                        // Right branch to F (DES: Expansion to 48 bits, XOR with key, S-boxes, Permutation)
                         drawConnection(centerX + 100, topY + i * roundSpacing, centerX + 100, y - 20, opacity, true, time);
 
-                        // F box (DES specific)
-                        drawFBox(centerX + 100, y, 80, 40, opacity, energy, 'F (Exp, S-Box, P)'); // Wider for longer label
+                        drawFBox(centerX + 100, y, 80, 40, opacity, energy, 'F (Exp, S-Box, P)');
 
-                        // Key input (DES: 48-bit subkey from key schedule)
                         drawKeyNode(centerX + 200, y, opacity, energy, time, `K${i+1} (48 bits)`);
                         drawConnection(centerX + 200, y, centerX + 140, y, opacity, true, time);
 
-                        // XOR (DES: XOR F output with left half)
                         drawXOR(centerX - 50, y + 20, 15, opacity, energy, time);
 
-                        // Cross connections (swapped in DES Feistel)
-                        drawConnection(centerX - 100, y, centerX + 100, y + 40, opacity, false, time); // Left to next right
-                        drawConnection(centerX - 100, y + 40, centerX - 100, y + roundSpacing, opacity, false, time); // Continue left
+                        drawConnection(centerX - 100, y, centerX + 100, y + 40, opacity, false, time);
+                        drawConnection(centerX - 100, y + 40, centerX - 100, y + roundSpacing, opacity, false, time);
 
-                        // Nodes
                         drawNode(centerX - 100, y + 40, opacity, i % 2 === 0, time, `L${i+1} (32 bits)`);
                         drawNode(centerX + 100, y + 40, opacity, i % 2 !== 0, time, `R${i+1} (32 bits)`);
                     }
 
-                    // Output with DES final permutation note
                     ctx.fillText('64-BIT CIPHERTEXT (After Final Permutation & Swap)', centerX, bottomY + 22);
 
-                    // Watermark
                     ctx.globalAlpha = 0.02;
                     ctx.fillStyle = 'white';
                     ctx.font = 'bold 140px Inter';
@@ -884,10 +845,8 @@
                     ctx.fillText('DES FEISTEL', canvas.width / 2, canvas.height / 2 + 50);
                     ctx.globalAlpha = 1.0;
                 } else {
-                    // AES mode
                     drawAesVisualization(centerX, topY, bottomY, time, energy);
 
-                    // AES Key Expansion (simplified)
                     const keyX = centerX - 300;
                     ctx.fillText('AES Key Expansion (128-bit to 11 round keys)', keyX - 50, topY - 20);
 
@@ -899,7 +858,6 @@
                         drawKeyNode(keyX - 80, y, 1, energy, time, `RK${i}`);
                     }
 
-                    // Watermark
                     ctx.globalAlpha = 0.02;
                     ctx.fillStyle = 'white';
                     ctx.font = 'bold 140px Inter';
@@ -917,23 +875,6 @@
 
             requestAnimationFrame(animate);
 
-            // Random Cipher Text on Hover
-            function showRandomCipherText(x, y) {
-                const chars = '0123456789ABCDEF';
-                let text = '';
-                for (let i = 0; i < 32; i++) {
-                    text += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                const div = document.createElement('div');
-                div.className = 'cipher-hover';
-                div.style.left = `${x + 10}px`;
-                div.style.top = `${y - 10}px`;
-                div.textContent = text;
-                document.body.appendChild(div);
-                setTimeout(() => div.remove(), 2000);
-            }
-
-            // Cleanup
             return () => {
                 cancelAnimationFrame(animationFrameId);
                 window.removeEventListener('resize', resize);
