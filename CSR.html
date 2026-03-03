@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSR & MSME Funding Opportunities</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+    </button>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter" id="slideCounter">
+        <span class="current-slide">01</span>
+        <span class="counter-divider">/</span>
+        <span class="total-slides">11</span>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <button class="nav-arrow nav-prev" id="prevBtn" aria-label="Previous slide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="nav-arrow nav-next" id="nextBtn" aria-label="Next slide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+
+    <!-- Slide Dots -->
+    <div class="slide-dots" id="slideDots"></div>
+
+    <!-- ======================== SLIDES ======================== -->
+    <div class="slides-container" id="slidesContainer">
+
+        <!-- SLIDE 1: Title -->
+        <section class="slide active" data-slide="0">
+            <div class="slide-bg-orbs">
+                <div class="orb orb-1"></div>
+                <div class="orb orb-2"></div>
+                <div class="orb orb-3"></div>
+            </div>
+            <div class="slide-content title-slide">
+                <p class="tag-label">IIM CSR Presentation</p>
+                <h1 class="title-main">CSR &amp; MSME<br><span class="gradient-text">Funding Opportunities</span></h1>
+                <p class="title-sub">A Comprehensive Analysis of Government Schemes, Corporate Programs<br>&amp; State-Level Initiatives Driving Sustainability for Indian MSMEs</p>
+                <div class="title-stats">
+                    <div class="title-stat">
+                        <span class="title-stat-num cyan">7</span>
+                        <span class="title-stat-label">Government<br>Schemes</span>
+                    </div>
+                    <div class="title-stat-divider"></div>
+                    <div class="title-stat">
+                        <span class="title-stat-num purple">8</span>
+                        <span class="title-stat-label">Corporate<br>Programs</span>
+                    </div>
+                    <div class="title-stat-divider"></div>
+                    <div class="title-stat">
+                        <span class="title-stat-num emerald">5</span>
+                        <span class="title-stat-label">MP State<br>Schemes</span>
+                    </div>
+                </div>
+                <div class="title-author">
+                    <span class="title-author-name">Dr. Hemraj S. Lamkuche</span>
+                    <span class="title-author-affiliation">VIT Bhopal University &nbsp;|&nbsp; Cybersecurity &amp; Digital Forensics, SCAI</span>
+                </div>
+                <button class="cta-btn" onclick="goToSlide(1)">
+                    Begin Presentation
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4l6 6-6 6"/></svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: Overview -->
+        <section class="slide" data-slide="1">
+            <div class="slide-content">
+                <p class="slide-label">Introduction</p>
+                <h2 class="slide-title">The Funding Landscape</h2>
+                <p class="slide-desc">India's ecosystem for CSR-driven MSME sustainability spans three pillars — creating a multi-layered framework for family businesses to integrate social responsibility into growth.</p>
+                <div class="pillars-row">
+                    <div class="pillar-card border-cyan">
+                        <div class="pillar-icon-wrap bg-cyan">
+                            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 3L3 9v2h22V9L14 3z"/><rect x="5" y="13" width="3" height="9"/><rect x="12.5" y="13" width="3" height="9"/><rect x="20" y="13" width="3" height="9"/><rect x="3" y="24" width="22" height="2"/></svg>
+                        </div>
+                        <h3>Government Schemes</h3>
+                        <p>National funding via RAMP, ZED, SPICE — subsidies, concessional loans &amp; grants for green tech.</p>
+                        <span class="pillar-count cyan">7 Schemes</span>
+                    </div>
+                    <div class="pillar-card border-amber">
+                        <div class="pillar-icon-wrap bg-amber">
+                            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="14" cy="14" r="11"/><path d="M14 8v6l5 5"/></svg>
+                        </div>
+                        <h3>Corporate Programs</h3>
+                        <p>Companies Act 2013 mandated CSR — grants, partnerships &amp; incubation for MSME sustainability.</p>
+                        <span class="pillar-count amber">8 Programs</span>
+                    </div>
+                    <div class="pillar-card border-emerald">
+                        <div class="pillar-icon-wrap bg-emerald">
+                            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 25h22"/><path d="M8 25V14l6-9 6 9v11"/><rect x="11" y="18" width="6" height="7"/></svg>
+                        </div>
+                        <h3>Madhya Pradesh</h3>
+                        <p>State-level venture capital, startup support &amp; industrial promotion for local MSME ecosystems.</p>
+                        <span class="pillar-count emerald">5 Initiatives</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: Key Objectives -->
+        <section class="slide" data-slide="2">
+            <div class="slide-content">
+                <p class="slide-label">Research Framework</p>
+                <h2 class="slide-title">Key Research Objectives</h2>
+                <div class="objectives-list">
+                    <div class="obj-item">
+                        <span class="obj-num cyan">01</span>
+                        <div class="obj-body">
+                            <h3>CSR &amp; Sustainability</h3>
+                            <p>Explore CSR's role in driving long-term MSME sustainability through green technology, circular economy, and environmental practices</p>
+                        </div>
+                        <div class="obj-line bg-cyan"></div>
+                    </div>
+                    <div class="obj-item">
+                        <span class="obj-num purple">02</span>
+                        <div class="obj-body">
+                            <h3>Family Business Integration</h3>
+                            <p>Analyze how family businesses can integrate CSR principles during scaling — waste reduction, energy efficiency, and sustainable supply chains</p>
+                        </div>
+                        <div class="obj-line bg-purple"></div>
+                    </div>
+                    <div class="obj-item">
+                        <span class="obj-num emerald">03</span>
+                        <div class="obj-body">
+                            <h3>Funding Ecosystem Mapping</h3>
+                            <p>Map the funding ecosystem connecting government subsidies, corporate CSR mandates, and state-level entrepreneurship support</p>
+                        </div>
+                        <div class="obj-line bg-emerald"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: Govt Schemes Part 1 -->
+        <section class="slide" data-slide="3">
+            <div class="slide-content">
+                <p class="slide-label">National Framework</p>
+                <h2 class="slide-title">Government Funding Schemes <span class="slide-title-badge">1/2</span></h2>
+                <div class="cards-grid cols-2">
+                    <div class="info-card accent-cyan">
+                        <div class="card-top">
+                            <span class="card-badge cyan">RAMP Program</span>
+                            <h3>GIFT Scheme</h3>
+                            <p class="card-fullname">MSME Green Investment &amp; Financing for Transformation</p>
+                        </div>
+                        <p class="card-desc">World Bank-supported concessional finance for clean/green technologies. Up to 50–100% subsidy on tech upgrades via SIDBI.</p>
+                    </div>
+                    <div class="info-card accent-emerald">
+                        <div class="card-top">
+                            <span class="card-badge emerald">Certification</span>
+                            <h3>ZED Certification</h3>
+                            <p class="card-fullname">Zero Defect Zero Effect</p>
+                        </div>
+                        <p class="card-desc">Quality manufacturing with minimal environmental impact. Up to 80% subsidy on certification. Free for women-owned MSMEs.</p>
+                    </div>
+                    <div class="info-card accent-purple">
+                        <div class="card-top">
+                            <span class="card-badge purple">Circular Economy</span>
+                            <h3>SPICE</h3>
+                            <p class="card-fullname">Promotion &amp; Investment in Circular Economy</p>
+                        </div>
+                        <p class="card-desc">Waste-to-value and resource efficiency under RAMP. Up to &#8377;1 crore subsidy for tech adoption via Ministry of MSME &amp; SIDBI.</p>
+                    </div>
+                    <div class="info-card accent-amber">
+                        <div class="card-top">
+                            <span class="card-badge amber">Green Finance</span>
+                            <h3>Green Business Scheme</h3>
+                            <p class="card-fullname">Eco-friendly Enterprise Credit</p>
+                        </div>
+                        <p class="card-desc">Concessional loans for renewables, organic farming &amp; recycling. Interest subsidies via banks; upfront costs partially covered.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: Govt Schemes Part 2 -->
+        <section class="slide" data-slide="4">
+            <div class="slide-content">
+                <p class="slide-label">National Framework</p>
+                <h2 class="slide-title">Government Funding Schemes <span class="slide-title-badge">2/2</span></h2>
+                <div class="cards-grid cols-3">
+                    <div class="info-card accent-rose">
+                        <div class="card-top">
+                            <span class="card-badge rose">Capital Subsidy</span>
+                            <h3>CLCSS</h3>
+                            <p class="card-fullname">Credit Linked Capital Subsidy</p>
+                        </div>
+                        <p class="card-desc">15% subsidy on capital investment for tech upgrades &amp; energy efficiency. Up to &#8377;1 crore eligible via nodal banks.</p>
+                    </div>
+                    <div class="info-card accent-blue">
+                        <div class="card-top">
+                            <span class="card-badge blue">Cluster Dev</span>
+                            <h3>MSE-CDP</h3>
+                            <p class="card-fullname">Cluster Development Programme</p>
+                        </div>
+                        <p class="card-desc">Cluster-based development with common facilities &amp; skill training. Up to 80% grant; clusters of 10+ MSMEs eligible.</p>
+                    </div>
+                    <div class="info-card accent-cyan">
+                        <div class="card-top">
+                            <span class="card-badge cyan">Innovation</span>
+                            <h3>ASPIRE</h3>
+                            <p class="card-fullname">Innovation, Rural Industry &amp; Entrepreneurship</p>
+                        </div>
+                        <p class="card-desc">Incubation centers &amp; innovation for agro-industry &amp; rural MSMEs. Up to &#8377;100 lakh one-time grant; PPP mode available.</p>
+                    </div>
+                </div>
+                <div class="slide-summary-bar">
+                    <span>Total: <strong>7 National Schemes</strong> covering subsidies, grants, certifications &amp; concessional finance</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: Corporate Part 1 -->
+        <section class="slide" data-slide="5">
+            <div class="slide-content">
+                <p class="slide-label">Private Sector</p>
+                <h2 class="slide-title">Corporate Funding Programs <span class="slide-title-badge">1/2</span></h2>
+                <div class="cards-grid cols-4">
+                    <div class="corp-card">
+                        <div class="corp-logo bg-cyan">TG</div>
+                        <h3>Tata Sustainability Group</h3>
+                        <p>Green tech, community projects &amp; skill programs for sustainable business models.</p>
+                        <div class="corp-tags"><span class="mini-tag">Green Tech</span><span class="mini-tag">Community</span></div>
+                        <div class="corp-amount cyan">&#8377;1,000+ Cr</div>
+                    </div>
+                    <div class="corp-card">
+                        <div class="corp-logo bg-purple">RF</div>
+                        <h3>Reliance Foundation</h3>
+                        <p>Rural transformation, digital &amp; green initiatives for sustainable development.</p>
+                        <div class="corp-tags"><span class="mini-tag">Rural</span><span class="mini-tag">Digital</span></div>
+                        <div class="corp-amount purple">~&#8377;1,300 Cr</div>
+                    </div>
+                    <div class="corp-card">
+                        <div class="corp-logo bg-emerald">IF</div>
+                        <h3>Infosys Foundation</h3>
+                        <p>Education, rural development &amp; sustainability with tech for green practices.</p>
+                        <div class="corp-tags"><span class="mini-tag">Education</span><span class="mini-tag">Innovation</span></div>
+                        <div class="corp-amount emerald">~&#8377;400 Cr</div>
+                    </div>
+                    <div class="corp-card">
+                        <div class="corp-logo bg-amber">HB</div>
+                        <h3>HDFC Bank CSR</h3>
+                        <p>Parivartan initiative — livelihoods, environment &amp; skill development for MSMEs.</p>
+                        <div class="corp-tags"><span class="mini-tag">Livelihoods</span><span class="mini-tag">Skills</span></div>
+                        <div class="corp-amount amber">~&#8377;700 Cr</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: Corporate Part 2 -->
+        <section class="slide" data-slide="6">
+            <div class="slide-content">
+                <p class="slide-label">Private Sector</p>
+                <h2 class="slide-title">Corporate Funding Programs <span class="slide-title-badge">2/2</span></h2>
+                <div class="cards-grid cols-4">
+                    <div class="corp-card">
+                        <div class="corp-logo bg-rose">OG</div>
+                        <h3>ONGC Foundation</h3>
+                        <p>Environment, health &amp; sustainable energy focus for green MSME projects.</p>
+                        <div class="corp-tags"><span class="mini-tag">Energy</span><span class="mini-tag">Green</span></div>
+                        <div class="corp-amount rose">~&#8377;600 Cr</div>
+                    </div>
+                    <div class="corp-card">
+                        <div class="corp-logo bg-blue">SB</div>
+                        <h3>SBI Foundation</h3>
+                        <p>Rural development, innovation incubators &amp; financial inclusion for MSMEs.</p>
+                        <div class="corp-tags"><span class="mini-tag">Finance</span><span class="mini-tag">Incubation</span></div>
+                        <div class="corp-amount blue">~&#8377;200 Cr</div>
+                    </div>
+                    <div class="corp-card">
+                        <div class="corp-logo bg-cyan">HC</div>
+                        <h3>HCL Foundation</h3>
+                        <p>Environment, education &amp; livelihoods with grants for sustainable tech.</p>
+                        <div class="corp-tags"><span class="mini-tag">Tech</span><span class="mini-tag">Education</span></div>
+                        <div class="corp-amount cyan">~&#8377;300 Cr</div>
+                    </div>
+                    <div class="corp-card">
+                        <div class="corp-logo bg-amber">DL</div>
+                        <h3>DLF Foundation</h3>
+                        <p>Education, health, environment &amp; sports for community-based MSME resilience.</p>
+                        <div class="corp-tags"><span class="mini-tag">Community</span><span class="mini-tag">Eco</span></div>
+                        <div class="corp-amount amber">~&#8377;100 Cr</div>
+                    </div>
+                </div>
+                <div class="total-banner">
+                    <span class="total-label">Combined Annual CSR Investment</span>
+                    <span class="total-value">&#8377;4,600+ Crore</span>
+                    <span class="total-sub">Across 8 major corporate programs</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: MP Schemes Part 1 -->
+        <section class="slide" data-slide="7">
+            <div class="slide-content">
+                <p class="slide-label">State-Level Initiatives</p>
+                <h2 class="slide-title">Madhya Pradesh Schemes <span class="slide-title-badge">1/2</span></h2>
+                <div class="mp-cards">
+                    <div class="mp-card">
+                        <div class="mp-marker bg-cyan"></div>
+                        <div class="mp-body">
+                            <span class="card-badge cyan">Policy 2025</span>
+                            <h3>MP MSME Development Policy</h3>
+                            <p>Comprehensive policy for manufacturing &amp; services — finance, technology, infrastructure with green practices &amp; circular economy focus.</p>
+                            <div class="mp-metrics">
+                                <div class="metric"><span class="metric-val cyan">40–50%</span><span class="metric-lbl">Capital Subsidy</span></div>
+                                <div class="metric"><span class="metric-val cyan">5% p.a.</span><span class="metric-lbl">Interest Subsidy</span></div>
+                                <div class="metric"><span class="metric-val cyan">100%</span><span class="metric-lbl">EPF (5 yrs)</span></div>
+                                <div class="metric"><span class="metric-val cyan">100%</span><span class="metric-lbl">Duty Exemption</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mp-card">
+                        <div class="mp-marker bg-purple"></div>
+                        <div class="mp-body">
+                            <span class="card-badge purple">Youth Empowerment</span>
+                            <h3>Mukhyamantri Udyam Kranti Yojana</h3>
+                            <p>Collateral-free loans to youth (18–40 yrs) for manufacturing, services &amp; retail — promoting self-employment.</p>
+                            <div class="mp-metrics">
+                                <div class="metric"><span class="metric-val purple">&#8377;1–50L</span><span class="metric-lbl">Mfg Loans</span></div>
+                                <div class="metric"><span class="metric-val purple">3%</span><span class="metric-lbl">Interest Sub. (7y)</span></div>
+                                <div class="metric"><span class="metric-val purple">CGTMSE</span><span class="metric-lbl">Guarantee</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mp-card">
+                        <div class="mp-marker bg-emerald"></div>
+                        <div class="mp-body">
+                            <span class="card-badge emerald">Self-Employment</span>
+                            <h3>Mukhyamantri Swarojgar Yojana</h3>
+                            <p>Margin money, interest subsidies, loan guarantees &amp; training for sustainable livelihoods and inclusive growth.</p>
+                            <div class="mp-metrics">
+                                <div class="metric"><span class="metric-val emerald">&#8377;25L</span><span class="metric-lbl">Max Project</span></div>
+                                <div class="metric"><span class="metric-val emerald">5–7%</span><span class="metric-lbl">Interest Sub.</span></div>
+                                <div class="metric"><span class="metric-val emerald">10–30%</span><span class="metric-lbl">Margin Money</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 9: MP Schemes Part 2 -->
+        <section class="slide" data-slide="8">
+            <div class="slide-content">
+                <p class="slide-label">State-Level Initiatives</p>
+                <h2 class="slide-title">Madhya Pradesh Schemes <span class="slide-title-badge">2/2</span></h2>
+                <div class="mp-cards">
+                    <div class="mp-card">
+                        <div class="mp-marker bg-amber"></div>
+                        <div class="mp-body">
+                            <span class="card-badge amber">Startup Policy 2022</span>
+                            <h3>MP Startup Policy</h3>
+                            <p>Innovation support in IT, agriculture, textiles &amp; renewables — grants for product development &amp; incubation.</p>
+                            <div class="mp-metrics">
+                                <div class="metric"><span class="metric-val amber">&#8377;50L</span><span class="metric-lbl">Max Aid</span></div>
+                                <div class="metric"><span class="metric-val amber">8%</span><span class="metric-lbl">Interest Sub.</span></div>
+                                <div class="metric"><span class="metric-val amber">2,500+</span><span class="metric-lbl">Startups Aided</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mp-card">
+                        <div class="mp-marker bg-rose"></div>
+                        <div class="mp-body">
+                            <span class="card-badge rose">Venture Capital</span>
+                            <h3>MP MSME Venture Capital Fund</h3>
+                            <p>MPIDC &amp; SIDBI managed — equity investments in renewables, agritech &amp; biotechnology for sustainable models.</p>
+                            <div class="mp-metrics">
+                                <div class="metric"><span class="metric-val rose">&#8377;10L–5Cr</span><span class="metric-lbl">Investment</span></div>
+                                <div class="metric"><span class="metric-val rose">Priority</span><span class="metric-lbl">Renewable Energy</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mp-card">
+                        <div class="mp-marker bg-blue"></div>
+                        <div class="mp-body">
+                            <span class="card-badge blue">Industrial Policy 2025</span>
+                            <h3>MP Industrial Promotion Policy</h3>
+                            <p>Infrastructure development — private parks, green initiatives &amp; inclusive growth with eco-friendly subsidies.</p>
+                            <div class="mp-metrics">
+                                <div class="metric"><span class="metric-val blue">40%</span><span class="metric-lbl">Capital Sub.</span></div>
+                                <div class="metric"><span class="metric-val blue">Green</span><span class="metric-lbl">Incentives</span></div>
+                                <div class="metric"><span class="metric-val blue">IPR</span><span class="metric-lbl">Cert. Support</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 10: Summary -->
+        <section class="slide" data-slide="9">
+            <div class="slide-content">
+                <p class="slide-label">Key Takeaways</p>
+                <h2 class="slide-title">Strategic Summary</h2>
+                <div class="summary-boxes">
+                    <div class="summary-box">
+                        <div class="sbox-icon cyan">
+                            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="16" cy="16" r="12"/><path d="M10 16l4 4 8-8"/></svg>
+                        </div>
+                        <h3>Multi-Layer Ecosystem</h3>
+                        <p>Three-tier coverage — national schemes, corporate CSR mandates, and state-level policies for diverse MSME needs.</p>
+                    </div>
+                    <div class="summary-box">
+                        <div class="sbox-icon emerald">
+                            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4v24M4 16h24"/><circle cx="16" cy="16" r="6"/><circle cx="16" cy="16" r="12"/></svg>
+                        </div>
+                        <h3>Green-First Approach</h3>
+                        <p>Environmental sustainability is central — from ZED certification to corporate green tech to MP's circular economy policies.</p>
+                    </div>
+                    <div class="summary-box">
+                        <div class="sbox-icon amber">
+                            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 24V14M12 24V10M18 24V16M24 24V6"/><path d="M4 28h24"/></svg>
+                        </div>
+                        <h3>Substantial Capital</h3>
+                        <p>&#8377;4,600+ crore annual corporate CSR spend plus government subsidies covering 40–100% of costs.</p>
+                    </div>
+                    <div class="summary-box">
+                        <div class="sbox-icon purple">
+                            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4l3 6h7l-5 5 2 7-7-4-7 4 2-7-5-5h7z"/></svg>
+                        </div>
+                        <h3>Family Business Focus</h3>
+                        <p>Succession-friendly policies, youth empowerment loans &amp; venture capital for scaling with integrated CSR values.</p>
+                    </div>
+                </div>
+                <div class="conclusion-bar">
+                    <p>CSR is not merely compliance — it is a <strong>strategic lever</strong> for MSMEs to achieve sustainable growth, competitive advantage &amp; societal impact.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 11: Author -->
+        <section class="slide" data-slide="10">
+            <div class="slide-bg-orbs">
+                <div class="orb orb-1"></div>
+                <div class="orb orb-2"></div>
+            </div>
+            <div class="slide-content author-slide">
+                <p class="slide-label">Thank You</p>
+                <h2 class="slide-title">Presented By</h2>
+
+                <div class="author-card">
+                    <div class="author-left">
+                        <div class="author-avatar"><span>HL</span></div>
+                        <div class="author-details">
+                            <h3 class="author-name">Dr. Hemraj S. Lamkuche</h3>
+                            <p class="author-role">Director, INFLYNX Technologies Pvt. Ltd, QBIT Payme, Prxis Technologies &amp; many more</p>
+                            <div class="author-tags">
+                                <span class="a-tag tag-cyan">Cryptologist</span>
+                                <span class="a-tag tag-purple">Sr. Asst. Professor - Grade 2</span>
+                            </div>
+                            <div class="author-info-rows">
+                                <div class="info-row">
+                                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="info-icon"><path d="M10 2L2 7v2h16V7L10 2z"/><rect x="4" y="11" width="2" height="5"/><rect x="9" y="11" width="2" height="5"/><rect x="14" y="11" width="2" height="5"/><rect x="2" y="17" width="16" height="1.5"/></svg>
+                                    <div>
+                                        <span class="info-label">Department</span>
+                                        <span class="info-value">Cybersecurity &amp; Digital Forensics</span>
+                                    </div>
+                                </div>
+                                <div class="info-row">
+                                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="info-icon"><rect x="3" y="4" width="14" height="12" rx="2"/><path d="M7 4V2M13 4V2M3 8h14"/></svg>
+                                    <div>
+                                        <span class="info-label">School</span>
+                                        <span class="info-value">School of Computing Science Engineering &amp; AI (SCAI)</span>
+                                    </div>
+                                </div>
+                                <div class="info-row">
+                                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="info-icon"><path d="M10 11a3 3 0 100-6 3 3 0 000 6z"/><path d="M10 18s-7-4-7-10a7 7 0 1114 0c0 6-7 10-7 10z"/></svg>
+                                    <div>
+                                        <span class="info-label">Institution</span>
+                                        <span class="info-value">VIT Bhopal University, Bhopal (M.P.)</span>
+                                    </div>
+                                </div>
+                                <div class="info-row">
+                                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="info-icon"><path d="M3 5l7-3 7 3v2H3V5z"/><path d="M5 7v6c0 3 5 5 5 5s5-2 5-5V7"/></svg>
+                                    <div>
+                                        <span class="info-label">Email</span>
+                                        <a href="mailto:hemrajshobharamlamkuche@vitbhopal.ac.in" class="info-email">hemrajshobharamlamkuche@vitbhopal.ac.in</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="author-right">
+                        <div class="qr-wrap">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=mailto:hemrajshobharamlamkuche@vitbhopal.ac.in&color=00d4ff&bgcolor=0a0e1a&format=svg" alt="QR Code" class="qr-img" width="180" height="180"/>
+                            <div class="qr-glow"></div>
+                        </div>
+                        <p class="qr-text">Scan to Connect</p>
+                        <p class="qr-sub">Email via QR</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Keyboard hint -->
+    <div class="key-hint" id="keyHint">Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> arrow keys to navigate</div>
+
+    <!-- Vanta.js 3D Backgrounds -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.trunk.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
