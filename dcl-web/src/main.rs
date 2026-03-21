@@ -1,4 +1,5 @@
 mod api;
+mod benchmark_data;
 mod gpu_backend;
 
 use axum::Router;
@@ -11,7 +12,8 @@ async fn main() {
     let backend = Arc::new(DclBackend::new());
 
     let app = Router::new()
-        .merge(api::api_router(backend));
+        .merge(api::api_router(backend))
+        .merge(benchmark_data::router());
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
     println!("🌐 DCL CUDA Explorer running at http://localhost:3000");

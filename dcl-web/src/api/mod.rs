@@ -5,6 +5,7 @@ pub mod coprime;
 pub mod evolve;
 pub mod repair;
 pub mod sieve;
+pub mod graph_presets;
 
 use axum::Router;
 use std::sync::Arc;
@@ -21,4 +22,5 @@ pub fn api_router(backend: SharedBackend) -> Router {
         .merge(evolve::router(backend.clone()))
         .merge(repair::router(backend.clone()))
         .merge(sieve::router(backend.clone()))
+        .merge(graph_presets::router())
 }
