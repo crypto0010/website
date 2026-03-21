@@ -1,17 +1,17 @@
+mod api;
 mod gpu_backend;
 
-use axum::{Router, routing::get, Json};
-use serde_json::json;
+use axum::Router;
 use std::net::SocketAddr;
-
-async fn health() -> Json<serde_json::Value> {
-    Json(json!({ "status": "ok" }))
-}
+use std::sync::Arc;
+use gpu_backend::DclBackend;
 
 #[tokio::main]
 async fn main() {
+    let backend = Arc::new(DclBackend::new());
+
     let app = Router::new()
-        .route("/api/health", get(health));
+        .merge(api::api_router(backend));
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
     println!("🌐 DCL CUDA Explorer running at http://localhost:3000");
