@@ -136,6 +136,7 @@ impl DclBackend {
 
     /// For each edge (u, v) check whether labels[u] and labels[v] are coprime.
     /// Returns a `Vec<bool>` parallel to `edges`.
+    #[allow(dead_code)]
     pub fn coprime_check(&self, labels: &[u64], edges: &[(usize, usize)]) -> Vec<bool> {
         edges
             .iter()
@@ -149,6 +150,7 @@ impl DclBackend {
     ///
     /// GPU: delegates to `GpuEvolve::evolve_steps`.
     /// CPU: repeatedly calls `cpu_power_map`.
+    #[allow(dead_code)]
     pub fn evolve(&self, labels: &[u64], m: u32, modulus: Option<u64>, steps: usize) -> Vec<u64> {
         let mod_val = modulus.unwrap_or(0);
 
