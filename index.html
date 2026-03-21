@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DCL CUDA Explorer — Dynamic Coprime Labeling</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--card:#1e293b;--border:#334155;--text:#e2e8f0;--muted:#94a3b8;
+  --blue:#3b82f6;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;--purple:#a78bfa;
+}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;line-height:1.6;font-size:0.95rem}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+.container{max-width:1100px;margin:0 auto;padding:0 20px}
+nav{position:sticky;top:0;z-index:100;background:rgba(15,23,42,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 0}
+nav .container{display:flex;align-items:center;justify-content:space-between}
+nav .logo{font-weight:700;font-size:1.1rem;color:var(--blue)}
+nav .links a{margin-left:20px;color:var(--muted);font-size:0.85rem}nav .links a:hover{color:var(--text)}
+.hero{text-align:center;padding:80px 0 60px}
+.hero h1{font-size:2.8rem;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
+.hero .subtitle{font-size:1.15rem;color:var(--muted);max-width:700px;margin:0 auto 30px}
+.hero .badges{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:0.8rem;font-weight:600;border:1px solid var(--border);background:var(--card)}
+.badge.green{border-color:var(--green);color:var(--green)}
+.badge.blue{border-color:var(--blue);color:var(--blue)}
+.badge.amber{border-color:var(--amber);color:var(--amber)}
+section{padding:50px 0}
+section h2{font-size:1.6rem;font-weight:700;margin-bottom:24px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+.section-label{font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;color:var(--blue);margin-bottom:8px}
+.learn-grid{display:grid;gap:16px}
+details{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color 0.2s}
+details[open]{border-color:var(--blue)}
+summary{padding:18px 22px;cursor:pointer;font-weight:600;font-size:1.05rem;display:flex;align-items:center;gap:12px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:'';width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform 0.2s;flex-shrink:0}
+details[open] summary::before{transform:rotate(45deg)}
+.card-body{padding:0 22px 20px;color:var(--muted);line-height:1.7}
+.card-body p{margin-bottom:10px}
+.card-body code{background:rgba(59,130,246,0.15);color:var(--blue);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.85em}
+.example{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:14px 18px;margin:12px 0}
+.example .mono{font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.9em;color:var(--text)}
+.theorem{background:rgba(167,139,250,0.08);border-left:3px solid var(--purple);padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0}
+.theorem strong{color:var(--purple)}
+.demo-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px}
+.demo-card h3{font-size:1.1rem;margin-bottom:12px;color:var(--text)}
+.demo-row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px}
+.demo-field label{display:block;font-size:0.8rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
+.demo-field input,.demo-field textarea{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.9rem;width:100%}
+.demo-field input:focus,.demo-field textarea:focus{outline:none;border-color:var(--blue)}
+.demo-field textarea{resize:vertical;min-height:60px}
+.btn{background:var(--blue);color:white;border:none;padding:9px 20px;border-radius:6px;cursor:pointer;font-weight:600;font-size:0.85rem;transition:opacity 0.2s}
+.btn:hover{opacity:0.85}
+.btn-sm{padding:6px 14px;font-size:0.8rem}
+.result-table{width:100%;border-collapse:collapse;margin-top:12px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.85rem}
+.result-table th{text-align:left;padding:8px 12px;border-bottom:2px solid var(--border);color:var(--muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.5px}
+.result-table td{padding:8px 12px;border-bottom:1px solid var(--border)}
+.result-table tr:last-child td{border-bottom:none}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:0.75rem;font-weight:600}
+.tag-pass{background:rgba(34,197,94,0.15);color:var(--green)}
+.tag-fail{background:rgba(239,68,68,0.15);color:var(--red)}
+.graph-container{background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:16px 0}
+.graph-container svg{display:block;max-width:100%;height:auto}
+.bench-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:768px){.bench-grid{grid-template-columns:1fr}}
+.bench-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;overflow:hidden}
+.bench-card h3{font-size:0.95rem;margin-bottom:16px;color:var(--muted)}
+.bench-card canvas{width:100%;border-radius:6px}
+.evolve-table tr.active{background:rgba(59,130,246,0.1)}
+.evolve-controls{display:flex;gap:10px;align-items:center;margin-top:12px}
+.evolve-controls input[type=range]{flex:1;accent-color:var(--blue)}
+footer{border-top:1px solid var(--border);padding:30px 0;text-align:center;color:var(--muted);font-size:0.8rem;margin-top:40px}
+footer p{margin-bottom:6px}
+@media(max-width:768px){.hero h1{font-size:2rem}.demo-row{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <span class="logo">DCL CUDA Explorer</span>
+    <div class="links">
+      <a href="#learn">Learn</a>
+      <a href="#demo">Try It</a>
+      <a href="#benchmarks">Benchmarks</a>
+      <a href="https://github.com/crypto0010/website" target="_blank">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <h1>DCL CUDA Explorer</h1>
+    <p class="subtitle">Interactive Dynamic Coprime Labeling with GPU Acceleration &mdash; a graph-theoretic framework for cryptographic applications</p>
+    <div class="badges">
+      <span class="badge green">8 CUDA Kernels</span>
+      <span class="badge blue">263M ops/s Peak</span>
+      <span class="badge amber">7.9x GPU Speedup</span>
+      <span class="badge">11,316 Lines of Rust</span>
+      <span class="badge">140 Tests &bull; 100% Pass</span>
+    </div>
+  </div>
+</header>
+
+<section id="learn">
+  <div class="container">
+    <div class="section-label">Theory</div>
+    <h2>Understanding Dynamic Coprime Labeling</h2>
+    <div class="learn-grid">
+      <details open>
+        <summary>What is Coprime Labeling?</summary>
+        <div class="card-body">
+          <p>Two integers are <strong>coprime</strong> if their greatest common divisor is 1: <code>gcd(a, b) = 1</code>. For example, 8 and 15 are coprime because gcd(8,15) = 1, but 8 and 12 are not because gcd(8,12) = 4.</p>
+          <p>A <strong>coprime labeling</strong> of a graph assigns positive integers to vertices such that every pair of adjacent vertices has coprime labels.</p>
+          <div class="example">
+            <strong>Example: Path graph P&#8325; with labels [2, 3, 5, 7, 11]</strong><br>
+            <div class="mono" style="margin-top:8px">
+              v&#8320;=2 &mdash; v&#8321;=3 &mdash; v&#8322;=5 &mdash; v&#8323;=7 &mdash; v&#8324;=11<br><br>
+              gcd(2,3) = 1 &#10003; &nbsp; gcd(3,5) = 1 &#10003; &nbsp; gcd(5,7) = 1 &#10003; &nbsp; gcd(7,11) = 1 &#10003;
+            </div>
+          </div>
+          <p>Since all primes are pairwise coprime, assigning distinct primes always works. But finding the <em>minimum</em> labels is NP-hard.</p>
+        </div>
+      </details>
+      <details>
+        <summary>The Power Map g(x) = x&#7504;</summary>
+        <div class="card-body">
+          <p><strong>Dynamic</strong> Coprime Labeling adds a temporal dimension: vertex labels <em>evolve</em> over time. The canonical transformation is the <strong>power map</strong>:</p>
+          <p style="text-align:center;font-size:1.2rem;margin:16px 0"><code>f&#8345;&#8330;&#8321;(v) = f&#8345;(v)&#7504;</code></p>
+          <div class="theorem">
+            <strong>Theorem 2 (Coprimality Preservation):</strong> If gcd(a, b) = 1, then gcd(a&#7504;, b&#7504;) = 1. Therefore, if f&#8320; is a coprime labeling, then f&#8345; is a coprime labeling for all t &ge; 0.
+          </div>
+          <p>Labels grow double-exponentially: f&#8345;(v) = f&#8320;(v)^(m^t), motivating modular arithmetic for practical computation.</p>
+          <div class="example">
+            <strong>Evolution on P&#8325; with g(x) = x&sup2;:</strong>
+            <table class="result-table" style="margin-top:10px">
+              <tr><th>t</th><th>v&#8320;</th><th>v&#8321;</th><th>v&#8322;</th><th>v&#8323;</th><th>v&#8324;</th><th>Coprime?</th></tr>
+              <tr><td>0</td><td>2</td><td>3</td><td>5</td><td>7</td><td>11</td><td><span class="tag tag-pass">&#10003;</span></td></tr>
+              <tr><td>1</td><td>4</td><td>9</td><td>25</td><td>49</td><td>121</td><td><span class="tag tag-pass">&#10003;</span></td></tr>
+              <tr><td>2</td><td>16</td><td>81</td><td>625</td><td>2,401</td><td>14,641</td><td><span class="tag tag-pass">&#10003;</span></td></tr>
+              <tr><td>3</td><td>256</td><td>6,561</td><td>390,625</td><td>5.8M</td><td>2.1&times;10&#8312;</td><td><span class="tag tag-pass">&#10003;</span></td></tr>
+            </table>
+          </div>
+        </div>
+      </details>
+      <details>
+        <summary>GPU Acceleration &mdash; Why CUDA?</summary>
+        <div class="card-body">
+          <p>DCL operations are <strong>embarrassingly parallel</strong>: each vertex/edge is independent. This maps perfectly to GPU architectures with thousands of CUDA cores executing in SIMT fashion.</p>
+          <table class="result-table">
+            <tr><th>#</th><th>Kernel</th><th>Parallelism</th></tr>
+            <tr><td>1</td><td>batch_gcd</td><td>1 thread/pair</td></tr>
+            <tr><td>2</td><td>prime_sieve</td><td>1 thread/candidate</td></tr>
+            <tr><td>3</td><td>batch_power_map</td><td>1 thread/label</td></tr>
+            <tr><td>4</td><td>batch_evolve</td><td>1 thread/label</td></tr>
+            <tr><td>5</td><td>coprime_check</td><td>1 thread/edge</td></tr>
+            <tr><td>6</td><td>coprime_repair</td><td>1 thread/edge</td></tr>
+            <tr><td>7</td><td>brute_force_search</td><td>1 thread/candidate</td></tr>
+            <tr><td>8</td><td>nist_data_gen</td><td>via kernel 4</td></tr>
+          </table>
+          <p style="margin-top:12px">Peak throughput: <strong>263.2M ops/s</strong> for power map, <strong>7.9&times; speedup</strong> over CPU at 1M elements on an RTX 3050.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="container">
+    <div class="section-label">Interactive</div>
+    <h2>Try It Yourself</h2>
+
+    <div class="demo-card">
+      <h3>Graph Visualization &mdash; P&#8325;</h3>
+      <p style="color:var(--muted);margin-bottom:12px;font-size:0.85rem">Path graph with 5 vertices labeled with the first 5 primes. All adjacent pairs are coprime (green edges).</p>
+      <div class="graph-container">
+        <svg width="750" height="300" viewBox="0 0 750 300">
+          <line x1="75" y1="150" x2="225" y2="150" stroke="#22c55e" stroke-width="2.5"/>
+          <line x1="225" y1="150" x2="375" y2="150" stroke="#22c55e" stroke-width="2.5"/>
+          <line x1="375" y1="150" x2="525" y2="150" stroke="#22c55e" stroke-width="2.5"/>
+          <line x1="525" y1="150" x2="675" y2="150" stroke="#22c55e" stroke-width="2.5"/>
+          <text x="150" y="135" text-anchor="middle" fill="#22c55e" font-size="10" font-family="monospace">gcd=1</text>
+          <text x="300" y="135" text-anchor="middle" fill="#22c55e" font-size="10" font-family="monospace">gcd=1</text>
+          <text x="450" y="135" text-anchor="middle" fill="#22c55e" font-size="10" font-family="monospace">gcd=1</text>
+          <text x="600" y="135" text-anchor="middle" fill="#22c55e" font-size="10" font-family="monospace">gcd=1</text>
+          <circle cx="75" cy="150" r="28" fill="#3b82f6" stroke="#60a5fa" stroke-width="2"/>
+          <text x="75" y="155" text-anchor="middle" fill="white" font-family="monospace" font-size="14" font-weight="bold">2</text>
+          <text x="75" y="198" text-anchor="middle" fill="#94a3b8" font-size="11">v0</text>
+          <circle cx="225" cy="150" r="28" fill="#3b82f6" stroke="#60a5fa" stroke-width="2"/>
+          <text x="225" y="155" text-anchor="middle" fill="white" font-family="monospace" font-size="14" font-weight="bold">3</text>
+          <text x="225" y="198" text-anchor="middle" fill="#94a3b8" font-size="11">v1</text>
+          <circle cx="375" cy="150" r="28" fill="#3b82f6" stroke="#60a5fa" stroke-width="2"/>
+          <text x="375" y="155" text-anchor="middle" fill="white" font-family="monospace" font-size="14" font-weight="bold">5</text>
+          <text x="375" y="198" text-anchor="middle" fill="#94a3b8" font-size="11">v2</text>
+          <circle cx="525" cy="150" r="28" fill="#3b82f6" stroke="#60a5fa" stroke-width="2"/>
+          <text x="525" y="155" text-anchor="middle" fill="white" font-family="monospace" font-size="14" font-weight="bold">7</text>
+          <text x="525" y="198" text-anchor="middle" fill="#94a3b8" font-size="11">v3</text>
+          <circle cx="675" cy="150" r="28" fill="#3b82f6" stroke="#60a5fa" stroke-width="2"/>
+          <text x="675" y="155" text-anchor="middle" fill="white" font-family="monospace" font-size="14" font-weight="bold">11</text>
+          <text x="675" y="198" text-anchor="middle" fill="#94a3b8" font-size="11">v4</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <h3>Batch GCD Calculator</h3>
+      <p style="color:var(--muted);margin-bottom:12px;font-size:0.85rem">Compute the greatest common divisor of number pairs. Enter one pair per line.</p>
+      <div class="demo-row">
+        <div class="demo-field" style="flex:1">
+          <label>Number Pairs</label>
+          <textarea id="gcdInput">12,8
+35,49
+97,13
+100,75
+48,18</textarea>
+        </div>
+        <button class="btn" onclick="computeGcd()">Compute GCD</button>
+      </div>
+      <div id="gcdResult"></div>
+    </div>
+
+    <div class="demo-card">
+      <h3>Power Map g(x) = x&#7504;</h3>
+      <p style="color:var(--muted);margin-bottom:12px;font-size:0.85rem">Apply the coprimality-preserving power map to a set of labels.</p>
+      <div class="demo-row">
+        <div class="demo-field" style="flex:2">
+          <label>Labels</label>
+          <input id="pmLabels" value="2, 3, 5, 7, 11">
+        </div>
+        <div class="demo-field" style="flex:0.5">
+          <label>Exponent m</label>
+          <input id="pmExp" type="number" value="2" min="2">
+        </div>
+        <div class="demo-field" style="flex:1">
+          <label>Modulus N (optional)</label>
+          <input id="pmMod" type="number" placeholder="e.g. 65537">
+        </div>
+        <button class="btn" onclick="computePowerMap()">Apply</button>
+      </div>
+      <div id="pmResult"></div>
+    </div>
+
+    <div class="demo-card" style="border-color:var(--blue)">
+      <h3 style="color:var(--blue)">Label Evolution &mdash; Watch Coprimality Preserved</h3>
+      <p style="color:var(--muted);margin-bottom:12px;font-size:0.85rem">Evolve labels under the power map and watch coprimality maintained at every step.</p>
+      <div class="demo-row">
+        <div class="demo-field" style="flex:2">
+          <label>Initial Labels</label>
+          <input id="evolveLabels" value="2, 3, 5, 7, 11">
+        </div>
+        <div class="demo-field" style="flex:0.5">
+          <label>Exponent</label>
+          <input id="evolveExp" type="number" value="2" min="2">
+        </div>
+        <div class="demo-field" style="flex:0.5">
+          <label>Steps</label>
+          <input id="evolveSteps" type="number" value="5" min="1" max="10">
+        </div>
+        <div class="demo-field" style="flex:1">
+          <label>Modulus (optional)</label>
+          <input id="evolveMod" type="number" placeholder="65537">
+        </div>
+        <button class="btn" onclick="computeEvolve()">Evolve</button>
+      </div>
+      <div id="evolveResult"></div>
+    </div>
+  </div>
+</section>
+
+<section id="benchmarks">
+  <div class="container">
+    <div class="section-label">Performance</div>
+    <h2>Published Results &mdash; GPU Research Paper</h2>
+    <p style="color:var(--muted);margin-bottom:24px">Intel Core i5-12450H + NVIDIA GeForce RTX 3050 (4GB GDDR6, 2048 CUDA cores).</p>
+    <div class="bench-grid">
+      <div class="bench-card"><h3>GPU vs. CPU &mdash; Batch GCD</h3><canvas id="chartGcd" height="280"></canvas></div>
+      <div class="bench-card"><h3>GPU vs. CPU &mdash; Power Map x&sup3;</h3><canvas id="chartPm" height="280"></canvas></div>
+      <div class="bench-card"><h3>Peak GPU Throughput by Kernel</h3><canvas id="chartThroughput" height="280"></canvas></div>
+      <div class="bench-card"><h3>GPU vs. CPU &mdash; Prime Sieve</h3><canvas id="chartSieve" height="280"></canvas></div>
+    </div>
+
+    <div class="demo-card" style="margin-top:20px">
+      <h3>NIST SP 800-22 Statistical Test Results</h3>
+      <p style="color:var(--muted);margin-bottom:12px;font-size:0.85rem">Randomness quality of DCL-generated byte streams (128,000 bits, 10-vertex graph, 200 steps).</p>
+      <table class="result-table">
+        <tr><th>Test</th><th>Result</th></tr>
+        <tr><td>Frequency (Monobit)</td><td><span class="tag tag-pass">PASS</span></td></tr>
+        <tr><td>Block Frequency</td><td><span class="tag tag-pass">PASS</span></td></tr>
+        <tr><td>Runs Test</td><td><span class="tag tag-pass">PASS</span></td></tr>
+        <tr><td>Longest Run of Ones</td><td><span class="tag tag-pass">PASS</span></td></tr>
+        <tr><td>Binary Matrix Rank</td><td><span class="tag tag-pass">PASS</span></td></tr>
+        <tr><td>Discrete Fourier Transform</td><td><span class="tag tag-pass">PASS</span></td></tr>
+        <tr><td>Non-overlapping Template</td><td><span class="tag tag-pass">PASS</span></td></tr>
+        <tr><td>Overlapping Template</td><td><span class="tag tag-pass">PASS</span></td></tr>
+        <tr><td>Linear Complexity</td><td><span class="tag tag-pass">PASS</span></td></tr>
+        <tr><td>Serial Test</td><td><span class="tag tag-pass">PASS</span></td></tr>
+        <tr><td>Approximate Entropy</td><td><span class="tag tag-pass">PASS</span></td></tr>
+        <tr><td>Cumulative Sums (Forward)</td><td><span class="tag tag-pass">PASS</span></td></tr>
+        <tr><td>Cumulative Sums (Reverse)</td><td><span class="tag tag-pass">PASS</span></td></tr>
+        <tr><td>Maurer's Universal</td><td><span class="tag tag-fail">FAIL</span></td></tr>
+        <tr><td>Random Excursions</td><td><span class="tag tag-pass">PASS</span></td></tr>
+        <tr style="font-weight:700"><td>Total</td><td>14/15 PASS (93%)</td></tr>
+      </table>
+    </div>
+
+    <div class="demo-card" style="margin-top:20px">
+      <h3>GPU Brute-Force Coprime Labeling Search</h3>
+      <table class="result-table">
+        <tr><th>Graph</th><th>n</th><th>Threads</th><th>Time (ms)</th><th>M cand/s</th><th>Found</th></tr>
+        <tr><td>P4</td><td>4</td><td>100K</td><td>6.26</td><td>16.0</td><td>20</td></tr>
+        <tr><td>P6</td><td>6</td><td>500K</td><td>7.09</td><td>70.5</td><td>20</td></tr>
+        <tr><td>C6</td><td>6</td><td>500K</td><td>12.14</td><td>41.2</td><td>20</td></tr>
+        <tr><td>K4</td><td>4</td><td>500K</td><td>8.66</td><td>57.7</td><td>20</td></tr>
+      </table>
+    </div>
+
+    <div class="demo-card" style="margin-top:20px">
+      <h3>Side-Channel Timing Analysis</h3>
+      <table class="result-table">
+        <tr><th>Implementation</th><th>Mean (us)</th><th>Std Dev</th><th>CV (%)</th></tr>
+        <tr><td>Standard GCD</td><td>1.23</td><td>0.89 us</td><td>72.4</td></tr>
+        <tr><td>Constant-time GCD</td><td>1.45</td><td>0.03 us</td><td style="color:var(--green);font-weight:700">2.1</td></tr>
+        <tr style="font-weight:700"><td colspan="3">Timing variance reduction</td><td style="color:var(--green)">96.7%</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="setup">
+  <div class="container">
+    <div class="section-label">Get Started</div>
+    <h2>Run the Full Interactive Version</h2>
+    <div class="demo-card">
+      <p style="margin-bottom:16px">This static page shows pre-computed results and client-side demos. For the full experience with <strong>live GPU computation</strong>, graph editor, and all 6 operations, run the server locally:</p>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.85rem;line-height:2">
+        <span style="color:var(--muted)"># Clone and build</span><br>
+        <span style="color:var(--green)">$</span> git clone https://github.com/crypto0010/website.git dcl-rs<br>
+        <span style="color:var(--green)">$</span> cd dcl-rs &amp;&amp; git checkout master<br>
+        <span style="color:var(--green)">$</span> cargo run -p dcl-web<br>
+        <br>
+        <span style="color:var(--muted)"># Open in browser</span><br>
+        <span style="color:var(--blue)">http://localhost:3000</span>
+      </div>
+      <p style="margin-top:16px;color:var(--muted);font-size:0.85rem"><strong>Requirements:</strong> Rust 1.70+, NVIDIA GPU with CUDA toolkit (optional &mdash; falls back to CPU).</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p><strong>DCL CUDA Explorer</strong> &mdash; Built with Rust + CUDA + Axum</p>
+    <p>Based on: <em>GPU-Accelerated Dynamic Coprime Labeling</em> (IEEE Trans. Computers, 2026)</p>
+    <p>and: <em>FPGA-Accelerated Dynamic Coprime Labeling</em> (IEEE Trans. Circuits &amp; Systems I, 2026)</p>
+  </div>
+</footer>
+
+<script>
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a}
+function modPow(base,exp,mod){
+  if(mod){let r=1n,b=BigInt(base)%BigInt(mod),e=BigInt(exp),m=BigInt(mod);while(e>0n){if(e&1n)r=(r*b)%m;b=(b*b)%m;e>>=1n}return Number(r)}
+  let r=1n,b=BigInt(base),e=BigInt(exp);while(e>0n){if(e&1n)r*=b;b*=b;e>>=1n;if(r>1000000000000000n)return Number(r)}return Number(r)
+}
+function fmt(n){return n>1e12?n.toExponential(2):n.toLocaleString()}
+
+function buildTable(headers,rows){
+  const t=document.createElement('table');t.className='result-table';
+  const thead=document.createElement('tr');
+  headers.forEach(h=>{const th=document.createElement('th');th.textContent=h;thead.appendChild(th)});
+  t.appendChild(thead);
+  rows.forEach(cells=>{const tr=document.createElement('tr');
+    cells.forEach(c=>{const td=document.createElement('td');
+      if(typeof c==='object'&&c.html){td.appendChild(c.html)}else{td.textContent=String(c)}
+      tr.appendChild(td)});t.appendChild(tr)});
+  return t
+}
+function makeTag(text,cls){const s=document.createElement('span');s.className='tag '+cls;s.textContent=text;return{html:s}}
+
+function computeGcd(){
+  const lines=document.getElementById('gcdInput').value.trim().split('\n');
+  const results=[];
+  for(const line of lines){const p=line.split(',').map(s=>parseInt(s.trim()));
+    if(p.length===2&&!isNaN(p[0])&&!isNaN(p[1])){const g=gcd(p[0],p[1]);results.push({a:p[0],b:p[1],gcd:g,coprime:g===1})}}
+  const el=document.getElementById('gcdResult');el.textContent='';
+  const rows=results.map(r=>[r.a,r.b,r.gcd,r.coprime?makeTag('Yes','tag-pass'):makeTag('No','tag-fail')]);
+  el.appendChild(buildTable(['a','b','gcd(a,b)','Coprime?'],rows))
+}
+
+function computePowerMap(){
+  const labels=document.getElementById('pmLabels').value.split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n));
+  const m=parseInt(document.getElementById('pmExp').value)||2;
+  const modStr=document.getElementById('pmMod').value.trim();
+  const mod=modStr?parseInt(modStr):null;
+  const results=labels.map(x=>modPow(x,m,mod));
+  const el=document.getElementById('pmResult');el.textContent='';
+  const rows=labels.map((l,i)=>['v'+i,l,fmt(results[i])]);
+  const header=mod?'x^'+m+' mod '+mod:'x^'+m;
+  el.appendChild(buildTable(['Vertex','Original',header],rows));
+  let allCo=true;for(let i=0;i<results.length-1;i++)if(gcd(results[i],results[i+1])!==1)allCo=false;
+  if(labels.length>1){const p=document.createElement('p');p.style.marginTop='10px';
+    const tag=document.createElement('span');tag.className='tag '+(allCo?'tag-pass':'tag-fail');
+    tag.textContent=allCo?'Coprimality Preserved':'Check Failed';p.appendChild(tag);
+    p.appendChild(document.createTextNode(allCo?' All adjacent pairs remain coprime.':' Some pairs are no longer coprime.'));
+    el.appendChild(p)}
+}
+
+function computeEvolve(){
+  const labels=document.getElementById('evolveLabels').value.split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n));
+  const m=parseInt(document.getElementById('evolveExp').value)||2;
+  const steps=Math.min(parseInt(document.getElementById('evolveSteps').value)||5,10);
+  const modStr=document.getElementById('evolveMod').value.trim();
+  const mod=modStr?parseInt(modStr):null;
+  const snaps=[labels.slice()];let cur=labels.slice();
+  for(let s=0;s<steps;s++){cur=cur.map(x=>modPow(x,m,mod));snaps.push(cur.slice())}
+  const el=document.getElementById('evolveResult');el.textContent='';
+  const headers=['t',...labels.map((_,i)=>'v'+i),'Coprime?'];
+  const rows=snaps.map((row,t)=>{let co=true;for(let i=0;i<row.length-1;i++)if(gcd(row[i],row[i+1])!==1)co=false;
+    return[t,...row.map(v=>fmt(v)),co?makeTag('Yes','tag-pass'):makeTag('No','tag-fail')]});
+  const table=buildTable(headers,rows);table.classList.add('evolve-table');
+  const trs=table.querySelectorAll('tr');
+  for(let i=1;i<trs.length;i++)trs[i].id='evolve-row-'+(i-1);
+  el.appendChild(table);
+  const controls=document.createElement('div');controls.className='evolve-controls';
+  const playBtn=document.createElement('button');playBtn.className='btn btn-sm';playBtn.id='evolvePlayBtn';
+  playBtn.textContent='Play';playBtn.onclick=function(){toggleEvolvePlay(snaps.length)};
+  const slider=document.createElement('input');slider.type='range';slider.id='evolveSlider';
+  slider.min='0';slider.max=String(snaps.length-1);slider.value='0';
+  slider.oninput=function(){highlightEvolveRow(this.value)};
+  const label=document.createElement('span');label.id='evolveStepLabel';
+  label.style.cssText='color:var(--muted);font-size:0.85rem;min-width:40px';label.textContent='t=0';
+  controls.appendChild(playBtn);controls.appendChild(slider);controls.appendChild(label);
+  el.appendChild(controls)
+}
+
+let evolveInterval=null;
+function toggleEvolvePlay(max){
+  const btn=document.getElementById('evolvePlayBtn');
+  if(evolveInterval){clearInterval(evolveInterval);evolveInterval=null;btn.textContent='Play';return}
+  btn.textContent='Pause';let step=parseInt(document.getElementById('evolveSlider').value);
+  evolveInterval=setInterval(()=>{step=(step+1)%max;document.getElementById('evolveSlider').value=step;
+    highlightEvolveRow(step);if(step===max-1){clearInterval(evolveInterval);evolveInterval=null;btn.textContent='Play'}},800)
+}
+function highlightEvolveRow(t){
+  document.querySelectorAll('.evolve-table tr').forEach(r=>r.classList.remove('active'));
+  const row=document.getElementById('evolve-row-'+t);if(row)row.classList.add('active');
+  const lbl=document.getElementById('evolveStepLabel');if(lbl)lbl.textContent='t='+t
+}
+
+const BD={gcd:[{n:'50K',gpu:7.03,cpu:4.34},{n:'100K',gpu:6.56,cpu:8.67},{n:'500K',gpu:9.62,cpu:51.09},{n:'1M',gpu:12.47,cpu:98.47}],
+pm:[{n:'50K',gpu:0.34,cpu:1.36},{n:'100K',gpu:0.67,cpu:2.65},{n:'500K',gpu:2.00,cpu:13.70},{n:'1M',gpu:3.80,cpu:26.53}],
+sieve:[{n:'50K',gpu:0.80,cpu:0.90},{n:'100K',gpu:1.24,cpu:2.19},{n:'500K',gpu:6.64,cpu:18.76},{n:'1M',gpu:12.74,cpu:43.96}],
+tp:[{name:'Batch GCD',value:80.2},{name:'Power Map',value:263.2},{name:'Prime Sieve',value:78.5},{name:'Batch Evolve',value:400.9},{name:'Brute-Force',value:70.5},{name:'NIST Gen',value:1.0}]};
+
+function drawBar(id,data,yl){
+  const c=document.getElementById(id);if(!c)return;const ctx=c.getContext('2d');
+  const dpr=window.devicePixelRatio||1;const r=c.getBoundingClientRect();
+  c.width=r.width*dpr;c.height=r.height*dpr;ctx.scale(dpr,dpr);
+  const W=r.width,H=r.height,p={t:20,r:20,b:40,l:55};
+  const cW=W-p.l-p.r,cH=H-p.t-p.b;
+  ctx.fillStyle='#0f172a';ctx.fillRect(0,0,W,H);
+  const mx=Math.max(...data.map(d=>Math.max(d.gpu,d.cpu)))*1.15;
+  const bg=cW/data.length,bw=bg*0.3;
+  ctx.strokeStyle='#334155';ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const y=p.t+cH-(cH*i/4);ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(W-p.r,y);ctx.stroke();
+    ctx.fillStyle='#94a3b8';ctx.font='11px system-ui';ctx.textAlign='right';ctx.fillText((mx*i/4).toFixed(1),p.l-8,y+4)}
+  ctx.fillStyle='#94a3b8';ctx.font='10px system-ui';ctx.save();ctx.translate(14,p.t+cH/2);ctx.rotate(-Math.PI/2);
+  ctx.textAlign='center';ctx.fillText(yl,0,0);ctx.restore();
+  data.forEach((d,i)=>{const x=p.l+i*bg+bg*0.1;const gH=(d.gpu/mx)*cH;const cpH=(d.cpu/mx)*cH;
+    ctx.fillStyle='#3b82f6';ctx.fillRect(x,p.t+cH-gH,bw,gH);
+    ctx.fillStyle='#64748b';ctx.fillRect(x+bw+2,p.t+cH-cpH,bw,cpH);
+    ctx.fillStyle='#22c55e';ctx.font='bold 10px system-ui';ctx.textAlign='center';
+    ctx.fillText((d.cpu/d.gpu).toFixed(1)+'x',x+bw,p.t+cH-gH-5);
+    ctx.fillStyle='#94a3b8';ctx.font='11px system-ui';ctx.fillText(d.n,x+bw,p.t+cH+18)});
+  ctx.fillStyle='#3b82f6';ctx.fillRect(W-120,8,12,12);ctx.fillStyle='#e2e8f0';ctx.font='11px system-ui';ctx.textAlign='left';ctx.fillText('GPU',W-104,18);
+  ctx.fillStyle='#64748b';ctx.fillRect(W-65,8,12,12);ctx.fillStyle='#e2e8f0';ctx.fillText('CPU',W-49,18)
+}
+function drawTP(id,data){
+  const c=document.getElementById(id);if(!c)return;const ctx=c.getContext('2d');
+  const dpr=window.devicePixelRatio||1;const r=c.getBoundingClientRect();
+  c.width=r.width*dpr;c.height=r.height*dpr;ctx.scale(dpr,dpr);
+  const W=r.width,H=r.height,p={t:15,r:60,b:15,l:100};
+  const cW=W-p.l-p.r,cH=H-p.t-p.b;
+  ctx.fillStyle='#0f172a';ctx.fillRect(0,0,W,H);
+  const mx=Math.max(...data.map(d=>d.value))*1.15;
+  const bH=Math.min(30,cH/data.length-8);
+  const cols=['#3b82f6','#22c55e','#f59e0b','#a78bfa','#ef4444','#64748b'];
+  data.forEach((d,i)=>{const y=p.t+i*(cH/data.length)+(cH/data.length-bH)/2;
+    const bW=(d.value/mx)*cW;ctx.fillStyle=cols[i%cols.length];ctx.fillRect(p.l,y,bW,bH);
+    ctx.fillStyle='#94a3b8';ctx.font='11px system-ui';ctx.textAlign='right';ctx.fillText(d.name,p.l-8,y+bH/2+4);
+    ctx.fillStyle='#e2e8f0';ctx.font='bold 11px monospace';ctx.textAlign='left';ctx.fillText(d.value.toFixed(1)+' M',p.l+bW+6,y+bH/2+4)})
+}
+function drawAll(){drawBar('chartGcd',BD.gcd,'Time (ms)');drawBar('chartPm',BD.pm,'Time (ms)');drawBar('chartSieve',BD.sieve,'Time (ms)');drawTP('chartThroughput',BD.tp)}
+window.addEventListener('DOMContentLoaded',()=>setTimeout(drawAll,100));
+window.addEventListener('resize',drawAll);
+</script>
+</body>
+</html>
