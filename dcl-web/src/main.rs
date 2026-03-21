@@ -1,3 +1,5 @@
+mod gpu_backend;
+
 use axum::{Router, routing::get, Json};
 use serde_json::json;
 use std::net::SocketAddr;
