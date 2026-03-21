@@ -1,0 +1,28 @@
+[workspace]
+members = [
+    "dcl-core",
+    "dcl-complexity",
+    "dcl-hypergraph",
+    "dcl-crypto",
+    "dcl-security",
+    "dcl-ramsey",
+    "dcl-cli", "fuzz", "dcl-gpu", "dcl-zkp", "dcl-wasm",
+    "dcl-web",
+]
+resolver = "2"
+
+[workspace.dependencies]
+rand = "0.8"
+clap = { version = "4", features = ["derive"] }
+criterion = { version = "0.5", features = ["html_reports"] }
+num-bigint = "0.4"
+num-traits = "0.2"
+num-integer = "0.1"
+sha2 = "0.10"
+hmac = "0.12"
+rayon = "1.10"
+thiserror = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+tracing-appender = "0.2"
+cudarc = { version = "0.19", features = ["std", "driver", "nvrtc", "cuda-version-from-build-system"] }
