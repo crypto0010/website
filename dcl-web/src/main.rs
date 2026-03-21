@@ -2,16 +2,23 @@ mod api;
 mod benchmark_data;
 mod gpu_backend;
 
-use axum::Router;
+use axum::{Router, response::Html, routing::get};
 use std::net::SocketAddr;
 use std::sync::Arc;
 use gpu_backend::DclBackend;
+
+const INDEX_HTML: &str = include_str!("../static/index.html");
+
+async fn index() -> Html<&'static str> {
+    Html(INDEX_HTML)
+}
 
 #[tokio::main]
 async fn main() {
     let backend = Arc::new(DclBackend::new());
 
     let app = Router::new()
+        .route("/", get(index))
         .merge(api::api_router(backend))
         .merge(benchmark_data::router());
 
