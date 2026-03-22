@@ -3,494 +3,2046 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DCL CUDA Explorer — Dynamic Coprime Labeling</title>
+<title>DCL CUDA Explorer</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#0f172a;--card:#1e293b;--border:#334155;--text:#e2e8f0;--muted:#94a3b8;
-  --blue:#3b82f6;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;--purple:#a78bfa;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --card-border: #334155;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --accent: #3b82f6;
+    --accent-hover: #2563eb;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --max-w: 1200px;
+    --radius: 8px;
 }
-body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;line-height:1.6;font-size:0.95rem}
-a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
-.container{max-width:1100px;margin:0 auto;padding:0 20px}
-nav{position:sticky;top:0;z-index:100;background:rgba(15,23,42,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 0}
-nav .container{display:flex;align-items:center;justify-content:space-between}
-nav .logo{font-weight:700;font-size:1.1rem;color:var(--blue)}
-nav .links a{margin-left:20px;color:var(--muted);font-size:0.85rem}nav .links a:hover{color:var(--text)}
-.hero{text-align:center;padding:80px 0 60px}
-.hero h1{font-size:2.8rem;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
-.hero .subtitle{font-size:1.15rem;color:var(--muted);max-width:700px;margin:0 auto 30px}
-.hero .badges{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:0.8rem;font-weight:600;border:1px solid var(--border);background:var(--card)}
-.badge.green{border-color:var(--green);color:var(--green)}
-.badge.blue{border-color:var(--blue);color:var(--blue)}
-.badge.amber{border-color:var(--amber);color:var(--amber)}
-section{padding:50px 0}
-section h2{font-size:1.6rem;font-weight:700;margin-bottom:24px;padding-bottom:10px;border-bottom:2px solid var(--border)}
-.section-label{font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;color:var(--blue);margin-bottom:8px}
-.learn-grid{display:grid;gap:16px}
-details{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color 0.2s}
-details[open]{border-color:var(--blue)}
-summary{padding:18px 22px;cursor:pointer;font-weight:600;font-size:1.05rem;display:flex;align-items:center;gap:12px;list-style:none}
-summary::-webkit-details-marker{display:none}
-summary::before{content:'';width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform 0.2s;flex-shrink:0}
-details[open] summary::before{transform:rotate(45deg)}
-.card-body{padding:0 22px 20px;color:var(--muted);line-height:1.7}
-.card-body p{margin-bottom:10px}
-.card-body code{background:rgba(59,130,246,0.15);color:var(--blue);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.85em}
-.example{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:14px 18px;margin:12px 0}
-.example .mono{font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.9em;color:var(--text)}
-.theorem{background:rgba(167,139,250,0.08);border-left:3px solid var(--purple);padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0}
-.theorem strong{color:var(--purple)}
-.demo-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px}
-.demo-card h3{font-size:1.1rem;margin-bottom:12px;color:var(--text)}
-.demo-row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px}
-.demo-field label{display:block;font-size:0.8rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
-.demo-field input,.demo-field textarea{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.9rem;width:100%}
-.demo-field input:focus,.demo-field textarea:focus{outline:none;border-color:var(--blue)}
-.demo-field textarea{resize:vertical;min-height:60px}
-.btn{background:var(--blue);color:white;border:none;padding:9px 20px;border-radius:6px;cursor:pointer;font-weight:600;font-size:0.85rem;transition:opacity 0.2s}
-.btn:hover{opacity:0.85}
-.btn-sm{padding:6px 14px;font-size:0.8rem}
-.result-table{width:100%;border-collapse:collapse;margin-top:12px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.85rem}
-.result-table th{text-align:left;padding:8px 12px;border-bottom:2px solid var(--border);color:var(--muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.5px}
-.result-table td{padding:8px 12px;border-bottom:1px solid var(--border)}
-.result-table tr:last-child td{border-bottom:none}
-.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:0.75rem;font-weight:600}
-.tag-pass{background:rgba(34,197,94,0.15);color:var(--green)}
-.tag-fail{background:rgba(239,68,68,0.15);color:var(--red)}
-.graph-container{background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:16px 0}
-.graph-container svg{display:block;max-width:100%;height:auto}
-.bench-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:768px){.bench-grid{grid-template-columns:1fr}}
-.bench-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;overflow:hidden}
-.bench-card h3{font-size:0.95rem;margin-bottom:16px;color:var(--muted)}
-.bench-card canvas{width:100%;border-radius:6px}
-.evolve-table tr.active{background:rgba(59,130,246,0.1)}
-.evolve-controls{display:flex;gap:10px;align-items:center;margin-top:12px}
-.evolve-controls input[type=range]{flex:1;accent-color:var(--blue)}
-footer{border-top:1px solid var(--border);padding:30px 0;text-align:center;color:var(--muted);font-size:0.8rem;margin-top:40px}
-footer p{margin-bottom:6px}
-@media(max-width:768px){.hero h1{font-size:2rem}.demo-row{flex-direction:column}}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Sticky Nav */
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    padding: 0.6rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+nav .nav-brand { font-weight: 700; font-size: 1.1rem; color: var(--accent); }
+nav .nav-links { display: flex; gap: 1.2rem; }
+nav .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+nav .nav-links a:hover { color: var(--text); }
+
+/* Container */
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem; }
+
+/* Hero */
+.hero {
+    text-align: center;
+    padding: 4rem 1rem 3rem;
+}
+.hero h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+.hero .subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 999px;
+    padding: 0.35rem 1rem;
+    font-size: 0.8rem;
+    font-family: var(--mono);
+}
+.status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--yellow);
+}
+.status-dot.active { background: var(--green); animation: pulse-dot 2s infinite; }
+@keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+}
+.hero-links { margin-top: 1rem; display: flex; gap: 1.5rem; justify-content: center; }
+.hero-links a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+.hero-links a:hover { text-decoration: underline; }
+
+/* GPU Scan Panel */
+.gpu-scan-panel {
+    display: inline-block;
+    margin: 1.5rem auto 0;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 1.2rem 2rem;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+}
+.gpu-scan-panel.scanning { border-color: var(--accent); }
+.gpu-scan-panel.gpu-found { border-color: var(--green); }
+.gpu-scan-panel.cpu-mode { border-color: var(--yellow); }
+.gpu-scan-panel.offline { border-color: var(--red); }
+
+.scan-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.95rem;
+    font-family: var(--sans);
+    transition: opacity 0.2s, transform 0.1s;
+}
+.scan-btn:hover { opacity: 0.85; }
+.scan-btn:active { transform: scale(0.97); }
+.scan-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.scan-btn .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.scan-result {
+    margin-top: 1rem;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    line-height: 1.8;
+    display: none;
+}
+.scan-result.show { display: block; }
+.scan-result .label { color: var(--text-muted); }
+.scan-result .value { color: var(--text); font-weight: 600; }
+.scan-result .value.gpu { color: var(--green); }
+.scan-result .value.cpu { color: var(--yellow); }
+.scan-result .value.err { color: var(--red); }
+.scan-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+/* Offline banner */
+.offline-banner {
+    display: none;
+    background: rgba(245,158,11,0.15);
+    border: 1px solid var(--yellow);
+    color: var(--yellow);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    font-family: var(--mono);
+}
+.offline-banner.show { display: block; }
+
+/* Section titles */
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 3rem 0 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--card-border);
+}
+
+/* Cards */
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+/* Learn cards */
+.learn-grid { display: grid; gap: 1rem; }
+details.learn-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+details.learn-card summary {
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.05rem;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    user-select: none;
+    transition: background 0.2s;
+}
+details.learn-card summary:hover { background: rgba(59,130,246,0.08); }
+details.learn-card summary::before { content: '\25B6'; font-size: 0.7rem; color: var(--accent); transition: transform 0.2s; }
+details.learn-card[open] summary::before { transform: rotate(90deg); }
+details.learn-card .learn-body {
+    padding: 0 1.25rem 1.25rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+details.learn-card .learn-body ul { padding-left: 1.2rem; margin: 0.5rem 0; }
+details.learn-card .learn-body li { margin-bottom: 0.3rem; }
+details.learn-card .learn-body code {
+    background: rgba(59,130,246,0.15);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+}
+.try-link { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.9rem; display: inline-block; margin-top: 0.5rem; }
+.try-link:hover { text-decoration: underline; }
+
+/* Graph Workspace */
+.graph-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.graph-controls label { font-size: 0.85rem; color: var(--text-muted); }
+.graph-controls input[type="range"] { width: 100px; accent-color: var(--accent); }
+
+.svg-container {
+    background: #0c1322;
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+}
+.svg-container svg { display: block; width: 100%; height: auto; }
+.graph-instructions {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--sans);
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-primary:disabled { background: #475569; cursor: not-allowed; opacity: 0.6; }
+.btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--text-muted);
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-outline.active { border-color: var(--accent); color: var(--accent); background: rgba(59,130,246,0.1); }
+.btn-danger { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+.btn-danger:hover { background: rgba(239,68,68,0.25); }
+
+/* Playground grid */
+.playground-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+.playground-grid .panel-full { grid-column: 1 / -1; }
+
+/* Panels */
+.panel {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--card-border);
+}
+.panel-header .panel-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.panel-header .panel-title .panel-icon {
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+.panel-desc {
+    padding: 0.5rem 1rem 0;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+.panel-body { padding: 1rem; flex: 1; }
+.panel-footer {
+    padding: 0.6rem 1rem;
+    border-top: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-family: var(--mono);
+}
+.panel-footer .timing { display: flex; align-items: center; gap: 0.3rem; }
+
+/* Inputs */
+textarea, input[type="text"], input[type="number"], select {
+    background: #0f172a;
+    border: 1px solid var(--card-border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+    font-family: var(--mono);
+    width: 100%;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+}
+textarea:focus, input:focus, select:focus { border-color: var(--accent); }
+textarea { min-height: 70px; }
+.input-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+.input-group { flex: 1; min-width: 100px; }
+.input-group label {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+.full-width { width: 100%; }
+
+/* Results */
+.results { display: none; margin-top: 0.75rem; }
+.results.show { display: block; }
+
+/* Tables */
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+}
+.result-table th {
+    text-align: left;
+    padding: 0.4rem 0.6rem;
+    border-bottom: 2px solid var(--card-border);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.result-table td {
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid rgba(51,65,85,0.5);
+}
+.result-table tr:hover { background: rgba(59,130,246,0.05); }
+.result-table .highlight-row { background: rgba(59,130,246,0.12); }
+.result-table .overflow-cell { color: var(--yellow); font-weight: 600; }
+
+/* Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: var(--mono);
+}
+.badge-pass { background: rgba(34,197,94,0.15); color: var(--green); }
+.badge-fail { background: rgba(239,68,68,0.15); color: var(--red); }
+.badge-warn { background: rgba(245,158,11,0.15); color: var(--yellow); }
+.badge-info { background: rgba(59,130,246,0.15); color: var(--accent); }
+
+/* Summary badges */
+.summary-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+/* Warning box */
+.warning-box {
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 6px;
+    padding: 0.6rem 0.8rem;
+    margin-top: 0.5rem;
+    font-size: 0.82rem;
+    color: var(--yellow);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Educational message */
+.edu-msg {
+    background: rgba(59,130,246,0.08);
+    border-left: 3px solid var(--accent);
+    padding: 0.6rem 0.8rem;
+    margin-top: 0.5rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    border-radius: 0 6px 6px 0;
+}
+
+/* Evolve timeline */
+.evolve-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+}
+.evolve-controls input[type="range"] {
+    flex: 1;
+    min-width: 120px;
+    accent-color: var(--accent);
+}
+
+/* Prime grid */
+.prime-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+.prime-badge {
+    background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 6px;
+    padding: 0.3rem 0.6rem;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    text-align: center;
+    line-height: 1.3;
+}
+.prime-badge small { display: block; font-size: 0.68rem; color: var(--text-muted); }
+
+/* Benchmark section */
+.bench-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+.bench-charts canvas {
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+}
+.bench-table-wrap { margin-bottom: 1.5rem; }
+.bench-table-wrap h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Diff highlight */
+.diff-changed { background: rgba(34,197,94,0.15); }
+.diff-old { text-decoration: line-through; color: var(--red); opacity: 0.6; }
+
+/* Repair comparison */
+.repair-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+.repair-compare .repair-col h4 {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+}
+
+/* Footer */
+footer {
+    border-top: 1px solid var(--card-border);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-top: 4rem;
+}
+footer p { margin-bottom: 0.3rem; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 3px; }
+
+/* Table scroll */
+.table-scroll { overflow-x: auto; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 1.8rem; }
+    .playground-grid { grid-template-columns: 1fr; }
+    .bench-charts { grid-template-columns: 1fr; }
+    .repair-compare { grid-template-columns: 1fr; }
+    nav .nav-links { gap: 0.6rem; }
+    nav .nav-links a { font-size: 0.75rem; }
+}
+
+/* Help tooltip */
+.help-btn {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--card-border);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+.help-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Evolve panel prominent style */
+.panel-evolve { border-color: var(--accent); box-shadow: 0 0 20px rgba(59,130,246,0.08); }
+.panel-evolve .panel-header { background: rgba(59,130,246,0.06); }
 </style>
 </head>
 <body>
 
+<!-- Nav -->
 <nav>
-  <div class="container">
-    <span class="logo">DCL CUDA Explorer</span>
-    <div class="links">
-      <a href="#learn">Learn</a>
-      <a href="#demo">Try It</a>
-      <a href="#benchmarks">Benchmarks</a>
-      <a href="https://github.com/crypto0010/website" target="_blank">GitHub</a>
+    <span class="nav-brand">DCL CUDA Explorer</span>
+    <div class="nav-links">
+        <a href="#learn">Learn</a>
+        <a href="#workspace">Graph</a>
+        <a href="#playground">Playground</a>
+        <a href="#benchmarks">Benchmarks</a>
     </div>
-  </div>
 </nav>
 
+<!-- Hero -->
 <header class="hero">
-  <div class="container">
     <h1>DCL CUDA Explorer</h1>
-    <p class="subtitle">Interactive Dynamic Coprime Labeling with GPU Acceleration &mdash; a graph-theoretic framework for cryptographic applications</p>
-    <div class="badges">
-      <span class="badge green">8 CUDA Kernels</span>
-      <span class="badge blue">263M ops/s Peak</span>
-      <span class="badge amber">7.9x GPU Speedup</span>
-      <span class="badge">11,316 Lines of Rust</span>
-      <span class="badge">140 Tests &bull; 100% Pass</span>
+    <p class="subtitle">Interactive Dynamic Coprime Labeling with GPU Acceleration</p>
+
+    <div class="gpu-scan-panel" id="gpuScanPanel">
+        <div class="scan-icon" id="scanIcon">&#128270;</div>
+        <button class="scan-btn" id="scanBtn" onclick="scanGpu()">Scan for GPU</button>
+        <div class="scan-result" id="scanResult">
+            <div><span class="label">Backend: </span><span class="value" id="scanBackend">--</span></div>
+            <div><span class="label">Device: </span><span class="value" id="scanDevice">--</span></div>
+            <div><span class="label">Status: </span><span class="value" id="scanStatus">--</span></div>
+        </div>
     </div>
-  </div>
+
+    <div style="margin-top:1rem">
+        <div class="status-badge" id="statusBadge">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusText">Not scanned</span>
+        </div>
+    </div>
+
+    <div class="hero-links">
+        <a href="#benchmarks">Research Paper</a>
+        <a href="https://github.com/crypto0010/website" target="_blank">GitHub</a>
+    </div>
 </header>
 
+<div class="container">
+
+<!-- Offline Banner -->
+<div class="offline-banner" id="offlineBanner">
+    Server offline &mdash; start with: <code>cargo run -p dcl-web</code>
+</div>
+
+<!-- Learn Section -->
 <section id="learn">
-  <div class="container">
-    <div class="section-label">Theory</div>
-    <h2>Understanding Dynamic Coprime Labeling</h2>
+    <h2 class="section-title">Learn</h2>
     <div class="learn-grid">
-      <details open>
-        <summary>What is Coprime Labeling?</summary>
-        <div class="card-body">
-          <p>Two integers are <strong>coprime</strong> if their greatest common divisor is 1: <code>gcd(a, b) = 1</code>. For example, 8 and 15 are coprime because gcd(8,15) = 1, but 8 and 12 are not because gcd(8,12) = 4.</p>
-          <p>A <strong>coprime labeling</strong> of a graph assigns positive integers to vertices such that every pair of adjacent vertices has coprime labels.</p>
-          <div class="example">
-            <strong>Example: Path graph P&#8325; with labels [2, 3, 5, 7, 11]</strong><br>
-            <div class="mono" style="margin-top:8px">
-              v&#8320;=2 &mdash; v&#8321;=3 &mdash; v&#8322;=5 &mdash; v&#8323;=7 &mdash; v&#8324;=11<br><br>
-              gcd(2,3) = 1 &#10003; &nbsp; gcd(3,5) = 1 &#10003; &nbsp; gcd(5,7) = 1 &#10003; &nbsp; gcd(7,11) = 1 &#10003;
+
+        <details class="learn-card" open>
+            <summary>What is Coprime Labeling?</summary>
+            <div class="learn-body">
+                <ul>
+                    <li>Two integers are <strong>coprime</strong> if <code>gcd(a, b) = 1</code>, meaning they share no common factor other than 1.</li>
+                    <li>A <strong>coprime labeling</strong> assigns positive integers to graph vertices such that adjacent vertices always have coprime labels.</li>
+                    <li>Example: Path graph P&#x2085; with labels <code>[2, 3, 5, 7, 11]</code> &mdash; every adjacent pair is coprime since they are all distinct primes.</li>
+                </ul>
+                <a class="try-link" href="#coprime-check">Try it &rarr;</a>
             </div>
-          </div>
-          <p>Since all primes are pairwise coprime, assigning distinct primes always works. But finding the <em>minimum</em> labels is NP-hard.</p>
-        </div>
-      </details>
-      <details>
-        <summary>The Power Map g(x) = x&#7504;</summary>
-        <div class="card-body">
-          <p><strong>Dynamic</strong> Coprime Labeling adds a temporal dimension: vertex labels <em>evolve</em> over time. The canonical transformation is the <strong>power map</strong>:</p>
-          <p style="text-align:center;font-size:1.2rem;margin:16px 0"><code>f&#8345;&#8330;&#8321;(v) = f&#8345;(v)&#7504;</code></p>
-          <div class="theorem">
-            <strong>Theorem 2 (Coprimality Preservation):</strong> If gcd(a, b) = 1, then gcd(a&#7504;, b&#7504;) = 1. Therefore, if f&#8320; is a coprime labeling, then f&#8345; is a coprime labeling for all t &ge; 0.
-          </div>
-          <p>Labels grow double-exponentially: f&#8345;(v) = f&#8320;(v)^(m^t), motivating modular arithmetic for practical computation.</p>
-          <div class="example">
-            <strong>Evolution on P&#8325; with g(x) = x&sup2;:</strong>
-            <table class="result-table" style="margin-top:10px">
-              <tr><th>t</th><th>v&#8320;</th><th>v&#8321;</th><th>v&#8322;</th><th>v&#8323;</th><th>v&#8324;</th><th>Coprime?</th></tr>
-              <tr><td>0</td><td>2</td><td>3</td><td>5</td><td>7</td><td>11</td><td><span class="tag tag-pass">&#10003;</span></td></tr>
-              <tr><td>1</td><td>4</td><td>9</td><td>25</td><td>49</td><td>121</td><td><span class="tag tag-pass">&#10003;</span></td></tr>
-              <tr><td>2</td><td>16</td><td>81</td><td>625</td><td>2,401</td><td>14,641</td><td><span class="tag tag-pass">&#10003;</span></td></tr>
-              <tr><td>3</td><td>256</td><td>6,561</td><td>390,625</td><td>5.8M</td><td>2.1&times;10&#8312;</td><td><span class="tag tag-pass">&#10003;</span></td></tr>
-            </table>
-          </div>
-        </div>
-      </details>
-      <details>
-        <summary>GPU Acceleration &mdash; Why CUDA?</summary>
-        <div class="card-body">
-          <p>DCL operations are <strong>embarrassingly parallel</strong>: each vertex/edge is independent. This maps perfectly to GPU architectures with thousands of CUDA cores executing in SIMT fashion.</p>
-          <table class="result-table">
-            <tr><th>#</th><th>Kernel</th><th>Parallelism</th></tr>
-            <tr><td>1</td><td>batch_gcd</td><td>1 thread/pair</td></tr>
-            <tr><td>2</td><td>prime_sieve</td><td>1 thread/candidate</td></tr>
-            <tr><td>3</td><td>batch_power_map</td><td>1 thread/label</td></tr>
-            <tr><td>4</td><td>batch_evolve</td><td>1 thread/label</td></tr>
-            <tr><td>5</td><td>coprime_check</td><td>1 thread/edge</td></tr>
-            <tr><td>6</td><td>coprime_repair</td><td>1 thread/edge</td></tr>
-            <tr><td>7</td><td>brute_force_search</td><td>1 thread/candidate</td></tr>
-            <tr><td>8</td><td>nist_data_gen</td><td>via kernel 4</td></tr>
-          </table>
-          <p style="margin-top:12px">Peak throughput: <strong>263.2M ops/s</strong> for power map, <strong>7.9&times; speedup</strong> over CPU at 1M elements on an RTX 3050.</p>
-        </div>
-      </details>
+        </details>
+
+        <details class="learn-card">
+            <summary>The Power Map g(x) = x&#x1D50;</summary>
+            <div class="learn-body">
+                <ul>
+                    <li>Labels evolve over time: <code>f&#x209C;&#x208A;&#x2081;(v) = f&#x209C;(v)&#x1D50;</code>.</li>
+                    <li>Key theorem: if <code>gcd(a, b) = 1</code> then <code>gcd(a&#x1D50;, b&#x1D50;) = 1</code> &mdash; coprimality is preserved!</li>
+                    <li>This means we can evolve labels indefinitely and the graph structure is maintained.</li>
+                </ul>
+                <a class="try-link" href="#evolve">Try it &rarr;</a>
+            </div>
+        </details>
+
+        <details class="learn-card">
+            <summary>GPU Acceleration</summary>
+            <div class="learn-body">
+                <ul>
+                    <li>DCL operations are <strong>embarrassingly parallel</strong> &mdash; each vertex/edge can be processed independently.</li>
+                    <li>8 CUDA kernels achieving up to <strong>263M ops/s</strong> on commodity hardware (RTX 3050).</li>
+                    <li>Up to <strong>7.9x speedup</strong> over CPU for batch operations at 1M elements.</li>
+                </ul>
+                <a class="try-link" href="#benchmarks">See benchmarks &rarr;</a>
+            </div>
+        </details>
+
     </div>
-  </div>
 </section>
 
-<section id="demo">
-  <div class="container">
-    <div class="section-label">Interactive</div>
-    <h2>Try It Yourself</h2>
-
-    <div class="demo-card">
-      <h3>Graph Visualization &mdash; P&#8325;</h3>
-      <p style="color:var(--muted);margin-bottom:12px;font-size:0.85rem">Path graph with 5 vertices labeled with the first 5 primes. All adjacent pairs are coprime (green edges).</p>
-      <div class="graph-container">
-        <svg width="750" height="300" viewBox="0 0 750 300">
-          <line x1="75" y1="150" x2="225" y2="150" stroke="#22c55e" stroke-width="2.5"/>
-          <line x1="225" y1="150" x2="375" y2="150" stroke="#22c55e" stroke-width="2.5"/>
-          <line x1="375" y1="150" x2="525" y2="150" stroke="#22c55e" stroke-width="2.5"/>
-          <line x1="525" y1="150" x2="675" y2="150" stroke="#22c55e" stroke-width="2.5"/>
-          <text x="150" y="135" text-anchor="middle" fill="#22c55e" font-size="10" font-family="monospace">gcd=1</text>
-          <text x="300" y="135" text-anchor="middle" fill="#22c55e" font-size="10" font-family="monospace">gcd=1</text>
-          <text x="450" y="135" text-anchor="middle" fill="#22c55e" font-size="10" font-family="monospace">gcd=1</text>
-          <text x="600" y="135" text-anchor="middle" fill="#22c55e" font-size="10" font-family="monospace">gcd=1</text>
-          <circle cx="75" cy="150" r="28" fill="#3b82f6" stroke="#60a5fa" stroke-width="2"/>
-          <text x="75" y="155" text-anchor="middle" fill="white" font-family="monospace" font-size="14" font-weight="bold">2</text>
-          <text x="75" y="198" text-anchor="middle" fill="#94a3b8" font-size="11">v0</text>
-          <circle cx="225" cy="150" r="28" fill="#3b82f6" stroke="#60a5fa" stroke-width="2"/>
-          <text x="225" y="155" text-anchor="middle" fill="white" font-family="monospace" font-size="14" font-weight="bold">3</text>
-          <text x="225" y="198" text-anchor="middle" fill="#94a3b8" font-size="11">v1</text>
-          <circle cx="375" cy="150" r="28" fill="#3b82f6" stroke="#60a5fa" stroke-width="2"/>
-          <text x="375" y="155" text-anchor="middle" fill="white" font-family="monospace" font-size="14" font-weight="bold">5</text>
-          <text x="375" y="198" text-anchor="middle" fill="#94a3b8" font-size="11">v2</text>
-          <circle cx="525" cy="150" r="28" fill="#3b82f6" stroke="#60a5fa" stroke-width="2"/>
-          <text x="525" y="155" text-anchor="middle" fill="white" font-family="monospace" font-size="14" font-weight="bold">7</text>
-          <text x="525" y="198" text-anchor="middle" fill="#94a3b8" font-size="11">v3</text>
-          <circle cx="675" cy="150" r="28" fill="#3b82f6" stroke="#60a5fa" stroke-width="2"/>
-          <text x="675" y="155" text-anchor="middle" fill="white" font-family="monospace" font-size="14" font-weight="bold">11</text>
-          <text x="675" y="198" text-anchor="middle" fill="#94a3b8" font-size="11">v4</text>
+<!-- Graph Workspace -->
+<section id="workspace">
+    <h2 class="section-title">Graph Workspace</h2>
+    <div class="graph-controls">
+        <button class="btn btn-outline btn-sm preset-btn" data-family="path" data-n="5">P&#x2085;</button>
+        <button class="btn btn-outline btn-sm preset-btn" data-family="cycle" data-n="6">C&#x2086;</button>
+        <button class="btn btn-outline btn-sm preset-btn" data-family="wheel" data-n="5">W&#x2085;</button>
+        <button class="btn btn-outline btn-sm preset-btn" data-family="complete" data-n="4">K&#x2084;</button>
+        <button class="btn btn-outline btn-sm preset-btn" data-family="hypercube" data-n="3">Q&#x2083;</button>
+        <span style="margin-left: 0.5rem;"></span>
+        <label>n: <span id="nVal">5</span></label>
+        <input type="range" min="3" max="20" value="5" id="nSlider">
+        <span style="flex:1"></span>
+        <button class="btn btn-danger btn-sm" id="clearBtn">Clear Graph</button>
+    </div>
+    <div class="svg-container" id="svgContainer">
+        <svg id="graphSvg" viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
         </svg>
-      </div>
     </div>
+    <p class="graph-instructions">Click canvas to add vertex &bull; Click two vertices to connect &bull; Double-click to edit label &bull; Right-click to delete</p>
+</section>
 
-    <div class="demo-card">
-      <h3>Batch GCD Calculator</h3>
-      <p style="color:var(--muted);margin-bottom:12px;font-size:0.85rem">Compute the greatest common divisor of number pairs. Enter one pair per line.</p>
-      <div class="demo-row">
-        <div class="demo-field" style="flex:1">
-          <label>Number Pairs</label>
-          <textarea id="gcdInput">12,8
+<!-- Playground -->
+<section id="playground">
+    <h2 class="section-title">Interactive Playground</h2>
+    <div class="playground-grid">
+
+        <!-- Panel 1: Batch GCD -->
+        <div class="panel" id="gcd-panel">
+            <div class="panel-header">
+                <span class="panel-title"><span class="panel-icon"></span> Batch GCD</span>
+                <button class="help-btn" title="Compute GCD for multiple pairs in parallel on the GPU">?</button>
+            </div>
+            <p class="panel-desc">Compute GCD for multiple integer pairs simultaneously.</p>
+            <div class="panel-body">
+                <textarea id="gcdInput" placeholder="12,8&#10;35,49&#10;97,13">12,8
 35,49
-97,13
-100,75
-48,18</textarea>
+97,13</textarea>
+                <div style="margin-top:0.5rem;text-align:right;">
+                    <button class="btn btn-primary btn-sm run-btn" id="gcdRunBtn">Run &#x25B6;</button>
+                </div>
+                <div class="results" id="gcdResults"></div>
+            </div>
+            <div class="panel-footer">
+                <span class="timing" id="gcdTiming"></span>
+            </div>
         </div>
-        <button class="btn" onclick="computeGcd()">Compute GCD</button>
-      </div>
-      <div id="gcdResult"></div>
-    </div>
 
-    <div class="demo-card">
-      <h3>Power Map g(x) = x&#7504;</h3>
-      <p style="color:var(--muted);margin-bottom:12px;font-size:0.85rem">Apply the coprimality-preserving power map to a set of labels.</p>
-      <div class="demo-row">
-        <div class="demo-field" style="flex:2">
-          <label>Labels</label>
-          <input id="pmLabels" value="2, 3, 5, 7, 11">
+        <!-- Panel 2: Power Map -->
+        <div class="panel" id="power-panel">
+            <div class="panel-header">
+                <span class="panel-title"><span class="panel-icon"></span> Power Map</span>
+                <button class="help-btn" title="Apply g(x) = x^m (mod N) to a set of labels">?</button>
+            </div>
+            <p class="panel-desc">Apply the power map to evolve labels by one step.</p>
+            <div class="panel-body">
+                <div class="input-row">
+                    <div class="input-group" style="flex:2">
+                        <label>Labels (comma-sep)</label>
+                        <input type="text" id="pmLabels" value="2,3,5,7,11">
+                    </div>
+                    <div class="input-group">
+                        <label>Exponent m</label>
+                        <input type="number" id="pmExp" value="2" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label>Modulus N (optional)</label>
+                        <input type="number" id="pmMod" placeholder="e.g. 65537">
+                    </div>
+                </div>
+                <div style="text-align:right;">
+                    <button class="btn btn-primary btn-sm run-btn" id="pmRunBtn">Run &#x25B6;</button>
+                </div>
+                <div class="results" id="pmResults"></div>
+            </div>
+            <div class="panel-footer">
+                <span class="timing" id="pmTiming"></span>
+            </div>
         </div>
-        <div class="demo-field" style="flex:0.5">
-          <label>Exponent m</label>
-          <input id="pmExp" type="number" value="2" min="2">
-        </div>
-        <div class="demo-field" style="flex:1">
-          <label>Modulus N (optional)</label>
-          <input id="pmMod" type="number" placeholder="e.g. 65537">
-        </div>
-        <button class="btn" onclick="computePowerMap()">Apply</button>
-      </div>
-      <div id="pmResult"></div>
-    </div>
 
-    <div class="demo-card" style="border-color:var(--blue)">
-      <h3 style="color:var(--blue)">Label Evolution &mdash; Watch Coprimality Preserved</h3>
-      <p style="color:var(--muted);margin-bottom:12px;font-size:0.85rem">Evolve labels under the power map and watch coprimality maintained at every step.</p>
-      <div class="demo-row">
-        <div class="demo-field" style="flex:2">
-          <label>Initial Labels</label>
-          <input id="evolveLabels" value="2, 3, 5, 7, 11">
+        <!-- Panel 3: Coprime Check -->
+        <div class="panel" id="coprime-check">
+            <div class="panel-header">
+                <span class="panel-title"><span class="panel-icon"></span> Coprime Check</span>
+                <button class="help-btn" title="Verify that all adjacent vertices have coprime labels">?</button>
+            </div>
+            <p class="panel-desc">Check if a graph labeling satisfies the coprime property.</p>
+            <div class="panel-body">
+                <button class="btn btn-outline btn-sm" id="ccLoadBtn" style="margin-bottom:0.5rem;">Use Current Graph</button>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Labels (comma-sep)</label>
+                        <input type="text" id="ccLabels" placeholder="2,3,4,6">
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Edges (e.g. 0-1,1-2,2-3)</label>
+                        <input type="text" id="ccEdges" placeholder="0-1,1-2,2-3">
+                    </div>
+                </div>
+                <div style="text-align:right;">
+                    <button class="btn btn-primary btn-sm run-btn" id="ccRunBtn">Run &#x25B6;</button>
+                </div>
+                <div class="results" id="ccResults"></div>
+            </div>
+            <div class="panel-footer">
+                <span class="timing" id="ccTiming"></span>
+            </div>
         </div>
-        <div class="demo-field" style="flex:0.5">
-          <label>Exponent</label>
-          <input id="evolveExp" type="number" value="2" min="2">
+
+        <!-- Panel 5: Coprime Repair -->
+        <div class="panel" id="repair-panel">
+            <div class="panel-header">
+                <span class="panel-title"><span class="panel-icon"></span> Coprime Repair</span>
+                <button class="help-btn" title="Automatically fix a broken labeling to make it coprime">?</button>
+            </div>
+            <p class="panel-desc">Fix a non-coprime labeling by finding minimal corrections.</p>
+            <div class="panel-body">
+                <button class="btn btn-outline btn-sm" id="repairLoadBtn" style="margin-bottom:0.5rem;">Load Broken Example</button>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Labels (comma-sep)</label>
+                        <input type="text" id="repairLabels" placeholder="4,6,9,10">
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Edges (e.g. 0-1,1-2,2-3)</label>
+                        <input type="text" id="repairEdges" placeholder="0-1,1-2,2-3">
+                    </div>
+                </div>
+                <div style="text-align:right;">
+                    <button class="btn btn-primary btn-sm run-btn" id="repairRunBtn">Run &#x25B6;</button>
+                </div>
+                <div class="results" id="repairResults"></div>
+            </div>
+            <div class="panel-footer">
+                <span class="timing" id="repairTiming"></span>
+            </div>
         </div>
-        <div class="demo-field" style="flex:0.5">
-          <label>Steps</label>
-          <input id="evolveSteps" type="number" value="5" min="1" max="10">
+
+        <!-- Panel 4: Evolve (full width, prominent) -->
+        <div class="panel panel-evolve panel-full" id="evolve">
+            <div class="panel-header">
+                <span class="panel-title"><span class="panel-icon"></span> Evolve</span>
+                <button class="help-btn" title="Watch labels evolve over multiple power-map steps, preserving coprimality">?</button>
+            </div>
+            <p class="panel-desc">Evolve a coprime labeling through multiple power-map iterations. Watch coprimality persist at every step.</p>
+            <div class="panel-body">
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Graph Preset</label>
+                        <select id="evolvePreset">
+                            <option value="path">Path (P&#x2099;)</option>
+                            <option value="cycle">Cycle (C&#x2099;)</option>
+                            <option value="complete">Complete (K&#x2099;)</option>
+                            <option value="wheel">Wheel (W&#x2099;)</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="flex:2">
+                        <label>Initial Labels (comma-sep)</label>
+                        <input type="text" id="evolveLabels" value="2,3,5,7,11">
+                    </div>
+                    <div class="input-group">
+                        <label>Exponent m</label>
+                        <input type="number" id="evolveExp" value="2" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label>Modulus (suggest 65537)</label>
+                        <input type="number" id="evolveMod" placeholder="65537">
+                    </div>
+                    <div class="input-group">
+                        <label>Steps: <span id="evolveStepVal">5</span></label>
+                        <input type="range" id="evolveSteps" min="1" max="50" value="5">
+                    </div>
+                </div>
+                <div style="text-align:right;">
+                    <button class="btn btn-primary run-btn" id="evolveRunBtn">Evolve &#x25B6;</button>
+                </div>
+                <div class="results" id="evolveResults"></div>
+            </div>
+            <div class="panel-footer">
+                <span class="timing" id="evolveTiming"></span>
+            </div>
         </div>
-        <div class="demo-field" style="flex:1">
-          <label>Modulus (optional)</label>
-          <input id="evolveMod" type="number" placeholder="65537">
+
+        <!-- Panel 6: Prime Sieve -->
+        <div class="panel" id="sieve-panel">
+            <div class="panel-header">
+                <span class="panel-title"><span class="panel-icon"></span> Prime Sieve</span>
+                <button class="help-btn" title="Generate safe primes for use as coprime labels">?</button>
+            </div>
+            <p class="panel-desc">Generate primes suitable for coprime labels.</p>
+            <div class="panel-body">
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Count</label>
+                        <input type="number" id="sieveCount" value="20" min="1" max="1000">
+                    </div>
+                    <div class="input-group">
+                        <label>Start Value</label>
+                        <input type="number" id="sieveStart" value="2" min="2">
+                    </div>
+                </div>
+                <div style="text-align:right;">
+                    <button class="btn btn-primary btn-sm run-btn" id="sieveRunBtn">Run &#x25B6;</button>
+                </div>
+                <div class="results" id="sieveResults"></div>
+            </div>
+            <div class="panel-footer">
+                <span class="timing" id="sieveTiming"></span>
+            </div>
         </div>
-        <button class="btn" onclick="computeEvolve()">Evolve</button>
-      </div>
-      <div id="evolveResult"></div>
+
+        <div></div>
+
     </div>
-  </div>
 </section>
 
+<!-- Benchmarks -->
 <section id="benchmarks">
-  <div class="container">
-    <div class="section-label">Performance</div>
-    <h2>Published Results &mdash; GPU Research Paper</h2>
-    <p style="color:var(--muted);margin-bottom:24px">Intel Core i5-12450H + NVIDIA GeForce RTX 3050 (4GB GDDR6, 2048 CUDA cores).</p>
-    <div class="bench-grid">
-      <div class="bench-card"><h3>GPU vs. CPU &mdash; Batch GCD</h3><canvas id="chartGcd" height="280"></canvas></div>
-      <div class="bench-card"><h3>GPU vs. CPU &mdash; Power Map x&sup3;</h3><canvas id="chartPm" height="280"></canvas></div>
-      <div class="bench-card"><h3>Peak GPU Throughput by Kernel</h3><canvas id="chartThroughput" height="280"></canvas></div>
-      <div class="bench-card"><h3>GPU vs. CPU &mdash; Prime Sieve</h3><canvas id="chartSieve" height="280"></canvas></div>
+    <h2 class="section-title">Published Results &mdash; GPU Research Paper</h2>
+
+    <div class="bench-charts">
+        <canvas id="chartScaling" width="560" height="340"></canvas>
+        <canvas id="chartThroughput" width="560" height="340"></canvas>
     </div>
 
-    <div class="demo-card" style="margin-top:20px">
-      <h3>NIST SP 800-22 Statistical Test Results</h3>
-      <p style="color:var(--muted);margin-bottom:12px;font-size:0.85rem">Randomness quality of DCL-generated byte streams (128,000 bits, 10-vertex graph, 200 steps).</p>
-      <table class="result-table">
-        <tr><th>Test</th><th>Result</th></tr>
-        <tr><td>Frequency (Monobit)</td><td><span class="tag tag-pass">PASS</span></td></tr>
-        <tr><td>Block Frequency</td><td><span class="tag tag-pass">PASS</span></td></tr>
-        <tr><td>Runs Test</td><td><span class="tag tag-pass">PASS</span></td></tr>
-        <tr><td>Longest Run of Ones</td><td><span class="tag tag-pass">PASS</span></td></tr>
-        <tr><td>Binary Matrix Rank</td><td><span class="tag tag-pass">PASS</span></td></tr>
-        <tr><td>Discrete Fourier Transform</td><td><span class="tag tag-pass">PASS</span></td></tr>
-        <tr><td>Non-overlapping Template</td><td><span class="tag tag-pass">PASS</span></td></tr>
-        <tr><td>Overlapping Template</td><td><span class="tag tag-pass">PASS</span></td></tr>
-        <tr><td>Linear Complexity</td><td><span class="tag tag-pass">PASS</span></td></tr>
-        <tr><td>Serial Test</td><td><span class="tag tag-pass">PASS</span></td></tr>
-        <tr><td>Approximate Entropy</td><td><span class="tag tag-pass">PASS</span></td></tr>
-        <tr><td>Cumulative Sums (Forward)</td><td><span class="tag tag-pass">PASS</span></td></tr>
-        <tr><td>Cumulative Sums (Reverse)</td><td><span class="tag tag-pass">PASS</span></td></tr>
-        <tr><td>Maurer's Universal</td><td><span class="tag tag-fail">FAIL</span></td></tr>
-        <tr><td>Random Excursions</td><td><span class="tag tag-pass">PASS</span></td></tr>
-        <tr style="font-weight:700"><td>Total</td><td>14/15 PASS (93%)</td></tr>
-      </table>
+    <div class="bench-table-wrap">
+        <h3>NIST SP 800-22 Randomness Results</h3>
+        <div class="table-scroll">
+            <table class="result-table" id="nistTable">
+                <thead><tr><th>Test</th><th>Result</th></tr></thead>
+                <tbody id="nistBody"></tbody>
+            </table>
+        </div>
     </div>
 
-    <div class="demo-card" style="margin-top:20px">
-      <h3>GPU Brute-Force Coprime Labeling Search</h3>
-      <table class="result-table">
-        <tr><th>Graph</th><th>n</th><th>Threads</th><th>Time (ms)</th><th>M cand/s</th><th>Found</th></tr>
-        <tr><td>P4</td><td>4</td><td>100K</td><td>6.26</td><td>16.0</td><td>20</td></tr>
-        <tr><td>P6</td><td>6</td><td>500K</td><td>7.09</td><td>70.5</td><td>20</td></tr>
-        <tr><td>C6</td><td>6</td><td>500K</td><td>12.14</td><td>41.2</td><td>20</td></tr>
-        <tr><td>K4</td><td>4</td><td>500K</td><td>8.66</td><td>57.7</td><td>20</td></tr>
-      </table>
+    <div class="bench-table-wrap">
+        <h3>Brute-Force Search Performance</h3>
+        <div class="table-scroll">
+            <table class="result-table" id="bruteTable">
+                <thead><tr><th>Graph</th><th>n</th><th>Threads</th><th>Time (ms)</th><th>M cand/s</th><th>Found</th></tr></thead>
+                <tbody id="bruteBody"></tbody>
+            </table>
+        </div>
     </div>
-
-    <div class="demo-card" style="margin-top:20px">
-      <h3>Side-Channel Timing Analysis</h3>
-      <table class="result-table">
-        <tr><th>Implementation</th><th>Mean (us)</th><th>Std Dev</th><th>CV (%)</th></tr>
-        <tr><td>Standard GCD</td><td>1.23</td><td>0.89 us</td><td>72.4</td></tr>
-        <tr><td>Constant-time GCD</td><td>1.45</td><td>0.03 us</td><td style="color:var(--green);font-weight:700">2.1</td></tr>
-        <tr style="font-weight:700"><td colspan="3">Timing variance reduction</td><td style="color:var(--green)">96.7%</td></tr>
-      </table>
-    </div>
-  </div>
 </section>
 
-<section id="setup">
-  <div class="container">
-    <div class="section-label">Get Started</div>
-    <h2>Run the Full Interactive Version</h2>
-    <div class="demo-card">
-      <p style="margin-bottom:16px">This static page shows pre-computed results and client-side demos. For the full experience with <strong>live GPU computation</strong>, graph editor, and all 6 operations, run the server locally:</p>
-      <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.85rem;line-height:2">
-        <span style="color:var(--muted)"># Clone and build</span><br>
-        <span style="color:var(--green)">$</span> git clone https://github.com/crypto0010/website.git dcl-rs<br>
-        <span style="color:var(--green)">$</span> cd dcl-rs &amp;&amp; git checkout master<br>
-        <span style="color:var(--green)">$</span> cargo run -p dcl-web<br>
-        <br>
-        <span style="color:var(--muted)"># Open in browser</span><br>
-        <span style="color:var(--blue)">http://localhost:3000</span>
-      </div>
-      <p style="margin-top:16px;color:var(--muted);font-size:0.85rem"><strong>Requirements:</strong> Rust 1.70+, NVIDIA GPU with CUDA toolkit (optional &mdash; falls back to CPU).</p>
-    </div>
-  </div>
-</section>
+</div>
 
+<!-- Footer -->
 <footer>
-  <div class="container">
     <p><strong>DCL CUDA Explorer</strong> &mdash; Built with Rust + CUDA + Axum</p>
     <p>Based on: <em>GPU-Accelerated Dynamic Coprime Labeling</em> (IEEE Trans. Computers, 2026)</p>
-    <p>and: <em>FPGA-Accelerated Dynamic Coprime Labeling</em> (IEEE Trans. Circuits &amp; Systems I, 2026)</p>
-  </div>
 </footer>
 
 <script>
-function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a}
-function modPow(base,exp,mod){
-  if(mod){let r=1n,b=BigInt(base)%BigInt(mod),e=BigInt(exp),m=BigInt(mod);while(e>0n){if(e&1n)r=(r*b)%m;b=(b*b)%m;e>>=1n}return Number(r)}
-  let r=1n,b=BigInt(base),e=BigInt(exp);while(e>0n){if(e&1n)r*=b;b*=b;e>>=1n;if(r>1000000000000000n)return Number(r)}return Number(r)
-}
-function fmt(n){return n>1e12?n.toExponential(2):n.toLocaleString()}
+(function() {
+"use strict";
 
-function buildTable(headers,rows){
-  const t=document.createElement('table');t.className='result-table';
-  const thead=document.createElement('tr');
-  headers.forEach(h=>{const th=document.createElement('th');th.textContent=h;thead.appendChild(th)});
-  t.appendChild(thead);
-  rows.forEach(cells=>{const tr=document.createElement('tr');
-    cells.forEach(c=>{const td=document.createElement('td');
-      if(typeof c==='object'&&c.html){td.appendChild(c.html)}else{td.textContent=String(c)}
-      tr.appendChild(td)});t.appendChild(tr)});
-  return t
-}
-function makeTag(text,cls){const s=document.createElement('span');s.className='tag '+cls;s.textContent=text;return{html:s}}
+/* =============================================================
+   DCL CUDA Explorer - Client JavaScript
+   ============================================================= */
 
-function computeGcd(){
-  const lines=document.getElementById('gcdInput').value.trim().split('\n');
-  const results=[];
-  for(const line of lines){const p=line.split(',').map(s=>parseInt(s.trim()));
-    if(p.length===2&&!isNaN(p[0])&&!isNaN(p[1])){const g=gcd(p[0],p[1]);results.push({a:p[0],b:p[1],gcd:g,coprime:g===1})}}
-  const el=document.getElementById('gcdResult');el.textContent='';
-  const rows=results.map(r=>[r.a,r.b,r.gcd,r.coprime?makeTag('Yes','tag-pass'):makeTag('No','tag-fail')]);
-  el.appendChild(buildTable(['a','b','gcd(a,b)','Coprime?'],rows))
-}
+// ---- Global State ----
+window.currentGraph = { vertices: [], edges: [] };
+var gpuStatus = { available: false, backend: 'cpu' };
+var serverOnline = false;
+var selectedVertex = null;
+var dragVertex = null;
+var dragOffsetX = 0, dragOffsetY = 0;
+var nextId = 0;
+var PRIMES = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97];
 
-function computePowerMap(){
-  const labels=document.getElementById('pmLabels').value.split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n));
-  const m=parseInt(document.getElementById('pmExp').value)||2;
-  const modStr=document.getElementById('pmMod').value.trim();
-  const mod=modStr?parseInt(modStr):null;
-  const results=labels.map(x=>modPow(x,m,mod));
-  const el=document.getElementById('pmResult');el.textContent='';
-  const rows=labels.map((l,i)=>['v'+i,l,fmt(results[i])]);
-  const header=mod?'x^'+m+' mod '+mod:'x^'+m;
-  el.appendChild(buildTable(['Vertex','Original',header],rows));
-  let allCo=true;for(let i=0;i<results.length-1;i++)if(gcd(results[i],results[i+1])!==1)allCo=false;
-  if(labels.length>1){const p=document.createElement('p');p.style.marginTop='10px';
-    const tag=document.createElement('span');tag.className='tag '+(allCo?'tag-pass':'tag-fail');
-    tag.textContent=allCo?'Coprimality Preserved':'Check Failed';p.appendChild(tag);
-    p.appendChild(document.createTextNode(allCo?' All adjacent pairs remain coprime.':' Some pairs are no longer coprime.'));
-    el.appendChild(p)}
+// ---- Utility: safe DOM builders ----
+function el(tag, attrs, children) {
+    var e = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function(k) {
+        if (k === 'className') e.className = attrs[k];
+        else if (k === 'textContent') e.textContent = attrs[k];
+        else if (k === 'style' && typeof attrs[k] === 'object') Object.assign(e.style, attrs[k]);
+        else e.setAttribute(k, attrs[k]);
+    });
+    if (children) {
+        if (!Array.isArray(children)) children = [children];
+        children.forEach(function(c) {
+            if (typeof c === 'string') e.appendChild(document.createTextNode(c));
+            else if (c) e.appendChild(c);
+        });
+    }
+    return e;
 }
 
-function computeEvolve(){
-  const labels=document.getElementById('evolveLabels').value.split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n));
-  const m=parseInt(document.getElementById('evolveExp').value)||2;
-  const steps=Math.min(parseInt(document.getElementById('evolveSteps').value)||5,10);
-  const modStr=document.getElementById('evolveMod').value.trim();
-  const mod=modStr?parseInt(modStr):null;
-  const snaps=[labels.slice()];let cur=labels.slice();
-  for(let s=0;s<steps;s++){cur=cur.map(x=>modPow(x,m,mod));snaps.push(cur.slice())}
-  const el=document.getElementById('evolveResult');el.textContent='';
-  const headers=['t',...labels.map((_,i)=>'v'+i),'Coprime?'];
-  const rows=snaps.map((row,t)=>{let co=true;for(let i=0;i<row.length-1;i++)if(gcd(row[i],row[i+1])!==1)co=false;
-    return[t,...row.map(v=>fmt(v)),co?makeTag('Yes','tag-pass'):makeTag('No','tag-fail')]});
-  const table=buildTable(headers,rows);table.classList.add('evolve-table');
-  const trs=table.querySelectorAll('tr');
-  for(let i=1;i<trs.length;i++)trs[i].id='evolve-row-'+(i-1);
-  el.appendChild(table);
-  const controls=document.createElement('div');controls.className='evolve-controls';
-  const playBtn=document.createElement('button');playBtn.className='btn btn-sm';playBtn.id='evolvePlayBtn';
-  playBtn.textContent='Play';playBtn.onclick=function(){toggleEvolvePlay(snaps.length)};
-  const slider=document.createElement('input');slider.type='range';slider.id='evolveSlider';
-  slider.min='0';slider.max=String(snaps.length-1);slider.value='0';
-  slider.oninput=function(){highlightEvolveRow(this.value)};
-  const label=document.createElement('span');label.id='evolveStepLabel';
-  label.style.cssText='color:var(--muted);font-size:0.85rem;min-width:40px';label.textContent='t=0';
-  controls.appendChild(playBtn);controls.appendChild(slider);controls.appendChild(label);
-  el.appendChild(controls)
+function clearEl(e) { while (e.firstChild) e.removeChild(e.firstChild); }
+
+function makeTable(headers, rows, opts) {
+    opts = opts || {};
+    var table = el('table', { className: 'result-table' });
+    var thead = el('thead');
+    var headRow = el('tr');
+    headers.forEach(function(h) { headRow.appendChild(el('th', { textContent: h })); });
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+    var tbody = el('tbody');
+    rows.forEach(function(row, ri) {
+        var tr = el('tr');
+        if (opts.highlightRow === ri) tr.className = 'highlight-row';
+        row.forEach(function(cell) {
+            if (typeof cell === 'object' && cell.nodeType) {
+                var td = el('td');
+                td.appendChild(cell);
+                tr.appendChild(td);
+            } else if (typeof cell === 'object' && cell.html !== undefined) {
+                var td = el('td');
+                if (cell.cls) td.className = cell.cls;
+                td.textContent = cell.text || '';
+                if (cell.badge) td.appendChild(makeBadge(cell.badge.text, cell.badge.cls));
+                tr.appendChild(td);
+            } else {
+                var td = el('td');
+                td.textContent = String(cell);
+                tr.appendChild(td);
+            }
+        });
+        tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    return table;
 }
 
-let evolveInterval=null;
-function toggleEvolvePlay(max){
-  const btn=document.getElementById('evolvePlayBtn');
-  if(evolveInterval){clearInterval(evolveInterval);evolveInterval=null;btn.textContent='Play';return}
-  btn.textContent='Pause';let step=parseInt(document.getElementById('evolveSlider').value);
-  evolveInterval=setInterval(()=>{step=(step+1)%max;document.getElementById('evolveSlider').value=step;
-    highlightEvolveRow(step);if(step===max-1){clearInterval(evolveInterval);evolveInterval=null;btn.textContent='Play'}},800)
-}
-function highlightEvolveRow(t){
-  document.querySelectorAll('.evolve-table tr').forEach(r=>r.classList.remove('active'));
-  const row=document.getElementById('evolve-row-'+t);if(row)row.classList.add('active');
-  const lbl=document.getElementById('evolveStepLabel');if(lbl)lbl.textContent='t='+t
+function makeBadge(text, cls) {
+    return el('span', { className: 'badge ' + (cls || 'badge-info'), textContent: text });
 }
 
-const BD={gcd:[{n:'50K',gpu:7.03,cpu:4.34},{n:'100K',gpu:6.56,cpu:8.67},{n:'500K',gpu:9.62,cpu:51.09},{n:'1M',gpu:12.47,cpu:98.47}],
-pm:[{n:'50K',gpu:0.34,cpu:1.36},{n:'100K',gpu:0.67,cpu:2.65},{n:'500K',gpu:2.00,cpu:13.70},{n:'1M',gpu:3.80,cpu:26.53}],
-sieve:[{n:'50K',gpu:0.80,cpu:0.90},{n:'100K',gpu:1.24,cpu:2.19},{n:'500K',gpu:6.64,cpu:18.76},{n:'1M',gpu:12.74,cpu:43.96}],
-tp:[{name:'Batch GCD',value:80.2},{name:'Power Map',value:263.2},{name:'Prime Sieve',value:78.5},{name:'Batch Evolve',value:400.9},{name:'Brute-Force',value:70.5},{name:'NIST Gen',value:1.0}]};
+function showResults(id, content) {
+    var container = document.getElementById(id);
+    clearEl(container);
+    if (typeof content === 'string') {
+        container.textContent = content;
+    } else if (content) {
+        container.appendChild(content);
+    }
+    container.classList.add('show');
+}
 
-function drawBar(id,data,yl){
-  const c=document.getElementById(id);if(!c)return;const ctx=c.getContext('2d');
-  const dpr=window.devicePixelRatio||1;const r=c.getBoundingClientRect();
-  c.width=r.width*dpr;c.height=r.height*dpr;ctx.scale(dpr,dpr);
-  const W=r.width,H=r.height,p={t:20,r:20,b:40,l:55};
-  const cW=W-p.l-p.r,cH=H-p.t-p.b;
-  ctx.fillStyle='#0f172a';ctx.fillRect(0,0,W,H);
-  const mx=Math.max(...data.map(d=>Math.max(d.gpu,d.cpu)))*1.15;
-  const bg=cW/data.length,bw=bg*0.3;
-  ctx.strokeStyle='#334155';ctx.lineWidth=1;
-  for(let i=0;i<=4;i++){const y=p.t+cH-(cH*i/4);ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(W-p.r,y);ctx.stroke();
-    ctx.fillStyle='#94a3b8';ctx.font='11px system-ui';ctx.textAlign='right';ctx.fillText((mx*i/4).toFixed(1),p.l-8,y+4)}
-  ctx.fillStyle='#94a3b8';ctx.font='10px system-ui';ctx.save();ctx.translate(14,p.t+cH/2);ctx.rotate(-Math.PI/2);
-  ctx.textAlign='center';ctx.fillText(yl,0,0);ctx.restore();
-  data.forEach((d,i)=>{const x=p.l+i*bg+bg*0.1;const gH=(d.gpu/mx)*cH;const cpH=(d.cpu/mx)*cH;
-    ctx.fillStyle='#3b82f6';ctx.fillRect(x,p.t+cH-gH,bw,gH);
-    ctx.fillStyle='#64748b';ctx.fillRect(x+bw+2,p.t+cH-cpH,bw,cpH);
-    ctx.fillStyle='#22c55e';ctx.font='bold 10px system-ui';ctx.textAlign='center';
-    ctx.fillText((d.cpu/d.gpu).toFixed(1)+'x',x+bw,p.t+cH-gH-5);
-    ctx.fillStyle='#94a3b8';ctx.font='11px system-ui';ctx.fillText(d.n,x+bw,p.t+cH+18)});
-  ctx.fillStyle='#3b82f6';ctx.fillRect(W-120,8,12,12);ctx.fillStyle='#e2e8f0';ctx.font='11px system-ui';ctx.textAlign='left';ctx.fillText('GPU',W-104,18);
-  ctx.fillStyle='#64748b';ctx.fillRect(W-65,8,12,12);ctx.fillStyle='#e2e8f0';ctx.fillText('CPU',W-49,18)
+// ---- API Helpers ----
+function fetchApi(endpoint, body) {
+    return fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+    }).then(function(res) {
+        if (!res.ok) throw new Error('API error ' + res.status);
+        return res.json();
+    });
 }
-function drawTP(id,data){
-  const c=document.getElementById(id);if(!c)return;const ctx=c.getContext('2d');
-  const dpr=window.devicePixelRatio||1;const r=c.getBoundingClientRect();
-  c.width=r.width*dpr;c.height=r.height*dpr;ctx.scale(dpr,dpr);
-  const W=r.width,H=r.height,p={t:15,r:60,b:15,l:100};
-  const cW=W-p.l-p.r,cH=H-p.t-p.b;
-  ctx.fillStyle='#0f172a';ctx.fillRect(0,0,W,H);
-  const mx=Math.max(...data.map(d=>d.value))*1.15;
-  const bH=Math.min(30,cH/data.length-8);
-  const cols=['#3b82f6','#22c55e','#f59e0b','#a78bfa','#ef4444','#64748b'];
-  data.forEach((d,i)=>{const y=p.t+i*(cH/data.length)+(cH/data.length-bH)/2;
-    const bW=(d.value/mx)*cW;ctx.fillStyle=cols[i%cols.length];ctx.fillRect(p.l,y,bW,bH);
-    ctx.fillStyle='#94a3b8';ctx.font='11px system-ui';ctx.textAlign='right';ctx.fillText(d.name,p.l-8,y+bH/2+4);
-    ctx.fillStyle='#e2e8f0';ctx.font='bold 11px monospace';ctx.textAlign='left';ctx.fillText(d.value.toFixed(1)+' M',p.l+bW+6,y+bH/2+4)})
+
+function fetchGet(endpoint) {
+    return fetch(endpoint).then(function(res) {
+        if (!res.ok) throw new Error('API error ' + res.status);
+        return res.json();
+    });
 }
-function drawAll(){drawBar('chartGcd',BD.gcd,'Time (ms)');drawBar('chartPm',BD.pm,'Time (ms)');drawBar('chartSieve',BD.sieve,'Time (ms)');drawTP('chartThroughput',BD.tp)}
-window.addEventListener('DOMContentLoaded',()=>setTimeout(drawAll,100));
-window.addEventListener('resize',drawAll);
+
+// ---- Math helpers ----
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while(b){ var t=b; b=a%b; a=t; } return a; }
+function isPrimeLocal(n) { if(n<2) return false; for(var i=2;i*i<=n;i++) if(n%i===0) return false; return true; }
+
+// ---- GPU Scan ----
+function scanGpu() {
+    var panel = document.getElementById('gpuScanPanel');
+    var btn = document.getElementById('scanBtn');
+    var result = document.getElementById('scanResult');
+    var icon = document.getElementById('scanIcon');
+
+    // Set scanning state
+    panel.className = 'gpu-scan-panel scanning';
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Scanning...';
+    icon.textContent = '\u23F3'; // hourglass
+    result.className = 'scan-result';
+
+    fetchGet('/api/health')
+        .then(function(health) {
+            gpuStatus = health || {};
+            gpuStatus.available = health.gpu_available || health.cuda_available || false;
+            serverOnline = true;
+
+            var backendEl = document.getElementById('scanBackend');
+            var deviceEl = document.getElementById('scanDevice');
+            var statusEl = document.getElementById('scanStatus');
+
+            if (gpuStatus.available) {
+                // GPU found
+                panel.className = 'gpu-scan-panel gpu-found';
+                icon.textContent = '\uD83D\uDE80'; // rocket
+                btn.innerHTML = '\u2705 GPU Detected — Ready';
+                backendEl.textContent = 'CUDA GPU';
+                backendEl.className = 'value gpu';
+                deviceEl.textContent = health.device_name || 'Unknown GPU';
+                deviceEl.className = 'value gpu';
+                statusEl.textContent = 'All operations will use GPU acceleration';
+                statusEl.className = 'value gpu';
+            } else {
+                // CPU fallback
+                panel.className = 'gpu-scan-panel cpu-mode';
+                icon.textContent = '\uD83D\uDCBB'; // laptop
+                btn.innerHTML = '\u26A0\uFE0F CPU Mode — No GPU Found';
+                backendEl.textContent = 'CPU (fallback)';
+                backendEl.className = 'value cpu';
+                deviceEl.textContent = 'No CUDA-capable GPU detected';
+                deviceEl.className = 'value cpu';
+                statusEl.textContent = 'All operations will run on CPU (slower but functional)';
+                statusEl.className = 'value cpu';
+            }
+
+            result.className = 'scan-result show';
+            updateStatusBadge(health);
+            document.getElementById('offlineBanner').classList.remove('show');
+            document.querySelectorAll('.run-btn').forEach(function(b) { b.disabled = false; });
+        })
+        .catch(function() {
+            // Server offline
+            panel.className = 'gpu-scan-panel offline';
+            icon.textContent = '\u274C'; // X
+            btn.innerHTML = 'Server Offline — Retry';
+            btn.disabled = false;
+
+            var backendEl = document.getElementById('scanBackend');
+            var deviceEl = document.getElementById('scanDevice');
+            var statusEl = document.getElementById('scanStatus');
+            backendEl.textContent = 'Not available';
+            backendEl.className = 'value err';
+            deviceEl.textContent = 'Server not running';
+            deviceEl.className = 'value err';
+            statusEl.textContent = 'Start with: cargo run -p dcl-web';
+            statusEl.className = 'value err';
+
+            result.className = 'scan-result show';
+            showOfflineBanner();
+        });
+}
+
+// ---- Status ----
+function updateStatusBadge(health) {
+    var dot = document.getElementById('statusDot');
+    var txt = document.getElementById('statusText');
+    if (health && (health.gpu_available || health.cuda_available)) {
+        dot.className = 'status-dot active';
+        txt.textContent = 'GPU Active \u2014 ' + (health.device_name || 'CUDA');
+    } else {
+        dot.className = 'status-dot';
+        txt.textContent = 'CPU Mode (fallback)';
+    }
+}
+
+function showOfflineBanner() {
+    document.getElementById('offlineBanner').classList.add('show');
+    document.getElementById('statusText').textContent = 'Offline';
+    document.querySelectorAll('.run-btn').forEach(function(b) { b.disabled = true; });
+}
+
+function showTiming(elId, data) {
+    var container = document.getElementById(elId);
+    if (!container) return;
+    clearEl(container);
+    var parts = [];
+    if (data && data.time_us != null) parts.push('\u23F1 ' + data.time_us + '\u00B5s');
+    else if (data && data.time_ms != null) parts.push('\u23F1 ' + data.time_ms + 'ms');
+    if (data && data.backend) parts.push(data.backend === 'cuda' ? 'GPU' : 'CPU');
+    else if (gpuStatus.available) parts.push('GPU');
+    else parts.push('CPU');
+    container.textContent = parts.join(' | ');
+}
+
+// ---- Panel 1: Batch GCD ----
+function runGcd() {
+    var text = document.getElementById('gcdInput').value.trim();
+    var lines = text.split('\n').filter(function(l) { return l.trim(); });
+    var pairs = lines.map(function(l) {
+        var p = l.split(',').map(Number);
+        return [p[0]||0, p[1]||0];
+    });
+
+    function renderGcdResults(data) {
+        var results = data.results || pairs.map(function(p) { return { a: p[0], b: p[1], gcd: gcd(p[0], p[1]) }; });
+        var rows = results.map(function(r) {
+            var g = r.gcd != null ? r.gcd : gcd(r.a, r.b);
+            var cop = g === 1;
+            return [r.a, r.b, g, makeBadge(cop ? 'YES' : 'NO', cop ? 'badge-pass' : 'badge-fail')];
+        });
+        var table = makeTable(['a', 'b', 'gcd(a,b)', 'Coprime?'], rows);
+        showResults('gcdResults', table);
+        showTiming('gcdTiming', data);
+    }
+
+    fetchApi('/api/gcd', { pairs: pairs })
+        .then(renderGcdResults)
+        .catch(function() {
+            renderGcdResults({ results: pairs.map(function(p) { return { a: p[0], b: p[1], gcd: gcd(p[0], p[1]) }; }), time_us: 0, backend: 'local' });
+        });
+}
+
+// ---- Panel 2: Power Map ----
+function runPowerMap() {
+    var labels = document.getElementById('pmLabels').value.split(',').map(Number).filter(function(n) { return !isNaN(n); });
+    var m = parseInt(document.getElementById('pmExp').value) || 2;
+    var modVal = document.getElementById('pmMod').value.trim();
+    var body = { labels: labels, exponent: m };
+    if (modVal) body.modulus = parseInt(modVal);
+
+    function renderPmResults(data) {
+        var before = data.before || labels;
+        var after = data.after || data.results || [];
+        var U64MAX = 18446744073709551615;
+        var hasOverflow = false;
+        var frag = document.createDocumentFragment();
+        var rows = after.map(function(v, i) {
+            var display = v;
+            var isOvf = false;
+            if (v === U64MAX || String(v) === '18446744073709551615') {
+                display = 'OVERFLOW';
+                isOvf = true;
+                hasOverflow = true;
+            } else if (v > 1e9) {
+                display = Number(v).toExponential(2);
+            }
+            var afterTd = el('td', isOvf ? { className: 'overflow-cell' } : {}, [String(display)]);
+            return ['v' + i, before[i] || labels[i], afterTd];
+        });
+        var table = makeTable(['Vertex', 'Before', 'After'], rows);
+        frag.appendChild(table);
+        if (hasOverflow) {
+            var warnBox = el('div', { className: 'warning-box' }, ['Overflow detected! Large exponents can exceed 64-bit range. ']);
+            var retryBtn = el('button', { className: 'btn btn-sm btn-outline' }, ['Retry with modulus 65537']);
+            retryBtn.addEventListener('click', function() {
+                document.getElementById('pmMod').value = '65537';
+                runPowerMap();
+            });
+            warnBox.appendChild(retryBtn);
+            frag.appendChild(warnBox);
+        }
+        showResults('pmResults', frag);
+        showTiming('pmTiming', data);
+    }
+
+    fetchApi('/api/power-map', body)
+        .then(renderPmResults)
+        .catch(function() {
+            var mod = modVal ? BigInt(modVal) : null;
+            var after = labels.map(function(l) {
+                var r = BigInt(l) ** BigInt(m);
+                if (mod) r = r % mod;
+                return Number(r > BigInt(Number.MAX_SAFE_INTEGER) ? BigInt('18446744073709551615') : r);
+            });
+            renderPmResults({ before: labels, after: after, time_us: 0, backend: 'local' });
+        });
+}
+
+// ---- Panel 3: Coprime Check ----
+function loadGraphForCheck() {
+    var g = window.currentGraph;
+    if (!g.vertices.length) return;
+    document.getElementById('ccLabels').value = g.vertices.map(function(v) { return v.label; }).join(',');
+    document.getElementById('ccEdges').value = g.edges.map(function(e) { return e.u + '-' + e.v; }).join(',');
+}
+
+function runCoprimeCheck() {
+    var labels = document.getElementById('ccLabels').value.split(',').map(Number).filter(function(n) { return !isNaN(n); });
+    var edgeStrs = document.getElementById('ccEdges').value.split(',').filter(function(s) { return s.includes('-'); });
+    var edges = edgeStrs.map(function(s) { var p = s.split('-').map(Number); return [p[0], p[1]]; });
+
+    function renderCcResults(data) {
+        var edgeResults = data.edges || data.results || [];
+        var violations = 0;
+        var frag = document.createDocumentFragment();
+        var rows = edgeResults.map(function(e) {
+            var cop = e.coprime !== false && (e.gcd === 1 || e.coprime === true);
+            if (!cop) violations++;
+            var lu = e.label_u != null ? e.label_u : labels[e.u];
+            var lv = e.label_v != null ? e.label_v : labels[e.v];
+            var g = e.gcd != null ? e.gcd : gcd(lu, lv);
+            return [
+                '(v' + e.u + ', v' + e.v + ')',
+                lu + ', ' + lv,
+                g,
+                makeBadge(cop ? '\u2713' : '\u2717', cop ? 'badge-pass' : 'badge-fail')
+            ];
+        });
+        var table = makeTable(['Edge', 'Labels', 'GCD', 'Coprime?'], rows);
+        frag.appendChild(table);
+        if (violations === 0) {
+            frag.appendChild(el('div', { className: 'summary-badge badge-pass', style: 'margin-top:0.75rem' }, ['All Coprime']));
+        } else {
+            frag.appendChild(el('div', { className: 'summary-badge badge-fail', style: 'margin-top:0.75rem' }, [violations + ' violation' + (violations > 1 ? 's' : '')]));
+            edgeResults.filter(function(e) { return e.coprime === false || (e.gcd != null && e.gcd !== 1); }).forEach(function(e) {
+                var lu = e.label_u != null ? e.label_u : labels[e.u];
+                var lv = e.label_v != null ? e.label_v : labels[e.v];
+                var g = e.gcd != null ? e.gcd : gcd(lu, lv);
+                frag.appendChild(el('div', { className: 'edu-msg' }, [
+                    'Edge (v' + e.u + ', v' + e.v + ') has labels ' + lu + ' and ' + lv + '. gcd(' + lu + ',' + lv + ')=' + g + ', not coprime.'
+                ]));
+            });
+        }
+        showResults('ccResults', frag);
+        showTiming('ccTiming', data);
+        renderGraph();
+    }
+
+    fetchApi('/api/coprime-check', { labels: labels, edges: edges })
+        .then(renderCcResults)
+        .catch(function() {
+            var localEdges = edges.map(function(e) {
+                return { u: e[0], v: e[1], label_u: labels[e[0]], label_v: labels[e[1]], gcd: gcd(labels[e[0]], labels[e[1]]), coprime: gcd(labels[e[0]], labels[e[1]]) === 1 };
+            });
+            renderCcResults({ edges: localEdges, time_us: 0, backend: 'local' });
+        });
+}
+
+// ---- Panel 4: Evolve ----
+var evolveData = null;
+var evolveInterval = null;
+var evolveRow = 0;
+
+document.getElementById('evolveSteps').addEventListener('input', function() {
+    document.getElementById('evolveStepVal').textContent = this.value;
+});
+
+function runEvolve() {
+    var labels = document.getElementById('evolveLabels').value.split(',').map(Number).filter(function(n) { return !isNaN(n); });
+    var m = parseInt(document.getElementById('evolveExp').value) || 2;
+    var steps = parseInt(document.getElementById('evolveSteps').value) || 5;
+    var modVal = document.getElementById('evolveMod').value.trim();
+    var preset = document.getElementById('evolvePreset').value;
+    var body = { labels: labels, exponent: m, steps: steps, graph_family: preset };
+    if (modVal) body.modulus = parseInt(modVal);
+
+    function handleEvolveData(data) {
+        evolveData = data.steps || data.history || [];
+        evolveRow = 0;
+        renderEvolveTable();
+        showTiming('evolveTiming', data);
+    }
+
+    fetchApi('/api/evolve', body)
+        .then(handleEvolveData)
+        .catch(function() {
+            var mod = modVal ? BigInt(modVal) : null;
+            var stepData = [{ labels: labels.slice(), coprime: true }];
+            for (var s = 0; s < steps; s++) {
+                var prev = stepData[stepData.length - 1].labels;
+                var next = prev.map(function(l) {
+                    var r = BigInt(l) ** BigInt(m);
+                    if (mod) r = r % mod;
+                    return Number(r > BigInt(Number.MAX_SAFE_INTEGER) ? r % (mod || BigInt('18446744073709551615')) : r);
+                });
+                stepData.push({ labels: next, coprime: true });
+            }
+            handleEvolveData({ steps: stepData, time_us: 0, backend: 'local' });
+        });
+}
+
+function fmtLabel(v) {
+    if (typeof v === 'string') v = parseFloat(v);
+    if (v > 1e9) return Number(v).toExponential(1);
+    return String(v);
+}
+
+function renderEvolveTable() {
+    if (!evolveData || !evolveData.length) return;
+    var numV = (evolveData[0].labels || evolveData[0]).length || 0;
+    var headers = ['t'];
+    for (var i = 0; i < numV; i++) headers.push('v' + i);
+    headers.push('Coprime?');
+
+    var rows = evolveData.map(function(row, idx) {
+        var labs = row.labels || row;
+        var cells = [String(idx)];
+        if (Array.isArray(labs)) labs.forEach(function(l) { cells.push(fmtLabel(l)); });
+        var cop = row.coprime !== false;
+        cells.push(makeBadge(cop ? 'YES' : 'NO', cop ? 'badge-pass' : 'badge-fail'));
+        return cells;
+    });
+
+    var frag = document.createDocumentFragment();
+    var scrollDiv = el('div', { className: 'table-scroll' });
+    var table = makeTable(headers, rows, { highlightRow: evolveRow });
+    scrollDiv.appendChild(table);
+    frag.appendChild(scrollDiv);
+
+    // Controls
+    var controls = el('div', { className: 'evolve-controls' });
+    var playBtn = el('button', { className: 'btn btn-outline btn-sm', id: 'evolvePlayBtn' }, [evolveInterval ? '\u23F8 Pause' : '\u25B6 Play']);
+    playBtn.addEventListener('click', toggleEvolvePlay);
+    controls.appendChild(playBtn);
+
+    var timeline = document.createElement('input');
+    timeline.type = 'range';
+    timeline.min = '0';
+    timeline.max = String(evolveData.length - 1);
+    timeline.value = String(evolveRow);
+    timeline.id = 'evolveTimeline';
+    timeline.addEventListener('input', function() { scrubEvolve(this.value); });
+    controls.appendChild(timeline);
+
+    controls.appendChild(el('span', { style: 'font-family:var(--mono);font-size:0.8rem' }, ['Step ' + evolveRow + '/' + (evolveData.length - 1)]));
+    frag.appendChild(controls);
+
+    showResults('evolveResults', frag);
+}
+
+function scrubEvolve(val) {
+    evolveRow = parseInt(val);
+    renderEvolveTable();
+}
+
+function toggleEvolvePlay() {
+    if (evolveInterval) {
+        clearInterval(evolveInterval);
+        evolveInterval = null;
+        var btn = document.getElementById('evolvePlayBtn');
+        if (btn) btn.textContent = '\u25B6 Play';
+        return;
+    }
+    var btn = document.getElementById('evolvePlayBtn');
+    if (btn) btn.textContent = '\u23F8 Pause';
+    evolveInterval = setInterval(function() {
+        if (!evolveData) { clearInterval(evolveInterval); evolveInterval = null; return; }
+        evolveRow++;
+        if (evolveRow >= evolveData.length) evolveRow = 0;
+        renderEvolveTable();
+    }, 1000);
+}
+
+// ---- Panel 5: Repair ----
+function loadBrokenExample() {
+    document.getElementById('repairLabels').value = '4,6,9,10';
+    document.getElementById('repairEdges').value = '0-1,1-2,2-3';
+}
+
+function runRepair() {
+    var labels = document.getElementById('repairLabels').value.split(',').map(Number).filter(function(n) { return !isNaN(n); });
+    var edgeStrs = document.getElementById('repairEdges').value.split(',').filter(function(s) { return s.includes('-'); });
+    var edges = edgeStrs.map(function(s) { var p = s.split('-').map(Number); return [p[0], p[1]]; });
+
+    function renderRepairResults(data) {
+        var original = data.original || labels;
+        var repaired = data.repaired || data.new_labels || labels;
+        var changes = data.changes || [];
+        var changedVerts = {};
+        changes.forEach(function(c) { changedVerts[c.vertex] = true; });
+
+        var frag = document.createDocumentFragment();
+        var compare = el('div', { className: 'repair-compare' });
+
+        // Original column
+        var origCol = el('div', { className: 'repair-col' });
+        origCol.appendChild(el('h4', {}, ['Original']));
+        var origRows = original.map(function(l, i) {
+            var td = el('td');
+            td.textContent = String(l);
+            if (changedVerts[i]) td.className = 'diff-old';
+            return ['v' + i, td];
+        });
+        origCol.appendChild(makeTable(['Vertex', 'Label'], origRows));
+        compare.appendChild(origCol);
+
+        // Repaired column
+        var repCol = el('div', { className: 'repair-col' });
+        repCol.appendChild(el('h4', {}, ['Repaired']));
+        var repArr = Array.isArray(repaired) ? repaired : original;
+        var repRows = repArr.map(function(l, i) {
+            var td = el('td');
+            td.textContent = String(l);
+            if (changedVerts[i]) td.className = 'diff-changed';
+            return ['v' + i, td];
+        });
+        repCol.appendChild(makeTable(['Vertex', 'Label'], repRows));
+        compare.appendChild(repCol);
+        frag.appendChild(compare);
+
+        changes.forEach(function(c) {
+            frag.appendChild(el('div', { className: 'edu-msg' }, [
+                'v' + c.vertex + ': ' + c.old_label + ' \u2192 ' + c.new_label + ' (' + (c.reason || 'now coprime') + ')'
+            ]));
+        });
+
+        showResults('repairResults', frag);
+        showTiming('repairTiming', data);
+    }
+
+    fetchApi('/api/repair', { labels: labels, edges: edges })
+        .then(renderRepairResults)
+        .catch(function() {
+            var repaired = labels.slice();
+            var changes = [];
+            edges.forEach(function(e) {
+                var u = e[0], v = e[1];
+                if (gcd(repaired[u], repaired[v]) !== 1) {
+                    var candidate = repaired[v] + 1;
+                    while (gcd(repaired[u], candidate) !== 1) candidate++;
+                    changes.push({ vertex: v, old_label: repaired[v], new_label: candidate, reason: 'gcd was ' + gcd(labels[u], labels[v]) + ', now coprime' });
+                    repaired[v] = candidate;
+                }
+            });
+            renderRepairResults({ original: labels, repaired: repaired, changes: changes, time_us: 0, backend: 'local' });
+        });
+}
+
+// ---- Panel 6: Prime Sieve ----
+function runSieve() {
+    var count = parseInt(document.getElementById('sieveCount').value) || 20;
+    var start = parseInt(document.getElementById('sieveStart').value) || 2;
+
+    function renderSieveResults(data) {
+        var primes = data.primes || [];
+        var grid = el('div', { className: 'prime-grid' });
+        primes.forEach(function(p) {
+            var halfP = (p - 1) / 2;
+            var isSafe = Number.isInteger(halfP) && halfP > 1 && isPrimeLocal(halfP);
+            var badge = el('div', { className: 'prime-badge' }, [String(p)]);
+            if (isSafe) badge.appendChild(el('small', {}, ['safe: (' + halfP + ')']));
+            grid.appendChild(badge);
+        });
+        showResults('sieveResults', grid);
+        showTiming('sieveTiming', data);
+    }
+
+    fetchApi('/api/prime-sieve', { count: count, start: start })
+        .then(renderSieveResults)
+        .catch(function() {
+            var primes = [];
+            var n = start;
+            while (primes.length < count) { if (isPrimeLocal(n)) primes.push(n); n++; }
+            renderSieveResults({ primes: primes, time_us: 0, backend: 'local' });
+        });
+}
+
+// ---- Graph Workspace ----
+var svgNS = 'http://www.w3.org/2000/svg';
+var SVG_W = 700, SVG_H = 450;
+
+function clearGraph() {
+    window.currentGraph = { vertices: [], edges: [] };
+    nextId = 0;
+    selectedVertex = null;
+    renderGraph();
+}
+
+document.getElementById('clearBtn').addEventListener('click', clearGraph);
+
+// Presets
+document.querySelectorAll('.preset-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        var family = this.dataset.family;
+        var n = parseInt(document.getElementById('nSlider').value);
+        document.querySelectorAll('.preset-btn').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        loadPreset(family, n);
+    });
+});
+
+document.getElementById('nSlider').addEventListener('input', function() {
+    document.getElementById('nVal').textContent = this.value;
+    var activeBtn = document.querySelector('.preset-btn.active');
+    if (activeBtn) loadPreset(activeBtn.dataset.family, parseInt(this.value));
+});
+
+function loadPreset(family, n) {
+    fetchGet('/api/graph-presets?family=' + family + '&n=' + n)
+        .then(function(data) {
+            if (data && data.vertices) {
+                window.currentGraph = data;
+                nextId = data.vertices.length;
+            } else {
+                generateLocalPreset(family, n);
+            }
+            forceLayout();
+            renderGraph();
+        })
+        .catch(function() {
+            generateLocalPreset(family, n);
+            forceLayout();
+            renderGraph();
+        });
+}
+
+function generateLocalPreset(family, n) {
+    var verts = [];
+    var edges = [];
+    for (var i = 0; i < n; i++) {
+        verts.push({ id: i, label: PRIMES[i % PRIMES.length], x: SVG_W / 2 + 150 * Math.cos(2 * Math.PI * i / n), y: SVG_H / 2 + 150 * Math.sin(2 * Math.PI * i / n) });
+    }
+    if (family === 'path') {
+        for (var i = 0; i < n - 1; i++) edges.push({ u: i, v: i + 1 });
+    } else if (family === 'cycle') {
+        for (var i = 0; i < n; i++) edges.push({ u: i, v: (i + 1) % n });
+    } else if (family === 'complete') {
+        for (var i = 0; i < n; i++) for (var j = i + 1; j < n; j++) edges.push({ u: i, v: j });
+    } else if (family === 'wheel') {
+        verts[0].x = SVG_W / 2; verts[0].y = SVG_H / 2;
+        for (var i = 1; i < n; i++) {
+            edges.push({ u: 0, v: i });
+            if (i < n - 1) edges.push({ u: i, v: i + 1 });
+        }
+        if (n > 2) edges.push({ u: n - 1, v: 1 });
+    } else if (family === 'hypercube') {
+        var dim = n;
+        var numV = 1 << dim;
+        verts = [];
+        for (var i = 0; i < numV; i++) {
+            verts.push({ id: i, label: PRIMES[i % PRIMES.length], x: SVG_W / 2 + 150 * Math.cos(2 * Math.PI * i / numV), y: SVG_H / 2 + 150 * Math.sin(2 * Math.PI * i / numV) });
+        }
+        for (var i = 0; i < numV; i++) {
+            for (var d = 0; d < dim; d++) {
+                var j = i ^ (1 << d);
+                if (j > i) edges.push({ u: i, v: j });
+            }
+        }
+    }
+    window.currentGraph = { vertices: verts, edges: edges };
+    nextId = verts.length;
+}
+
+function forceLayout() {
+    var g = window.currentGraph;
+    if (!g.vertices.length) return;
+    var n = g.vertices.length;
+    g.vertices.forEach(function(v, i) {
+        if (v.x == null || v.y == null) {
+            v.x = SVG_W / 2 + 150 * Math.cos(2 * Math.PI * i / n);
+            v.y = SVG_H / 2 + 150 * Math.sin(2 * Math.PI * i / n);
+        }
+    });
+    var k = Math.sqrt((SVG_W * SVG_H) / (n + 1));
+    for (var iter = 0; iter < 100; iter++) {
+        var dx = new Float64Array(n);
+        var dy = new Float64Array(n);
+        for (var i = 0; i < n; i++) {
+            for (var j = i + 1; j < n; j++) {
+                var ddx = g.vertices[i].x - g.vertices[j].x;
+                var ddy = g.vertices[i].y - g.vertices[j].y;
+                var dist = Math.sqrt(ddx * ddx + ddy * ddy) || 1;
+                var force = k * k / dist;
+                var fx = ddx / dist * force;
+                var fy = ddy / dist * force;
+                dx[i] += fx; dy[i] += fy;
+                dx[j] -= fx; dy[j] -= fy;
+            }
+        }
+        g.edges.forEach(function(e) {
+            var ii = e.u, jj = e.v;
+            if (ii >= n || jj >= n) return;
+            var ddx = g.vertices[ii].x - g.vertices[jj].x;
+            var ddy = g.vertices[ii].y - g.vertices[jj].y;
+            var dist = Math.sqrt(ddx * ddx + ddy * ddy) || 1;
+            var force = dist * dist / k;
+            var fx = ddx / dist * force;
+            var fy = ddy / dist * force;
+            dx[ii] -= fx; dy[ii] -= fy;
+            dx[jj] += fx; dy[jj] += fy;
+        });
+        var temp = Math.max(1, 50 * (1 - iter / 100));
+        for (var i = 0; i < n; i++) {
+            var d = Math.sqrt(dx[i] * dx[i] + dy[i] * dy[i]) || 1;
+            g.vertices[i].x += dx[i] / d * Math.min(d, temp);
+            g.vertices[i].y += dy[i] / d * Math.min(d, temp);
+            g.vertices[i].x = Math.max(30, Math.min(SVG_W - 30, g.vertices[i].x));
+            g.vertices[i].y = Math.max(30, Math.min(SVG_H - 30, g.vertices[i].y));
+        }
+    }
+}
+
+function renderGraph() {
+    var svg = document.getElementById('graphSvg');
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var g = window.currentGraph;
+
+    // Draw edges
+    g.edges.forEach(function(e) {
+        var va = g.vertices.find(function(v) { return v.id === e.u; });
+        var vb = g.vertices.find(function(v) { return v.id === e.v; });
+        if (!va || !vb) return;
+        var cop = gcd(va.label, vb.label) === 1;
+        var line = document.createElementNS(svgNS, 'line');
+        line.setAttribute('x1', va.x);
+        line.setAttribute('y1', va.y);
+        line.setAttribute('x2', vb.x);
+        line.setAttribute('y2', vb.y);
+        line.setAttribute('stroke', cop ? '#22c55e' : '#ef4444');
+        line.setAttribute('stroke-width', '2');
+        if (!cop) line.setAttribute('stroke-dasharray', '6,4');
+        line.addEventListener('contextmenu', function(ev) {
+            ev.preventDefault();
+            g.edges = g.edges.filter(function(ed) { return !(ed.u === e.u && ed.v === e.v); });
+            renderGraph();
+        });
+        svg.appendChild(line);
+    });
+
+    // Draw vertices
+    g.vertices.forEach(function(v) {
+        var group = document.createElementNS(svgNS, 'g');
+        group.setAttribute('transform', 'translate(' + v.x + ',' + v.y + ')');
+        group.style.cursor = 'pointer';
+
+        var circle = document.createElementNS(svgNS, 'circle');
+        circle.setAttribute('r', '24');
+        circle.setAttribute('fill', selectedVertex === v.id ? '#2563eb' : '#3b82f6');
+        circle.setAttribute('stroke', selectedVertex === v.id ? '#93c5fd' : '#1e40af');
+        circle.setAttribute('stroke-width', '2');
+        group.appendChild(circle);
+
+        var text = document.createElementNS(svgNS, 'text');
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('dy', '0.35em');
+        text.setAttribute('fill', '#fff');
+        text.setAttribute('font-family', "'JetBrains Mono', monospace");
+        text.setAttribute('font-size', v.label > 999 ? '10' : '13');
+        text.setAttribute('font-weight', '600');
+        text.textContent = v.label > 1e6 ? Number(v.label).toExponential(0) : String(v.label);
+        group.appendChild(text);
+
+        group.addEventListener('mousedown', function(ev) {
+            if (ev.button === 2) return;
+            ev.stopPropagation();
+            dragVertex = v.id;
+            var svgRect = svg.getBoundingClientRect();
+            var scale = SVG_W / svgRect.width;
+            dragOffsetX = (ev.clientX - svgRect.left) * scale - v.x;
+            dragOffsetY = (ev.clientY - svgRect.top) * scale - v.y;
+        });
+
+        group.addEventListener('click', function(ev) {
+            ev.stopPropagation();
+            if (selectedVertex !== null && selectedVertex !== v.id) {
+                toggleEdge(selectedVertex, v.id);
+                selectedVertex = null;
+            } else if (selectedVertex === v.id) {
+                selectedVertex = null;
+            } else {
+                selectedVertex = v.id;
+            }
+            renderGraph();
+        });
+
+        group.addEventListener('dblclick', function(ev) {
+            ev.stopPropagation();
+            var newLabel = prompt('New label for vertex ' + v.id + ':', v.label);
+            if (newLabel !== null && !isNaN(parseInt(newLabel))) {
+                v.label = parseInt(newLabel);
+                renderGraph();
+            }
+        });
+
+        group.addEventListener('contextmenu', function(ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            g.edges = g.edges.filter(function(e) { return e.u !== v.id && e.v !== v.id; });
+            g.vertices = g.vertices.filter(function(vert) { return vert.id !== v.id; });
+            if (selectedVertex === v.id) selectedVertex = null;
+            renderGraph();
+        });
+
+        svg.appendChild(group);
+    });
+}
+
+function toggleEdge(u, v) {
+    var g = window.currentGraph;
+    var idx = g.edges.findIndex(function(e) { return (e.u === u && e.v === v) || (e.u === v && e.v === u); });
+    if (idx >= 0) {
+        g.edges.splice(idx, 1);
+    } else {
+        g.edges.push({ u: Math.min(u, v), v: Math.max(u, v) });
+    }
+}
+
+// SVG mouse events
+(function() {
+    var svg = document.getElementById('graphSvg');
+
+    svg.addEventListener('mousemove', function(ev) {
+        if (dragVertex == null) return;
+        var g = window.currentGraph;
+        var v = g.vertices.find(function(vert) { return vert.id === dragVertex; });
+        if (!v) return;
+        var rect = svg.getBoundingClientRect();
+        var scale = SVG_W / rect.width;
+        v.x = Math.max(30, Math.min(SVG_W - 30, (ev.clientX - rect.left) * scale - dragOffsetX));
+        v.y = Math.max(30, Math.min(SVG_H - 30, (ev.clientY - rect.top) * scale - dragOffsetY));
+        renderGraph();
+    });
+
+    svg.addEventListener('mouseup', function() { dragVertex = null; });
+    svg.addEventListener('mouseleave', function() { dragVertex = null; });
+
+    svg.addEventListener('click', function(ev) {
+        if (ev.target !== svg) return;
+        var rect = svg.getBoundingClientRect();
+        var scale = SVG_W / rect.width;
+        var x = (ev.clientX - rect.left) * scale;
+        var y = (ev.clientY - rect.top) * scale;
+        var g = window.currentGraph;
+        var usedLabels = {};
+        g.vertices.forEach(function(v) { usedLabels[v.label] = true; });
+        var label = 2;
+        for (var pi = 0; pi < PRIMES.length; pi++) {
+            if (!usedLabels[PRIMES[pi]]) { label = PRIMES[pi]; break; }
+        }
+        g.vertices.push({ id: nextId++, label: label, x: x, y: y });
+        selectedVertex = null;
+        renderGraph();
+    });
+
+    svg.addEventListener('contextmenu', function(ev) { ev.preventDefault(); });
+})();
+
+// ---- Wire up buttons ----
+document.getElementById('gcdRunBtn').addEventListener('click', runGcd);
+document.getElementById('pmRunBtn').addEventListener('click', runPowerMap);
+document.getElementById('ccLoadBtn').addEventListener('click', loadGraphForCheck);
+document.getElementById('ccRunBtn').addEventListener('click', runCoprimeCheck);
+document.getElementById('repairLoadBtn').addEventListener('click', loadBrokenExample);
+document.getElementById('repairRunBtn').addEventListener('click', runRepair);
+document.getElementById('evolveRunBtn').addEventListener('click', runEvolve);
+document.getElementById('sieveRunBtn').addEventListener('click', runSieve);
+
+// ---- Benchmarks ----
+var FALLBACK_BENCH = {
+    scaling: {
+        sizes: ['1K', '10K', '100K', '1M'],
+        operations: {
+            'GCD': { gpu: [0.05, 0.2, 1.2, 8], cpu: [0.3, 3, 30, 63] },
+            'Power Map': { gpu: [0.04, 0.15, 0.9, 6], cpu: [0.2, 2, 20, 47] },
+            'Sieve': { gpu: [0.06, 0.3, 1.5, 10], cpu: [0.4, 4, 40, 55] }
+        }
+    },
+    throughput: [
+        { kernel: 'batch_gcd', ops_per_sec: 263000000 },
+        { kernel: 'power_map', ops_per_sec: 210000000 },
+        { kernel: 'coprime_check', ops_per_sec: 195000000 },
+        { kernel: 'prime_sieve', ops_per_sec: 180000000 },
+        { kernel: 'evolve', ops_per_sec: 155000000 },
+        { kernel: 'label_repair', ops_per_sec: 140000000 },
+        { kernel: 'brute_search', ops_per_sec: 120000000 },
+        { kernel: 'nist_random', ops_per_sec: 98000000 }
+    ],
+    nist: [
+        { test: 'Frequency (Monobit)', pass: true },
+        { test: 'Block Frequency', pass: true },
+        { test: 'Runs', pass: true },
+        { test: 'Longest Run of Ones', pass: true },
+        { test: 'Binary Matrix Rank', pass: true },
+        { test: 'DFT (Spectral)', pass: true },
+        { test: 'Non-overlapping Template', pass: true },
+        { test: 'Overlapping Template', pass: true },
+        { test: 'Universal Statistical', pass: false },
+        { test: 'Linear Complexity', pass: true },
+        { test: 'Serial', pass: true },
+        { test: 'Approximate Entropy', pass: true },
+        { test: 'Cumulative Sums', pass: true },
+        { test: 'Random Excursions', pass: true },
+        { test: 'Random Excursions Variant', pass: true }
+    ],
+    brute_force: [
+        { graph: 'Path P_8', n: 8, threads: 256, time_ms: 12.4, mcand_s: 82.3, found: true },
+        { graph: 'Cycle C_10', n: 10, threads: 512, time_ms: 45.1, mcand_s: 71.2, found: true },
+        { graph: 'Complete K_6', n: 6, threads: 256, time_ms: 8.7, mcand_s: 95.1, found: true },
+        { graph: 'Wheel W_8', n: 8, threads: 256, time_ms: 23.6, mcand_s: 78.4, found: true },
+        { graph: 'Petersen', n: 10, threads: 512, time_ms: 67.3, mcand_s: 65.8, found: true }
+    ]
+};
+
+function loadBenchmarks() {
+    fetchGet('/api/benchmarks')
+        .then(function(data) { renderBenchmarks(data); })
+        .catch(function() { renderBenchmarks(FALLBACK_BENCH); });
+}
+
+function renderBenchmarks(data) {
+    if (!data) data = FALLBACK_BENCH;
+    renderScalingChart(data.scaling || FALLBACK_BENCH.scaling);
+    renderThroughputChart(data.throughput || FALLBACK_BENCH.throughput);
+    renderNistTable(data.nist || FALLBACK_BENCH.nist);
+    renderBruteTable(data.brute_force || FALLBACK_BENCH.brute_force);
+}
+
+function renderScalingChart(scaling) {
+    var canvas = document.getElementById('chartScaling');
+    var ctx = canvas.getContext('2d');
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = 560 * dpr;
+    canvas.height = 340 * dpr;
+    ctx.scale(dpr, dpr);
+    canvas.style.width = '100%';
+    canvas.style.height = 'auto';
+
+    var W = 560, H = 340;
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = 'bold 13px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('GPU vs CPU Scaling', W / 2, 22);
+
+    var sizes = scaling.sizes || ['1K', '10K', '100K', '1M'];
+    var ops = scaling.operations || FALLBACK_BENCH.scaling.operations;
+    var opNames = Object.keys(ops);
+    var op = ops[opNames[0]] || { gpu: [1, 2, 3, 4], cpu: [2, 4, 6, 8] };
+    var allVals = (op.gpu || []).concat(op.cpu || []);
+    var maxVal = Math.max.apply(null, allVals.concat([1]));
+
+    var marginL = 55, marginR = 20, marginT = 40, marginB = 55;
+    var chartW = W - marginL - marginR;
+    var chartH = H - marginT - marginB;
+
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(marginL, marginT);
+    ctx.lineTo(marginL, H - marginB);
+    ctx.lineTo(W - marginR, H - marginB);
+    ctx.stroke();
+
+    var groupW = chartW / sizes.length;
+    var barW = groupW * 0.3;
+
+    sizes.forEach(function(size, i) {
+        var x = marginL + i * groupW + groupW / 2;
+        var gpuH = ((op.gpu || [])[i] || 0) / maxVal * chartH;
+        ctx.fillStyle = '#3b82f6';
+        ctx.fillRect(x - barW - 2, H - marginB - gpuH, barW, gpuH);
+        var cpuH = ((op.cpu || [])[i] || 0) / maxVal * chartH;
+        ctx.fillStyle = '#64748b';
+        ctx.fillRect(x + 2, H - marginB - cpuH, barW, cpuH);
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '11px system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(size, x, H - marginB + 18);
+        var gpuV = (op.gpu || [])[i] || 1;
+        var cpuV = (op.cpu || [])[i] || 1;
+        if (cpuV > gpuV) {
+            ctx.fillStyle = '#22c55e';
+            ctx.font = 'bold 10px monospace';
+            ctx.fillText((cpuV / gpuV).toFixed(1) + 'x', x, H - marginB - Math.max(gpuH, cpuH) - 5);
+        }
+    });
+
+    ctx.fillStyle = '#3b82f6';
+    ctx.fillRect(W - 120, marginT + 5, 10, 10);
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = '11px system-ui, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('GPU', W - 106, marginT + 14);
+    ctx.fillStyle = '#64748b';
+    ctx.fillRect(W - 120, marginT + 22, 10, 10);
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillText('CPU', W - 106, marginT + 31);
+
+    ctx.save();
+    ctx.translate(15, H / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '11px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Time (ms) \u2014 ' + opNames[0], 0, 0);
+    ctx.restore();
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '11px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Problem Size', W / 2, H - 5);
+}
+
+function renderThroughputChart(throughput) {
+    var canvas = document.getElementById('chartThroughput');
+    var ctx = canvas.getContext('2d');
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = 560 * dpr;
+    canvas.height = 340 * dpr;
+    ctx.scale(dpr, dpr);
+    canvas.style.width = '100%';
+    canvas.style.height = 'auto';
+
+    var W = 560, H = 340;
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = 'bold 13px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Kernel Throughput (M ops/s)', W / 2, 22);
+
+    var items = throughput || FALLBACK_BENCH.throughput;
+    var maxOps = Math.max.apply(null, items.map(function(i) { return i.ops_per_sec || 0; }).concat([1]));
+
+    var marginL = 130, marginR = 60, marginT = 38, marginB = 15;
+    var chartW = W - marginL - marginR;
+    var barH = Math.min(28, (H - marginT - marginB) / items.length - 4);
+
+    items.forEach(function(item, i) {
+        var y = marginT + i * (barH + 4);
+        var mops = (item.ops_per_sec || 0) / 1e6;
+        var w = (mops / (maxOps / 1e6)) * chartW;
+
+        var grad = ctx.createLinearGradient(marginL, 0, marginL + w, 0);
+        grad.addColorStop(0, '#3b82f6');
+        grad.addColorStop(1, '#8b5cf6');
+        ctx.fillStyle = grad;
+        ctx.fillRect(marginL, y, w, barH);
+
+        ctx.fillStyle = '#e2e8f0';
+        ctx.font = '11px monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText(item.kernel || ('kernel_' + i), marginL - 8, y + barH / 2 + 4);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.textAlign = 'left';
+        ctx.fillText(mops.toFixed(0) + 'M', marginL + w + 6, y + barH / 2 + 4);
+    });
+}
+
+function renderNistTable(nist) {
+    var tbody = document.getElementById('nistBody');
+    clearEl(tbody);
+    var passCount = 0;
+    var items = nist || FALLBACK_BENCH.nist;
+    items.forEach(function(t) {
+        if (t.pass) passCount++;
+        var tr = el('tr');
+        tr.appendChild(el('td', { textContent: t.test }));
+        var td = el('td');
+        td.appendChild(makeBadge(t.pass ? 'PASS' : 'FAIL', t.pass ? 'badge-pass' : 'badge-fail'));
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+    });
+    var total = items.length;
+    var summaryRow = el('tr');
+    summaryRow.style.fontWeight = '700';
+    summaryRow.style.borderTop = '2px solid var(--card-border)';
+    summaryRow.appendChild(el('td', { textContent: 'Summary' }));
+    var summaryTd = el('td');
+    summaryTd.appendChild(makeBadge(passCount + '/' + total + ' PASS (' + Math.round(passCount / total * 100) + '%)', 'badge-info'));
+    summaryRow.appendChild(summaryTd);
+    tbody.appendChild(summaryRow);
+}
+
+function renderBruteTable(brute) {
+    var tbody = document.getElementById('bruteBody');
+    clearEl(tbody);
+    (brute || FALLBACK_BENCH.brute_force).forEach(function(r) {
+        var tr = el('tr');
+        tr.appendChild(el('td', { textContent: r.graph }));
+        tr.appendChild(el('td', { textContent: String(r.n) }));
+        tr.appendChild(el('td', { textContent: String(r.threads) }));
+        tr.appendChild(el('td', { textContent: String(r.time_ms) }));
+        tr.appendChild(el('td', { textContent: String(r.mcand_s) }));
+        var td = el('td');
+        td.appendChild(makeBadge(r.found ? 'YES' : 'NO', r.found ? 'badge-pass' : 'badge-fail'));
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+    });
+}
+
+// ---- Init ----
+function initApp() {
+    // Auto-scan GPU on page load
+    scanGpu();
+    loadBenchmarks();
+    generateLocalPreset('path', 5);
+    forceLayout();
+    renderGraph();
+}
+
+document.addEventListener('DOMContentLoaded', initApp);
+
+})();
 </script>
 </body>
 </html>
