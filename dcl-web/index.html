@@ -7,8 +7,9 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
+:root, [data-theme="dark"] {
     --bg: #0f172a;
+    --bg-rgb: 15,23,42;
     --card-bg: #1e293b;
     --card-border: #334155;
     --text: #e2e8f0;
@@ -22,6 +23,28 @@
     --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     --max-w: 1200px;
     --radius: 8px;
+    --particle-color: 59,130,246;
+    --nav-bg: rgba(15,23,42,0.85);
+    --code-bg: rgba(59,130,246,0.15);
+    --svg-bg: #0c1322;
+}
+
+[data-theme="light"] {
+    --bg: #f1f5f9;
+    --bg-rgb: 241,245,249;
+    --card-bg: #ffffff;
+    --card-border: #cbd5e1;
+    --text: #1e293b;
+    --text-muted: #475569;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --green: #16a34a;
+    --red: #dc2626;
+    --yellow: #d97706;
+    --particle-color: 37,99,235;
+    --nav-bg: rgba(241,245,249,0.85);
+    --code-bg: rgba(37,99,235,0.1);
+    --svg-bg: #e2e8f0;
 }
 
 html { scroll-behavior: smooth; }
@@ -33,14 +56,45 @@ body {
     font-size: 0.95rem;
     line-height: 1.6;
     min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
 }
+
+/* 3D Background Canvas */
+#bgCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    padding: 0;
+    line-height: 1;
+}
+.theme-toggle:hover { border-color: var(--accent); transform: scale(1.1); }
 
 /* Sticky Nav */
 nav {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(15, 23, 42, 0.85);
+    background: var(--nav-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--card-border);
@@ -224,7 +278,7 @@ details.learn-card .learn-body {
 details.learn-card .learn-body ul { padding-left: 1.2rem; margin: 0.5rem 0; }
 details.learn-card .learn-body li { margin-bottom: 0.3rem; }
 details.learn-card .learn-body code {
-    background: rgba(59,130,246,0.15);
+    background: var(--code-bg);
     padding: 0.15rem 0.4rem;
     border-radius: 4px;
     font-family: var(--mono);
@@ -246,7 +300,7 @@ details.learn-card .learn-body code {
 .graph-controls input[type="range"] { width: 100px; accent-color: var(--accent); }
 
 .svg-container {
-    background: #0c1322;
+    background: var(--svg-bg);
     border: 1px solid var(--card-border);
     border-radius: var(--radius);
     overflow: hidden;
@@ -572,6 +626,8 @@ footer p { margin-bottom: 0.3rem; }
 </head>
 <body>
 
+<canvas id="bgCanvas"></canvas>
+
 <!-- Nav -->
 <nav>
     <span class="nav-brand">DCL CUDA Explorer</span>
@@ -580,6 +636,7 @@ footer p { margin-bottom: 0.3rem; }
         <a href="#workspace">Graph</a>
         <a href="#playground">Playground</a>
         <a href="#benchmarks">Benchmarks</a>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark/light mode">&#127769;</button>
     </div>
 </nav>
 
@@ -2045,6 +2102,139 @@ function initApp() {
 }
 
 document.addEventListener('DOMContentLoaded', initApp);
+
+// ---- Theme Toggle ----
+function toggleTheme() {
+    var html = document.documentElement;
+    var current = html.getAttribute('data-theme') || 'dark';
+    var next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('dcl-theme', next);
+    var btn = document.getElementById('themeToggle');
+    btn.textContent = next === 'dark' ? '\uD83C\uDF19' : '\u2600\uFE0F';
+    // Restart particle colors
+    if (window.bgParticles) {
+        window.bgParticles.forEach(function(p) {
+            var rgb = getComputedStyle(document.documentElement).getPropertyValue('--particle-color').trim();
+            p.rgb = rgb;
+        });
+    }
+}
+
+// Restore saved theme
+(function() {
+    var saved = localStorage.getItem('dcl-theme');
+    if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+        var btn = document.getElementById('themeToggle');
+        if (btn) btn.textContent = saved === 'dark' ? '\uD83C\uDF19' : '\u2600\uFE0F';
+    }
+})();
+
+// ---- 3D Particle Network Background ----
+(function() {
+    var canvas = document.getElementById('bgCanvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    var PARTICLE_COUNT = 60;
+    var CONNECT_DIST = 150;
+    var mouse = { x: -1000, y: -1000 };
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    document.addEventListener('mousemove', function(e) {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+
+    function Particle() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.z = Math.random() * 200 + 50; // depth for 3D effect
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.vz = (Math.random() - 0.5) * 0.3;
+        this.size = Math.random() * 2 + 1;
+    }
+
+    for (var i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push(new Particle());
+    }
+    window.bgParticles = particles;
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        var style = getComputedStyle(document.documentElement);
+        var rgb = style.getPropertyValue('--particle-color').trim() || '59,130,246';
+
+        for (var i = 0; i < particles.length; i++) {
+            var p = particles[i];
+
+            // Update position
+            p.x += p.vx;
+            p.y += p.vy;
+            p.z += p.vz;
+
+            // Boundary wrap
+            if (p.x < 0) p.x = canvas.width;
+            if (p.x > canvas.width) p.x = 0;
+            if (p.y < 0) p.y = canvas.height;
+            if (p.y > canvas.height) p.y = 0;
+            if (p.z < 20) p.vz = Math.abs(p.vz);
+            if (p.z > 250) p.vz = -Math.abs(p.vz);
+
+            // 3D perspective projection
+            var scale = 200 / (200 + p.z);
+            var sx = (p.x - canvas.width / 2) * scale + canvas.width / 2;
+            var sy = (p.y - canvas.height / 2) * scale + canvas.height / 2;
+            var sz = p.size * scale;
+
+            // Mouse interaction — particles near mouse glow brighter
+            var dx = sx - mouse.x;
+            var dy = sy - mouse.y;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            var glow = dist < 200 ? (1 - dist / 200) * 0.5 : 0;
+
+            // Draw particle
+            var alpha = (0.3 + glow) * scale;
+            ctx.beginPath();
+            ctx.arc(sx, sy, sz, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(' + rgb + ',' + alpha + ')';
+            ctx.fill();
+
+            // Connect nearby particles with lines
+            for (var j = i + 1; j < particles.length; j++) {
+                var q = particles[j];
+                var qscale = 200 / (200 + q.z);
+                var qx = (q.x - canvas.width / 2) * qscale + canvas.width / 2;
+                var qy = (q.y - canvas.height / 2) * qscale + canvas.height / 2;
+                var ddx = sx - qx;
+                var ddy = sy - qy;
+                var d = Math.sqrt(ddx * ddx + ddy * ddy);
+                if (d < CONNECT_DIST) {
+                    var lineAlpha = (1 - d / CONNECT_DIST) * 0.15 * Math.min(scale, qscale);
+                    ctx.beginPath();
+                    ctx.moveTo(sx, sy);
+                    ctx.lineTo(qx, qy);
+                    ctx.strokeStyle = 'rgba(' + rgb + ',' + lineAlpha + ')';
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+})();
 
 })();
 </script>
