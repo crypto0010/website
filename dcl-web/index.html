@@ -615,7 +615,7 @@ footer p { margin-bottom: 0.3rem; }
 
 <!-- Offline Banner -->
 <div class="offline-banner" id="offlineBanner">
-    Server offline &mdash; start with: <code>cargo run -p dcl-web</code>
+    Running in client mode &mdash; for GPU acceleration, run locally: <code>cargo run -p dcl-web</code>
 </div>
 
 <!-- Learn Section -->
@@ -1086,24 +1086,28 @@ function scanGpu() {
             document.querySelectorAll('.run-btn').forEach(function(b) { b.disabled = false; });
         })
         .catch(function() {
-            // Server offline
-            panel.className = 'gpu-scan-panel offline';
-            icon.textContent = '\u274C'; // X
-            btn.innerHTML = 'Server Offline — Retry';
+            // No server — run in client mode
+            panel.className = 'gpu-scan-panel cpu-mode';
+            icon.textContent = '\uD83D\uDCBB';
+            btn.textContent = 'Client Mode \u2014 Ready';
             btn.disabled = false;
 
             var backendEl = document.getElementById('scanBackend');
             var deviceEl = document.getElementById('scanDevice');
             var statusEl = document.getElementById('scanStatus');
-            backendEl.textContent = 'Not available';
-            backendEl.className = 'value err';
-            deviceEl.textContent = 'Server not running';
-            deviceEl.className = 'value err';
-            statusEl.textContent = 'Start with: cargo run -p dcl-web';
-            statusEl.className = 'value err';
+            backendEl.textContent = 'Browser (client-side)';
+            backendEl.className = 'value cpu';
+            deviceEl.textContent = 'All computations run locally in your browser';
+            deviceEl.className = 'value cpu';
+            statusEl.textContent = 'GCD, Power Map, and Evolution demos fully functional';
+            statusEl.className = 'value cpu';
 
             result.className = 'scan-result show';
-            showOfflineBanner();
+            document.getElementById('offlineBanner').classList.remove('show');
+            var dot = document.getElementById('statusDot');
+            var txt = document.getElementById('statusText');
+            dot.className = 'status-dot active';
+            txt.textContent = 'Client Mode \u2014 Browser';
         });
 }
 
