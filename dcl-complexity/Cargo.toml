@@ -1,0 +1,15 @@
+[package]
+name = "dcl-complexity"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dcl-core = { path = "../dcl-core" }
+
+[dev-dependencies]
+criterion = { workspace = true }
+rand = { workspace = true }
+
+[[bench]]
+name = "bfs_bench"
+harness = false

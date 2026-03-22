@@ -1,0 +1,10 @@
+{
+  "name": "dcl-wasm-demo",
+  "version": "1.0.0",
+  "description": "DCL Framework WebAssembly Demo",
+  "scripts": {
+    "build": "wasm-pack build --target web --out-dir www/pkg",
+    "serve": "python -m http.server 8080"
+  },
+  "devDependencies": {}
+}

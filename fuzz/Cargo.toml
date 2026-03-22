@@ -1,0 +1,38 @@
+[package]
+name = "dcl-fuzz"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+dcl-core = { path = "../dcl-core" }
+dcl-crypto = { path = "../dcl-crypto" }
+dcl-security = { path = "../dcl-security" }
+
+[[bin]]
+name = "fuzz_labeling"
+path = "fuzz_targets/fuzz_labeling.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "fuzz_gcd"
+path = "fuzz_targets/fuzz_gcd.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "fuzz_miller_rabin"
+path = "fuzz_targets/fuzz_miller_rabin.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "fuzz_side_channel"
+path = "fuzz_targets/fuzz_side_channel.rs"
+test = false
+doc = false

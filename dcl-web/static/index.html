@@ -101,6 +101,65 @@ nav .nav-links a:hover { color: var(--text); }
 .hero-links a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
 .hero-links a:hover { text-decoration: underline; }
 
+/* GPU Scan Panel */
+.gpu-scan-panel {
+    display: inline-block;
+    margin: 1.5rem auto 0;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 1.2rem 2rem;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+}
+.gpu-scan-panel.scanning { border-color: var(--accent); }
+.gpu-scan-panel.gpu-found { border-color: var(--green); }
+.gpu-scan-panel.cpu-mode { border-color: var(--yellow); }
+.gpu-scan-panel.offline { border-color: var(--red); }
+
+.scan-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.95rem;
+    font-family: var(--sans);
+    transition: opacity 0.2s, transform 0.1s;
+}
+.scan-btn:hover { opacity: 0.85; }
+.scan-btn:active { transform: scale(0.97); }
+.scan-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.scan-btn .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.scan-result {
+    margin-top: 1rem;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    line-height: 1.8;
+    display: none;
+}
+.scan-result.show { display: block; }
+.scan-result .label { color: var(--text-muted); }
+.scan-result .value { color: var(--text); font-weight: 600; }
+.scan-result .value.gpu { color: var(--green); }
+.scan-result .value.cpu { color: var(--yellow); }
+.scan-result .value.err { color: var(--red); }
+.scan-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+
 /* Offline banner */
 .offline-banner {
     display: none;
@@ -528,13 +587,27 @@ footer p { margin-bottom: 0.3rem; }
 <header class="hero">
     <h1>DCL CUDA Explorer</h1>
     <p class="subtitle">Interactive Dynamic Coprime Labeling with GPU Acceleration</p>
-    <div class="status-badge" id="statusBadge">
-        <span class="status-dot" id="statusDot"></span>
-        <span id="statusText">Connecting...</span>
+
+    <div class="gpu-scan-panel" id="gpuScanPanel">
+        <div class="scan-icon" id="scanIcon">&#128270;</div>
+        <button class="scan-btn" id="scanBtn" onclick="scanGpu()">Scan for GPU</button>
+        <div class="scan-result" id="scanResult">
+            <div><span class="label">Backend: </span><span class="value" id="scanBackend">--</span></div>
+            <div><span class="label">Device: </span><span class="value" id="scanDevice">--</span></div>
+            <div><span class="label">Status: </span><span class="value" id="scanStatus">--</span></div>
+        </div>
     </div>
+
+    <div style="margin-top:1rem">
+        <div class="status-badge" id="statusBadge">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusText">Not scanned</span>
+        </div>
+    </div>
+
     <div class="hero-links">
         <a href="#benchmarks">Research Paper</a>
-        <a href="https://github.com" target="_blank">GitHub</a>
+        <a href="https://github.com/crypto0010/website" target="_blank">GitHub</a>
     </div>
 </header>
 
@@ -959,16 +1032,91 @@ function fetchGet(endpoint) {
 function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while(b){ var t=b; b=a%b; a=t; } return a; }
 function isPrimeLocal(n) { if(n<2) return false; for(var i=2;i*i<=n;i++) if(n%i===0) return false; return true; }
 
+// ---- GPU Scan ----
+function scanGpu() {
+    var panel = document.getElementById('gpuScanPanel');
+    var btn = document.getElementById('scanBtn');
+    var result = document.getElementById('scanResult');
+    var icon = document.getElementById('scanIcon');
+
+    // Set scanning state
+    panel.className = 'gpu-scan-panel scanning';
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Scanning...';
+    icon.textContent = '\u23F3'; // hourglass
+    result.className = 'scan-result';
+
+    fetchGet('/api/health')
+        .then(function(health) {
+            gpuStatus = health || {};
+            gpuStatus.available = health.gpu_available || health.cuda_available || false;
+            serverOnline = true;
+
+            var backendEl = document.getElementById('scanBackend');
+            var deviceEl = document.getElementById('scanDevice');
+            var statusEl = document.getElementById('scanStatus');
+
+            if (gpuStatus.available) {
+                // GPU found
+                panel.className = 'gpu-scan-panel gpu-found';
+                icon.textContent = '\uD83D\uDE80'; // rocket
+                btn.innerHTML = '\u2705 GPU Detected — Ready';
+                backendEl.textContent = 'CUDA GPU';
+                backendEl.className = 'value gpu';
+                deviceEl.textContent = health.device_name || 'Unknown GPU';
+                deviceEl.className = 'value gpu';
+                statusEl.textContent = 'All operations will use GPU acceleration';
+                statusEl.className = 'value gpu';
+            } else {
+                // CPU fallback
+                panel.className = 'gpu-scan-panel cpu-mode';
+                icon.textContent = '\uD83D\uDCBB'; // laptop
+                btn.innerHTML = '\u26A0\uFE0F CPU Mode — No GPU Found';
+                backendEl.textContent = 'CPU (fallback)';
+                backendEl.className = 'value cpu';
+                deviceEl.textContent = 'No CUDA-capable GPU detected';
+                deviceEl.className = 'value cpu';
+                statusEl.textContent = 'All operations will run on CPU (slower but functional)';
+                statusEl.className = 'value cpu';
+            }
+
+            result.className = 'scan-result show';
+            updateStatusBadge(health);
+            document.getElementById('offlineBanner').classList.remove('show');
+            document.querySelectorAll('.run-btn').forEach(function(b) { b.disabled = false; });
+        })
+        .catch(function() {
+            // Server offline
+            panel.className = 'gpu-scan-panel offline';
+            icon.textContent = '\u274C'; // X
+            btn.innerHTML = 'Server Offline — Retry';
+            btn.disabled = false;
+
+            var backendEl = document.getElementById('scanBackend');
+            var deviceEl = document.getElementById('scanDevice');
+            var statusEl = document.getElementById('scanStatus');
+            backendEl.textContent = 'Not available';
+            backendEl.className = 'value err';
+            deviceEl.textContent = 'Server not running';
+            deviceEl.className = 'value err';
+            statusEl.textContent = 'Start with: cargo run -p dcl-web';
+            statusEl.className = 'value err';
+
+            result.className = 'scan-result show';
+            showOfflineBanner();
+        });
+}
+
 // ---- Status ----
 function updateStatusBadge(health) {
     var dot = document.getElementById('statusDot');
     var txt = document.getElementById('statusText');
     if (health && (health.gpu_available || health.cuda_available)) {
         dot.className = 'status-dot active';
-        txt.textContent = 'GPU Active';
+        txt.textContent = 'GPU Active \u2014 ' + (health.device_name || 'CUDA');
     } else {
         dot.className = 'status-dot';
-        txt.textContent = 'CPU Mode';
+        txt.textContent = 'CPU Mode (fallback)';
     }
 }
 
@@ -1884,16 +2032,8 @@ function renderBruteTable(brute) {
 
 // ---- Init ----
 function initApp() {
-    fetchGet('/api/health')
-        .then(function(health) {
-            gpuStatus = health || {};
-            gpuStatus.available = health.gpu_available || health.cuda_available || false;
-            serverOnline = true;
-            updateStatusBadge(health);
-        })
-        .catch(function() {
-            showOfflineBanner();
-        });
+    // Auto-scan GPU on page load
+    scanGpu();
     loadBenchmarks();
     generateLocalPreset('path', 5);
     forceLayout();

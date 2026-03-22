@@ -1,0 +1,157 @@
+\relax 
+\citation{gallian2021}
+\citation{bondy2008}
+\citation{bernstein2014}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
+\newlabel{sec:intro}{{I}{1}{}{section.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Preliminaries}{1}{}\protected@file@percent }
+\newlabel{sec:prelim}{{II}{1}{}{section.2}{}}
+\citation{diestel2017}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Representative graph families used in experimental evaluation: path ($P_5$), cycle ($C_6$), wheel ($W_5$), and hypercube ($Q_2$).}}{2}{}\protected@file@percent }
+\newlabel{fig:graphs}{{1}{2}{}{figure.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Graph Family Properties}}{2}{}\protected@file@percent }
+\newlabel{tab:graphs}{{I}{2}{}{table.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {III}Theoretical Framework}{2}{}\protected@file@percent }
+\newlabel{sec:theory}{{III}{2}{}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Coprimality Preservation}{2}{}\protected@file@percent }
+\newlabel{lem:gcd}{{1}{2}{}{theorem.1}{}}
+\newlabel{eq:gcd_preserve}{{1}{2}{}{equation.1}{}}
+\newlabel{thm:coprime}{{2}{2}{}{theorem.2}{}}
+\newlabel{lem:growth}{{3}{2}{}{theorem.3}{}}
+\newlabel{eq:growth}{{2}{2}{}{equation.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Isomorphic Conservation Verification ($g(x) = x^2$, 50 Steps)}}{2}{}\protected@file@percent }
+\newlabel{tab:ramsey}{{II}{2}{}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Isomorphic Conservation}{2}{}\protected@file@percent }
+\newlabel{def:coprime_graph}{{4}{2}{}{definition.4}{}}
+\newlabel{thm:iso}{{4}{2}{}{theorem.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Computational Hardness}{2}{}\protected@file@percent }
+\newlabel{thm:hard}{{5}{2}{}{theorem.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Hypergraph Generalization}{2}{}\protected@file@percent }
+\newlabel{thm:hyper}{{6}{2}{}{theorem.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-E}}Tight Bounds on Maximum Labels}{2}{}\protected@file@percent }
+\newlabel{thm:bounds}{{7}{2}{}{theorem.7}{}}
+\newlabel{cor:pnt}{{8}{2}{}{theorem.8}{}}
+\newlabel{prop:carm}{{9}{2}{}{theorem.9}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Modular DCL Evolution on $P_5$: $g(x) = x^2 \bmod  65537$}}{3}{}\protected@file@percent }
+\newlabel{tab:modevol}{{III}{3}{}{table.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Algorithm Design}{3}{}\protected@file@percent }
+\newlabel{sec:algorithms}{{IV}{3}{}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Binary Exponentiation with Early Saturation}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Zero-Clone Backtracking BFS}{3}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Binary Exponentiation with Saturation}}{3}{}\protected@file@percent }
+\newlabel{alg:binexp}{{1}{3}{}{algorithm.1}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Zero-Clone Backtracking BFS}}{3}{}\protected@file@percent }
+\newlabel{alg:bfs}{{2}{3}{}{algorithm.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Coprimality Repair}{3}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces HDCL-SP Safe Prime Sieve}}{4}{}\protected@file@percent }
+\newlabel{alg:hdcl}{{3}{4}{}{algorithm.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces HDCL-SP vs.\ Baseline Safe-Prime Generation}}{4}{}\protected@file@percent }
+\newlabel{tab:hdcl}{{IV}{4}{}{table.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}HDCL-SP: Hypergraph DCL Safe-Prime Sieve}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}CUDA-Accelerated Architecture}{4}{}\protected@file@percent }
+\newlabel{sec:gpu}{{V}{4}{}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}System Design}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}CUDA Kernel Inventory}{4}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces DCL-RS workspace architecture. Arrows indicate dependency direction. The \texttt  {dcl-gpu} crate depends on \texttt  {dcl-core} (types) and \texttt  {dcl-security} (cryptanalysis configuration).}}{4}{}\protected@file@percent }
+\newlabel{fig:arch}{{2}{4}{}{figure.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces CUDA Kernel Inventory}}{4}{}\protected@file@percent }
+\newlabel{tab:kernels}{{V}{4}{}{table.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Memory Management}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}GPU Execution Pipeline}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-E}}Hardware Target}{4}{}\protected@file@percent }
+\citation{nist2010}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces GPU kernel execution pipeline. Dashed arrow indicates the iterative loop for multi-step evolution kernels, avoiding intermediate host transfers.}}{5}{}\protected@file@percent }
+\newlabel{fig:pipeline}{{3}{5}{}{figure.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces GPU Hardware Specifications}}{5}{}\protected@file@percent }
+\newlabel{tab:hardware}{{VI}{5}{}{table.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-F}}Portability Considerations}{5}{}\protected@file@percent }
+\newlabel{eq:mulmod}{{3}{5}{}{equation.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Security Analysis}{5}{}\protected@file@percent }
+\newlabel{sec:security}{{VI}{5}{}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}NIST SP 800-22 Compliance}{5}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {VII}{\ignorespaces NIST SP 800-22 Statistical Test Results}}{5}{}\protected@file@percent }
+\newlabel{tab:nist}{{VII}{5}{}{table.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VIII}{\ignorespaces Side-Channel Timing Analysis (10{,}000 Trials)}}{5}{}\protected@file@percent }
+\newlabel{tab:sidechannel}{{VIII}{5}{}{table.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Side-Channel Resistance}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Cryptanalytic Resistance}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Experimental Results}{5}{}\protected@file@percent }
+\newlabel{sec:results}{{VII}{5}{}{section.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-A}}GPU vs.\ CPU Scaling Analysis}{5}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {IX}{\ignorespaces GPU vs.\ CPU Benchmark Results (RTX 3050)}}{6}{}\protected@file@percent }
+\newlabel{tab:benchmark}{{IX}{6}{}{table.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces GPU speedup scaling with problem size. The dashed line at $1\times $ indicates the CPU-GPU break-even point. All three operations exhibit monotonically increasing speedup with larger $N$.}}{6}{}\protected@file@percent }
+\newlabel{fig:speedup}{{4}{6}{}{figure.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {X}{\ignorespaces Peak GPU Throughput by Kernel Type}}{6}{}\protected@file@percent }
+\newlabel{tab:throughput}{{X}{6}{}{table.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-B}}GPU Throughput Analysis}{6}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Peak GPU throughput comparison across all six CUDA kernel types. The batch evolve kernel (400.9\,M\,ops/s) benefits from amortized PCIe transfer cost over 10 sequential evolution steps. The NIST generator is bounded by iterative temporal dependence.}}{6}{}\protected@file@percent }
+\newlabel{fig:throughput}{{5}{6}{}{figure.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XI}{\ignorespaces BFS Optimization: Standard vs.\ Zero-Clone Backtracking}}{6}{}\protected@file@percent }
+\newlabel{tab:bfs}{{XI}{6}{}{table.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces BFS state-space exploration: standard vs.\ zero-clone backtracking with prime-only pruning. Logarithmic scale highlights the consistent order-of-magnitude reduction across all graph instances.}}{6}{}\protected@file@percent }
+\newlabel{fig:bfs}{{6}{6}{}{figure.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-C}}BFS Optimization}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-D}}DCL Evolution Demonstration}{6}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {XII}{\ignorespaces DCL Evolution on $P_5$: $g(x) = x^2$, $f_0 = (1, 2, 3, 5, 7)$}}{7}{}\protected@file@percent }
+\newlabel{tab:evolution}{{XII}{7}{}{table.12}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XIII}{\ignorespaces GPU Brute-Force Coprime Labeling Search}}{7}{}\protected@file@percent }
+\newlabel{tab:bruteforce}{{XIII}{7}{}{table.13}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XIV}{\ignorespaces GPU NIST Test Data Generation Performance}}{7}{}\protected@file@percent }
+\newlabel{tab:nistgen}{{XIV}{7}{}{table.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-E}}GPU Brute-Force Labeling Search}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-F}}NIST Data Generation Throughput}{7}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {XV}{\ignorespaces DCL Framework Performance Summary}}{7}{}\protected@file@percent }
+\newlabel{tab:perf_summary}{{XV}{7}{}{table.15}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XVI}{\ignorespaces Test Coverage Across DCL-RS Workspace}}{7}{}\protected@file@percent }
+\newlabel{tab:tests}{{XVI}{7}{}{table.16}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-G}}Performance Characteristics Summary}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-H}}Implementation Summary}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-I}}Test Suite Architecture}{7}{}\protected@file@percent }
+\newlabel{sec:testsuite}{{\mbox  {VII-I}}{7}{}{subsection.7.9}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {VII-I}1}Core Library (50 tests)}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {VII-I}2}Complexity and Search (10 tests)}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {VII-I}3}Hypergraph Extension (4 tests)}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {VII-I}4}Cryptographic Primitives (11 tests)}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {VII-I}5}Security Analysis (36 tests)}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {VII-I}6}GPU Kernel Correctness (10 tests)}{8}{}\protected@file@percent }
+\citation{gallian2021}
+\citation{gallian2021}
+\citation{bondy2008}
+\citation{bernstein2014}
+\citation{bernstein2012}
+\citation{cudarc2024}
+\citation{nist2010}
+\citation{bernstein2019}
+\citation{menezes1997}
+\@writefile{lot}{\contentsline {table}{\numberline {XVII}{\ignorespaces Detailed Test Breakdown by Functional Category}}{9}{}\protected@file@percent }
+\newlabel{tab:test_detail}{{XVII}{9}{}{table.17}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {VII-I}7}Zero-Knowledge Proofs (9 tests)}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Related Work}{9}{}\protected@file@percent }
+\newlabel{sec:related}{{VIII}{9}{}{section.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-A}}Graph Labeling Theory}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-B}}GPU-Accelerated Number Theory}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-C}}Pseudorandom Number Generation and Statistical Testing}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-D}}Side-Channel Resistance}{9}{}\protected@file@percent }
+\citation{bach1996}
+\bibstyle{IEEEtran}
+\bibcite{gallian2021}{1}
+\bibcite{bondy2008}{2}
+\bibcite{diestel2017}{3}
+\bibcite{graham1994}{4}
+\bibcite{diffie1976}{5}
+\bibcite{rivest1978}{6}
+\bibcite{nist2010}{7}
+\bibcite{rabin1980}{8}
+\bibcite{menezes1997}{9}
+\bibcite{bach1996}{10}
+\bibcite{hardy2008}{11}
+\bibcite{bernstein2014}{12}
+\bibcite{bernstein2012}{13}
+\bibcite{bernstein2019}{14}
+\bibcite{cudarc2024}{15}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-E}}Zero-Knowledge Proofs for Graph Properties}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IX}Conclusion}{10}{}\protected@file@percent }
+\newlabel{sec:conclusion}{{IX}{10}{}{section.9}{}}
+\@writefile{toc}{\contentsline {section}{References}{10}{}\protected@file@percent }
+\gdef \@abspage@last{11}

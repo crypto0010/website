@@ -1,0 +1,38 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.2 (win64) Build 6299465 Fri Nov 14 19:35:11 GMT 2025
+| Date         : Sat Mar 14 12:33:13 2026
+| Host         : DESKTOP-HU96KOB running 64-bit major release  (build 9200)
+| Command      : report_utilization -file reports/post_synth_util.rpt -hierarchical
+| Design       : dcl_top
+| Device       : xc7a100tcsg324-1
+| Speed File   : -1
+| Design State : Synthesized
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++-------------------+-----------------+------------+------------+---------+------+------+--------+--------+------------+
+|      Instance     |      Module     | Total LUTs | Logic LUTs | LUTRAMs | SRLs |  FFs | RAMB36 | RAMB18 | DSP Blocks |
++-------------------+-----------------+------------+------------+---------+------+------+--------+--------+------------+
+| dcl_top           |           (top) |       2365 |       2365 |       0 |    0 | 2156 |      1 |      2 |          0 |
+|   (dcl_top)       |           (top) |          0 |          0 |       0 |    0 |    0 |      1 |      2 |          0 |
+|   u_cmd           |    cmd_dispatch |        232 |        232 |       0 |    0 |  688 |      0 |      0 |          0 |
+|   u_coprime       | coprime_checker |        454 |        454 |       0 |    0 |  363 |      0 |      0 |          0 |
+|     (u_coprime)   | coprime_checker |         22 |         22 |       0 |    0 |  222 |      0 |      0 |          0 |
+|     u_gcd         |      gcd_unit_0 |        432 |        432 |       0 |    0 |  141 |      0 |      0 |          0 |
+|   u_demo          |       demo_ctrl |        126 |        126 |       0 |    0 |  116 |      0 |      0 |          0 |
+|   u_gcd           |        gcd_unit |        533 |        533 |       0 |    0 |  207 |      0 |      0 |          0 |
+|   u_power_map     |  power_map_unit |        941 |        941 |       0 |    0 |  691 |      0 |      0 |          0 |
+|     (u_power_map) |  power_map_unit |        121 |        121 |       0 |    0 |  357 |      0 |      0 |          0 |
+|     u_mulmod      |       mulmod_64 |        820 |        820 |       0 |    0 |  334 |      0 |      0 |          0 |
++-------------------+-----------------+------------+------------+---------+------+------+--------+--------+------------+
+
+

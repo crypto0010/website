@@ -1,0 +1,140 @@
+\relax 
+\citation{gallian2021}
+\citation{bondy2008}
+\citation{niven1991}
+\citation{xilinxug474}
+\citation{bernstein2014}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
+\newlabel{sec:intro}{{I}{1}{}{section.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Preliminaries}{2}{}\protected@file@percent }
+\newlabel{sec:prelim}{{II}{2}{}{section.2}{}}
+\newlabel{lem:gcd}{{1}{2}{}{theorem.1}{}}
+\newlabel{eq:gcd_preserve}{{1}{2}{}{equation.1}{}}
+\newlabel{thm:coprime}{{2}{2}{}{theorem.2}{}}
+\newlabel{thm:iso}{{3}{2}{}{theorem.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Modular DCL Evolution on $P_5$ ($g_{2,65537}$, Labels $[2,3,5,7,11]$)}}{2}{}\protected@file@percent }
+\newlabel{tab:evolve}{{I}{2}{}{table.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Graph Families Supported by the FPGA Implementation}}{2}{}\protected@file@percent }
+\newlabel{tab:graphs}{{II}{2}{}{table.2}{}}
+\newlabel{prop:carm}{{4}{2}{}{theorem.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {III}System Architecture}{2}{}\protected@file@percent }
+\newlabel{sec:arch}{{III}{2}{}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Design Philosophy}{2}{}\protected@file@percent }
+\citation{stein1967}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces System architecture of the DCL-FPGA accelerator (single-column view). The command dispatcher and demo controller share GCD and power map units through multiplexers gated by \texttt  {demo\_active}. The coprimality checker instantiates a private GCD unit and accesses label/edge BRAM. LUT counts are post-synthesis values.}}{3}{}\protected@file@percent }
+\newlabel{fig:arch}{{1}{3}{}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Top-Level Architecture}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Memory Organization}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Target Platform}{3}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Nexys~4~DDR Board Specifications}}{3}{}\protected@file@percent }
+\newlabel{tab:board}{{III}{3}{}{table.3}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Stein's Binary GCD (Hardware FSM)}}{3}{}\protected@file@percent }
+\newlabel{alg:gcd}{{1}{3}{}{algorithm.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Compute Unit Design}{3}{}\protected@file@percent }
+\newlabel{sec:compute}{{IV}{3}{}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}GCD Unit: Stein's Binary Algorithm}{3}{}\protected@file@percent }
+\citation{knuth1997}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces GCD unit FSM (9~states). Green = entry, orange = exit/output states. Self-loops on \texttt  {S\_STRIP\_*} and \texttt  {S\_FIN\_SHIFT} perform iterative 1-bit shifts. Termination is detected when $b = a$ (pre-subtraction). States \texttt  {S\_FIN\_SHIFT/OUT} compute $a \ll s$ and emit the result.}}{4}{}\protected@file@percent }
+\newlabel{fig:gcd_fsm}{{2}{4}{}{figure.2}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Russian Peasant Modular Multiplication}}{4}{}\protected@file@percent }
+\newlabel{alg:mulmod}{{2}{4}{}{algorithm.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Modular Multiplier: Russian Peasant Method}{4}{}\protected@file@percent }
+\newlabel{eq:sum65a}{{2}{4}{}{equation.2}{}}
+\newlabel{eq:sum65b}{{3}{4}{}{equation.3}{}}
+\newlabel{eq:condmod}{{4}{4}{}{equation.4}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces Binary Exponentiation Power Map}}{4}{}\protected@file@percent }
+\newlabel{alg:powmap}{{3}{4}{}{algorithm.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Power Map Unit: Binary Exponentiation}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}Coprimality Checker}{4}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Power map unit datapath. The \texttt  {acc} and \texttt  {base} registers share a single \texttt  {mulmod\_64} via input MUXes. Solid lines are data paths; dashed lines are control. Result feedback is routed outside the compute block to avoid overlap.}}{5}{}\protected@file@percent }
+\newlabel{fig:pm_datapath}{{3}{5}{}{figure.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces UART Command Protocol Specification}}{5}{}\protected@file@percent }
+\newlabel{tab:uart}{{IV}{5}{}{table.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Interface Design}{5}{}\protected@file@percent }
+\newlabel{sec:interface}{{V}{5}{}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}UART Command Protocol}{5}{}\protected@file@percent }
+\newlabel{eq:baud}{{5}{5}{}{equation.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces End-to-End UART Command Latency Analysis}}{5}{}\protected@file@percent }
+\newlabel{tab:uarttime}{{V}{5}{}{table.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces Synthesis Configuration}}{5}{}\protected@file@percent }
+\newlabel{tab:synthconfig}{{VI}{5}{}{table.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Standalone Demo Mode}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Rust Host Driver}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Synthesis and Optimization}{5}{}\protected@file@percent }
+\newlabel{sec:synth}{{VI}{5}{}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Iterative Arithmetic Datapaths}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Resource Sharing}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Critical Path Analysis}{6}{}\protected@file@percent }
+\newlabel{eq:fmax}{{6}{6}{}{equation.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Post-synthesis LUT allocation by module. The modular multiplier dominates at 820~LUTs (34.7\%). The two GCD instances consume 965~LUTs combined (40.8\%).}}{6}{}\protected@file@percent }
+\newlabel{fig:lutbar}{{4}{6}{}{figure.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Worst-case setup path (vertical view). The critical path traverses the 65-bit conditional subtraction chain in \texttt  {mulmod\_64}, spanning 17~CARRY4 primitives and 3~LUTs. The 2.568\,ns positive slack implies $f_{\max } \approx 134.5$\,MHz.}}{6}{}\protected@file@percent }
+\newlabel{fig:critpath}{{5}{6}{}{figure.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Experimental Results}{6}{}\protected@file@percent }
+\newlabel{sec:results}{{VII}{6}{}{section.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-A}}Resource Utilization}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-B}}Hierarchical Module Breakdown}{6}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {VII}{\ignorespaces Post-Implementation Resource Utilization}}{7}{}\protected@file@percent }
+\newlabel{tab:util}{{VII}{7}{}{table.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VIII}{\ignorespaces Hierarchical Resource Allocation (Post-Synthesis)}}{7}{}\protected@file@percent }
+\newlabel{tab:hier}{{VIII}{7}{}{table.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IX}{\ignorespaces Post-Implementation Timing Summary (100\,MHz)}}{7}{}\protected@file@percent }
+\newlabel{tab:timing}{{IX}{7}{}{table.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-C}}Timing Analysis}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-D}}Utilization Distribution}{7}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Resource utilization of the DCL-FPGA design on the XC7A100T. The design consumes less than 4\% of logic resources (LUTs, FFs, BRAM) and zero DSP slices. IOB utilization reflects the 57 board-level connections (switches, LEDs, UART, 7-segment display).}}{7}{}\protected@file@percent }
+\newlabel{fig:util}{{6}{7}{}{figure.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {X}{\ignorespaces Compute Operation Performance at 100\,MHz}}{7}{}\protected@file@percent }
+\newlabel{tab:perf}{{X}{7}{}{table.10}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XI}{\ignorespaces Cross-Platform Comparison of DCL Implementations}}{7}{}\protected@file@percent }
+\newlabel{tab:compare}{{XI}{7}{}{table.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-E}}Performance Characteristics}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-F}}Platform Comparison}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-G}}Isomorphic Conservation Verification}{7}{}\protected@file@percent }
+\citation{tenca2003}
+\citation{guneysu2008}
+\citation{takagi1992}
+\citation{sutter2007}
+\citation{cormen2009}
+\@writefile{lot}{\contentsline {table}{\numberline {XII}{\ignorespaces FPGA-Verified Isomorphic Conservation ($g_{2,65537}$)}}{8}{}\protected@file@percent }
+\newlabel{tab:isocheck}{{XII}{8}{}{table.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-H}}Design Trade-off Analysis}{8}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {XIII}{\ignorespaces Verification Test Coverage}}{8}{}\protected@file@percent }
+\newlabel{tab:testcov}{{XIII}{8}{}{table.13}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Verification}{8}{}\protected@file@percent }
+\newlabel{sec:verify}{{VIII}{8}{}{section.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-A}}Unit-Level Testbenches}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-B}}Bit-Exact Reference Matching}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-C}}Edge Case Coverage}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IX}Related Work}{8}{}\protected@file@percent }
+\newlabel{sec:related}{{IX}{8}{}{section.9}{}}
+\citation{menezes1996}
+\citation{xilinxug901}
+\citation{tenca2003}
+\citation{guneysu2008}
+\citation{sutter2007}
+\bibstyle{IEEEtran}
+\bibcite{gallian2021}{1}
+\bibcite{bondy2008}{2}
+\bibcite{niven1991}{3}
+\bibcite{xilinxug474}{4}
+\bibcite{stein1967}{5}
+\bibcite{knuth1997}{6}
+\bibcite{diestel2017}{7}
+\bibcite{tenca2003}{8}
+\bibcite{guneysu2008}{9}
+\bibcite{takagi1992}{10}
+\bibcite{sutter2007}{11}
+\@writefile{lot}{\contentsline {table}{\numberline {XIV}{\ignorespaces Comparison with Related FPGA Implementations}}{9}{}\protected@file@percent }
+\newlabel{tab:relwork}{{XIV}{9}{}{table.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IX-A}}RTL Design Summary}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {X}Conclusion}{9}{}\protected@file@percent }
+\newlabel{sec:conclusion}{{X}{9}{}{section.10}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XV}{\ignorespaces RTL Source File Summary}}{9}{}\protected@file@percent }
+\newlabel{tab:rtl}{{XV}{9}{}{table.15}{}}
+\@writefile{toc}{\contentsline {section}{References}{9}{}\protected@file@percent }
+\bibcite{xilinxug901}{12}
+\bibcite{bernstein2014}{13}
+\bibcite{cormen2009}{14}
+\bibcite{menezes1996}{15}
+\gdef \@abspage@last{10}

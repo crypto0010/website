@@ -1,0 +1,3519 @@
+╔══════════════════════════════════════════════════════════════════╗
+║         DCL-RS CUDA/GPU COMPREHENSIVE RESULTS                  ║
+╚══════════════════════════════════════════════════════════════════╝
+
+Generated: Sat Mar 14 23:31:06 IST 2026
+Hostname:  DESKTOP-MMB8LA9
+OS:        MINGW64_NT-10.0-26200 DESKTOP-MMB8LA9 3.6.6-1cdd4371.x86_64 2026-01-15 22:20 UTC x86_64 Msys
+Rust:      rustc 1.93.0 (254b59607 2026-01-19)
+Cargo:     cargo 1.93.0 (083ac5135 2025-12-15)
+
+Working Directory: /c/Users/HP/Documents/C_Skills/dcl-rs
+
+
+################################################################
+# SECTION 1: SYSTEM & CUDA INFO                               #
+################################################################
+
+CMD 1: cargo run -p dcl-cli -- gpu --info
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.34s
+     Running `target\debug\dcl-cli.exe gpu --info`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+CUDA Device Information:
+  Name: NVIDIA GeForce RTX 3050
+  Memory: 4096 MB
+  Compute Capability: 8.6
+[EXIT CODE: 0 - OK]
+========================================
+
+################################################################
+# SECTION 2: ALL dcl-gpu TESTS (with output)                  #
+################################################################
+
+CMD 2: cargo test -p dcl-gpu -- --nocapture
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s
+     Running unittests src\lib.rs (target\debug\deps\dcl_gpu-cda6fdeb4562a696.exe)
+
+running 10 tests
+test benchmark::tests::benchmark_all ... ignored
+CUDA device: NVIDIA GeForce RTX 3050
+Memory: 4096 MB
+Compute: 8.6
+test context::tests::cuda_context_creation ... ok
+Batch GCD test passed: [4, 5, 1, 25, 7, 1]
+test kernels::gcd::tests::batch_gcd_correctness ... ok
+NIST gen: 400 bytes match CPU
+test kernels::nist_gen::tests::nist_gen_matches_cpu ... ok
+Evolve GPU vs CPU after 3 steps: MATCH
+test kernels::evolve::tests::evolve_matches_cpu ... ok
+Power map GPU vs CPU: MATCH
+test kernels::power_map::tests::power_map_matches_cpu ... ok
+Prime sieve test passed: [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+test kernels::prime_sieve::tests::prime_sieve_correctness ... ok
+GPU brute force found 10 solutions
+test kernels::brute_force::tests::brute_force_finds_solutions ... ok
+Coprimality check: PASS
+test kernels::coprimality::tests::coprime_check_correctness ... ok
+Coprimality repair: 1 edges fixed, labels: [6, 11, 5, 7]
+test kernels::coprimality::tests::coprime_repair_fixes_violations ... ok
+
+test result: ok. 9 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+   Doc-tests dcl_gpu
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[EXIT CODE: 0 - OK]
+========================================
+
+################################################################
+# SECTION 3: FULL WORKSPACE TESTS                             #
+################################################################
+
+CMD 3: cargo test -p dcl-core -p dcl-complexity -p dcl-security -p dcl-crypto -p dcl-hypergraph -p dcl-ramsey -p dcl-zkp -p dcl-gpu
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-hypergraph\src\repair.rs:58:13
+   |
+58 |         let mut lab = Labeling::new(vec![6, 9, 5]);
+   |             ----^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-hypergraph\src\repair.rs:60:13
+   |
+60 |         let mut lab2 = Labeling::new(vec![6, 3, 5]);
+   |             ----^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: `dcl-ramsey` (lib test) generated 2 warnings (2 duplicates)
+warning: `dcl-complexity` (lib test) generated 2 warnings (2 duplicates)
+warning: `dcl-security` (lib test) generated 6 warnings (6 duplicates)
+warning: `dcl-hypergraph` (lib test) generated 2 warnings (run `cargo fix --lib -p dcl-hypergraph --tests` to apply 2 suggestions)
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: comparison is useless due to type limits
+   --> dcl-crypto\src\sieve_improved.rs:293:17
+    |
+293 |         assert!(result.success_count >= 0);
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_comparisons)]` on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+warning: `dcl-crypto` (lib test) generated 2 warnings (1 duplicate)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.36s
+     Running unittests src\lib.rs (target\debug\deps\dcl_complexity-370d28fc5d52df79.exe)
+
+running 10 tests
+test bfs::tests::bfs_none_for_infeasible ... ok
+test bfs_optimized::tests::optimized_bfs_path3 ... ok
+test bfs_optimized::tests::sieve_primes_correctness ... ok
+test bfs_optimized::tests::zero_clone_finds_same_solutions ... ok
+test bfs_optimized::tests::prune_efficiency ... ok
+test index::tests::mu_cycle4 ... ok
+test bfs::tests::bfs_finds_labeling_path5 ... ok
+test bfs::tests::bfs_wheel_w5 ... ok
+test index::tests::mu_path5 ... ok
+test bfs::tests::bfs_cycle_c6 ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
+
+     Running unittests src\lib.rs (target\debug\deps\dcl_core-1dddeeb3d21daa0d.exe)
+
+running 38 tests
+test dcl::tests::dcl_power_map_one_step ... ok
+test dcl::tests::dcl_cycle_c6_identity ... ok
+test gcd::tests::setwise_gcd_basic ... ok
+test graph::tests::coprime_labeling_path ... ok
+test dcl::tests::dcl_path_p5_identity_100_steps ... ok
+test dcl::tests::dcl_wheel_w5_identity ... ok
+test error::tests::dimension_mismatch_error ... ok
+test error::tests::error_display ... ok
+test error::tests::overflow_error ... ok
+test error::tests::result_conversion ... ok
+test gcd::tests::extended_gcd_basic ... ok
+test gcd::tests::gcd_basic ... ok
+test dcl::tests::dcl_hypercube_q3_identity ... ok
+test dcl::tests::isomorphic_conservation_path_identity ... ok
+test graph::tests::cycle_edges ... ok
+test gcd::tests::coprime_basic ... ok
+test error::tests::coprimality_violation_error ... ok
+test graph::tests::hypercube_q3 ... ok
+test graph::tests::path_edges ... ok
+test graph::tests::wheel_edges ... ok
+test labeling::tests::edge_coprime ... ok
+test labeling::tests::evolve_in_place_matches_evolve ... ok
+test labeling::tests::labeling_evolve ... ok
+test labeling::tests::labeling_injective ... ok
+test labeling::tests::repair_coprimality_fixes_violations ... ok
+test labeling::tests::repair_coprimality_no_op_on_valid ... ok
+test labeling_bigint::tests::gcd_computation ... ok
+test labeling_bigint::tests::bigint_no_overflow ... ok
+test transform::tests::hash_transform_deterministic ... ok
+test transform::tests::hash_transform_different_steps ... ok
+test transform::tests::power_map_apply ... ok
+test transform::tests::identity_coprime_preserving ... ok
+test transform::tests::hash_transform_coprime_check ... ok
+test transform::tests::power_map_binary_exp_correctness ... ok
+test transform::tests::power_map_large_exponent ... ok
+test transform::tests::power_map_coprime_preserving ... ok
+test labeling_bigint::tests::bigint_coprimality_preserved ... ok
+test labeling_bigint::tests::modular_arithmetic_bounded ... ok
+
+test result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\error_handling_tests.rs (target\debug\deps\error_handling_tests-4544fadd997de40b.exe)
+
+running 12 tests
+test test_dcl_dimension_mismatch ... ok
+test test_backward_compatibility ... ok
+test test_dcl_valid_initialization ... ok
+test test_error_display_messages ... ok
+test test_graph_edge_out_of_bounds ... ok
+test test_dcl_new_panics_on_invalid - should panic ... ok
+test test_dcl_verify_steps_with_error ... ok
+test test_invalid_labeling_set_zero ... ok
+test test_invalid_labeling_zero ... ok
+test test_dcl_coprimality_violation_initial ... ok
+test test_labeling_new_panics_on_zero - should panic ... ok
+test test_labeling_index_out_of_bounds ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\dcl_crypto-c01bd204685a05dc.exe)
+
+running 11 tests
+test miller_rabin::tests::mod_pow_correctness ... ok
+test miller_rabin::tests::miller_rabin_known_composites ... ok
+test sieve_improved::tests::improved_sieve_basic_functionality ... ok
+test miller_rabin::tests::safe_prime_detection ... ok
+test bias::tests::bias_test_uniform_safe_primes ... ok
+test baseline::tests::standard_baseline_produces_safe_prime ... ok
+test sieve::tests::sieve_property_lemma ... ok
+test sieve::tests::sieve_produces_safe_prime ... ok
+test miller_rabin::tests::miller_rabin_known_primes ... ok
+test sieve_improved::tests::batch_generation_basic ... ok
+test sieve_improved::tests::hash_mixing_reduces_bias ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.65s
+
+     Running unittests src\lib.rs (target\debug\deps\dcl_gpu-856cb4e8c4552b8a.exe)
+
+running 10 tests
+test benchmark::tests::benchmark_all ... ignored
+test context::tests::cuda_context_creation ... ok
+test kernels::nist_gen::tests::nist_gen_matches_cpu ... ok
+test kernels::evolve::tests::evolve_matches_cpu ... ok
+test kernels::coprimality::tests::coprime_check_correctness ... ok
+test kernels::gcd::tests::batch_gcd_correctness ... ok
+test kernels::power_map::tests::power_map_matches_cpu ... ok
+test kernels::prime_sieve::tests::prime_sieve_correctness ... ok
+test kernels::brute_force::tests::brute_force_finds_solutions ... ok
+test kernels::coprimality::tests::coprime_repair_fixes_violations ... ok
+
+test result: ok. 9 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+     Running unittests src\lib.rs (target\debug\deps\dcl_hypergraph-b945383d22f754f3.exe)
+
+running 4 tests
+test hypergraph::tests::complete_3uniform_validity ... ok
+test repair::tests::repair_restores_constraint ... ok
+test hypergraph_dcl::tests::existence_equivalence_check ... ok
+test hypergraph_dcl::tests::hypergraph_dcl_3uniform ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\dcl_ramsey-8253c0c3f39550aa.exe)
+
+running 9 tests
+test carmichael::tests::euler_totient_known ... ok
+test carmichael::tests::carmichael_known_values ... ok
+test carmichael::tests::modular_period_divides_lambda ... ok
+test isomorphism::tests::iso_different_structures ... ok
+test isomorphism::tests::iso_complete3 ... ok
+test isomorphism::tests::iso_path4_to_itself ... ok
+test ramsey::tests::ramsey_conservation_path5 ... ok
+test ramsey::tests::ramsey_conservation_q3 ... ok
+test ramsey::tests::ramsey_suite_all_hold ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\dcl_security-f0f7907e226c1cc4.exe)
+
+running 36 tests
+test adversary::tests::structural_adversary_returns_valid_labeling ... ok
+test adversary::tests::statistical_adversary_returns_valid_labeling ... ok
+test dl_experiment::tests::dl_experiment_runs_no_panic ... ok
+test game::tests::brute_force_adversary_game ... ok
+test cryptanalysis::tests::frequency_test_validates_randomness ... ok
+test enhanced_security::tests::commitment_integrity ... ok
+test nist_tests::tests::test_frequency_monobit ... ok
+test dl_experiment::tests::mth_root_exact ... ok
+test cryptanalysis::tests::dcl_labels_to_test_data_produces_bytes ... ok
+test nist_tests::tests::test_runs_test ... ok
+test security_levels::tests::parse_from_string ... ok
+test game::tests::random_adversary_low_win_rate ... ok
+test security_levels::tests::security_levels_ordered ... ok
+test security_levels::tests::summary_contains_info ... ok
+test security_levels::tests::validation_works ... ok
+test side_channel::tests::test_batch_check ... ok
+test side_channel::tests::test_compare_bytes_constant_time ... ok
+test side_channel::tests::test_gcd_constant_time_correctness ... ok
+test side_channel::tests::test_cache_resistant_hash ... ok
+test side_channel::tests::test_are_coprime_constant_time ... ok
+test side_channel::tests::test_mod_pow_resistant ... ok
+test side_channel::tests::test_side_channel_metrics ... ok
+test side_channel::tests::test_timing_resistant_coprime ... ok
+test telemetry::tests::test_collector_metrics ... ok
+test telemetry::tests::test_performance_tracking ... ok
+test telemetry::tests::test_snapshot ... ok
+test telemetry::tests::test_telemetry_config ... ok
+test telemetry::tests::test_telemetry_event ... ok
+test telemetry::tests::test_perf_timer ... ok
+test cryptanalysis::tests::cryptanalysis_larger_graph ... ok
+test cryptanalysis::tests::cryptanalysis_with_modulus ... ok
+test scaling::tests::scaling_path_small ... ok
+test cryptanalysis::tests::cryptanalysis_with_config ... ok
+test cryptanalysis::tests::cryptanalysis_runs ... ok
+test nist_tests::tests::test_nist_suite_on_random_data ... ok
+test enhanced_security::tests::enhanced_game_runs ... ok
+
+test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.10s
+
+     Running unittests src\lib.rs (target\debug\deps\dcl_zkp-dea4f90431c0bde3.exe)
+
+running 9 tests
+test fiat_shamir::tests::test_fiat_shamir ... ok
+test coprime_proof::tests::test_invalid_witness ... ok
+test coprime_proof::tests::test_coprime_proof ... ok
+test label_proof::tests::test_invalid_label_count ... ok
+test commitment::tests::test_commitment_hiding ... ok
+test commitment::tests::test_commitment ... ok
+test label_proof::tests::test_zero_label ... ok
+test label_proof::tests::test_label_proof ... ok
+test tests::test_basic_commitment ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests dcl_complexity
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests dcl_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests dcl_crypto
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests dcl_gpu
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests dcl_hypergraph
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests dcl_ramsey
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests dcl_security
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests dcl_zkp
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[EXIT CODE: 0 - OK]
+========================================
+
+################################################################
+# SECTION 4: GPU BATCH GCD                                    #
+################################################################
+
+CMD 4: cargo run -p dcl-cli -- gpu --gcd --count 10000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.15s
+     Running `target\debug\dcl-cli.exe gpu --gcd --count 10000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- Batch GCD (10000 pairs) ---
+  Time: 5.20ms
+  Coprime pairs: 10000/10000 (100.0%)
+  Throughput: 1.9M ops/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 5: cargo run -p dcl-cli -- gpu --gcd --count 50000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --gcd --count 50000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- Batch GCD (50000 pairs) ---
+  Time: 5.71ms
+  Coprime pairs: 50000/50000 (100.0%)
+  Throughput: 8.8M ops/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 6: cargo run -p dcl-cli -- gpu --gcd --count 100000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --gcd --count 100000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- Batch GCD (100000 pairs) ---
+  Time: 5.88ms
+  Coprime pairs: 100000/100000 (100.0%)
+  Throughput: 17.0M ops/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+################################################################
+# SECTION 5: GPU PRIME SIEVE                                  #
+################################################################
+
+CMD 7: cargo run -p dcl-cli -- gpu --primes --count 10000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --primes --count 10000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- Prime Sieve (2 to 10001) ---
+  Time: 5.77ms
+  Primes found: 1229
+  Throughput: 1.7M ops/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 8: cargo run -p dcl-cli -- gpu --primes --count 50000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --primes --count 50000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- Prime Sieve (2 to 50001) ---
+  Time: 7.69ms
+  Primes found: 5133
+  Throughput: 6.5M ops/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 9: cargo run -p dcl-cli -- gpu --primes --count 100000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --primes --count 100000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- Prime Sieve (2 to 100001) ---
+  Time: 10.26ms
+  Primes found: 9592
+  Throughput: 9.7M ops/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+################################################################
+# SECTION 6: GPU BATCH EVOLVE                                 #
+################################################################
+
+CMD 10: cargo run -p dcl-cli -- gpu --evolve --vertices 5 --count 10000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --evolve --vertices 5 --count 10000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- Batch Evolve (5 vertices, 2000 instances) ---
+  Time: 5.26ms
+  Labels evolved: 10000
+  Throughput: 19.0M ops/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 11: cargo run -p dcl-cli -- gpu --evolve --vertices 10 --count 50000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --evolve --vertices 10 --count 50000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- Batch Evolve (10 vertices, 5000 instances) ---
+  Time: 5.57ms
+  Labels evolved: 50000
+  Throughput: 89.7M ops/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 12: cargo run -p dcl-cli -- gpu --evolve --vertices 10 --count 100000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --evolve --vertices 10 --count 100000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- Batch Evolve (10 vertices, 10000 instances) ---
+  Time: 5.50ms
+  Labels evolved: 100000
+  Throughput: 181.8M ops/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 13: cargo run -p dcl-cli -- gpu --evolve --vertices 10 --count 100000 --modulus 65537
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --evolve --vertices 10 --count 100000 --modulus 65537`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- Batch Evolve (10 vertices, 10000 instances) ---
+  Time: 6.81ms
+  Labels evolved: 100000
+  Throughput: 146.9M ops/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+################################################################
+# SECTION 7: GPU BRUTE-FORCE SEARCH                           #
+################################################################
+
+CMD 14: cargo run -p dcl-cli -- gpu --bfs --graph path --vertices 4 --count 100000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --bfs --graph path --vertices 4 --count 100000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- GPU Brute-Force Search (100000 threads) ---
+  Time: 5.13ms
+  Valid labelings found: 20
+  Example: [15, 46, 31, 11]
+  Throughput: 19.5M candidates/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 15: cargo run -p dcl-cli -- gpu --bfs --graph path --vertices 6 --count 500000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --bfs --graph path --vertices 6 --count 500000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- GPU Brute-Force Search (500000 threads) ---
+  Time: 5.58ms
+  Valid labelings found: 20
+  Example: [34, 31, 35, 1, 22, 7]
+  Throughput: 89.6M candidates/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 16: cargo run -p dcl-cli -- gpu --bfs --graph cycle --vertices 6 --count 500000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --bfs --graph cycle --vertices 6 --count 500000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- GPU Brute-Force Search (500000 threads) ---
+  Time: 5.56ms
+  Valid labelings found: 20
+  Example: [27, 2, 9, 44, 37, 1]
+  Throughput: 89.9M candidates/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 17: cargo run -p dcl-cli -- gpu --bfs --graph complete --vertices 4 --count 500000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --bfs --graph complete --vertices 4 --count 500000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- GPU Brute-Force Search (500000 threads) ---
+  Time: 5.67ms
+  Valid labelings found: 20
+  Example: [41, 46, 7, 5]
+  Throughput: 88.2M candidates/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+################################################################
+# SECTION 8: GPU NIST DATA GENERATION                         #
+################################################################
+
+CMD 18: cargo run -p dcl-cli -- gpu --nist --vertices 5 --steps 100
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --nist --vertices 5 --steps 100`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- GPU NIST Data Gen (5 vertices, 100 steps) ---
+  Time: 10.08ms
+  Generated: 4000 bytes (32000 bits)
+  Throughput: 0.4M bytes/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 19: cargo run -p dcl-cli -- gpu --nist --vertices 10 --steps 200
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --nist --vertices 10 --steps 200`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- GPU NIST Data Gen (10 vertices, 200 steps) ---
+  Time: 16.98ms
+  Generated: 16000 bytes (128000 bits)
+  Throughput: 0.9M bytes/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 20: cargo run -p dcl-cli -- gpu --nist --vertices 10 --steps 200 --modulus 65537
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --nist --vertices 10 --steps 200 --modulus 65537`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- GPU NIST Data Gen (10 vertices, 200 steps) ---
+  Time: 17.88ms
+  Generated: 16000 bytes (128000 bits)
+  Throughput: 0.9M bytes/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+################################################################
+# SECTION 9: GPU vs CPU BENCHMARK                             #
+################################################################
+
+CMD 21: cargo run -p dcl-cli -- gpu --benchmark --count 50000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.15s
+     Running `target\debug\dcl-cli.exe gpu --benchmark --count 50000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+=== GPU vs CPU Benchmark (50000 items) ===
+
+
+Operation                GPU (ms)     CPU (ms)    Speedup   GPU Throughput
+---------------------------------------------------------------------------
+Batch GCD                   5.49        4.26       0.8x          9.1M ops/s
+Power Map x^3               0.40        1.35       3.4x        125.7M ops/s
+Prime Sieve                 0.90        0.90       1.0x         55.5M ops/s
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 22: cargo run -p dcl-cli -- gpu --benchmark --count 100000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --benchmark --count 100000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+=== GPU vs CPU Benchmark (100000 items) ===
+
+
+Operation                GPU (ms)     CPU (ms)    Speedup   GPU Throughput
+---------------------------------------------------------------------------
+Batch GCD                   5.75        8.68       1.5x         17.4M ops/s
+Power Map x^3               0.58        2.64       4.5x        171.9M ops/s
+Prime Sieve                 1.25        2.13       1.7x         80.2M ops/s
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 23: cargo run -p dcl-cli -- gpu --benchmark --count 500000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --benchmark --count 500000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+=== GPU vs CPU Benchmark (500000 items) ===
+
+
+Operation                GPU (ms)     CPU (ms)    Speedup   GPU Throughput
+---------------------------------------------------------------------------
+Batch GCD                   7.37       46.13       6.3x         67.9M ops/s
+Power Map x^3               1.57       13.09       8.4x        319.4M ops/s
+Prime Sieve                 6.30       17.11       2.7x         79.4M ops/s
+
+[EXIT CODE: 0 - OK]
+========================================
+
+CMD 24: cargo run -p dcl-cli -- gpu --benchmark --count 1000000
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target\debug\dcl-cli.exe gpu --benchmark --count 1000000`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+=== GPU vs CPU Benchmark (1000000 items) ===
+
+
+Operation                GPU (ms)     CPU (ms)    Speedup   GPU Throughput
+---------------------------------------------------------------------------
+Batch GCD                   9.43       95.28      10.1x        106.0M ops/s
+Power Map x^3               2.78       26.34       9.5x        359.9M ops/s
+Prime Sieve                12.18       43.87       3.6x         82.1M ops/s
+
+[EXIT CODE: 0 - OK]
+========================================
+
+################################################################
+# SECTION 10: GPU DEFAULT (ALL DEMOS)                         #
+################################################################
+
+CMD 25: cargo run -p dcl-cli -- gpu
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_label` is never read
+  --> dcl-complexity\src\bfs_optimized.rs:47:5
+   |
+44 | pub struct OptimizedBfs<'a> {
+   |            ------------ field in this struct
+...
+47 |     max_label: u64,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:98:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+98 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+warning: `dcl-complexity` (lib) generated 2 warnings
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.15s
+     Running `target\debug\dcl-cli.exe gpu`
+
+=== DCL-GPU: CUDA Acceleration ===
+
+--- Batch GCD (100000 pairs) ---
+  Time: 5.52ms
+  Coprime pairs: 100000/100000 (100.0%)
+  Throughput: 18.1M ops/sec
+
+--- Prime Sieve (2 to 100001) ---
+  Time: 7.17ms
+  Primes found: 9592
+  Throughput: 13.9M ops/sec
+
+--- Batch Evolve (10 vertices, 10000 instances) ---
+  Time: 2.41ms
+  Labels evolved: 100000
+  Throughput: 414.3M ops/sec
+
+[EXIT CODE: 0 - OK]
+========================================
+
+################################################################
+# SECTION 11: IGNORED BENCHMARK TESTS                         #
+################################################################
+
+CMD 26: cargo test -p dcl-gpu -- --ignored --nocapture
+----------------------------------------
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+   --> dcl-security\src\cryptanalysis.rs:153:5
+    |
+150 | pub struct Cryptanalyzer<'a> {
+    |            ------------- field in this struct
+...
+153 |     test_iterations: usize,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s
+     Running unittests src\lib.rs (target\debug\deps\dcl_gpu-cda6fdeb4562a696.exe)
+
+running 1 test
+
+Operation                GPU (ms)     CPU (ms)    Speedup   GPU Throughput
+---------------------------------------------------------------------------
+Batch GCD                   6.03        8.92       1.5x         16.6M ops/s
+Power Map x^3               2.41        2.60       1.1x         41.6M ops/s
+Prime Sieve                 2.81        2.04       0.7x         35.6M ops/s
+
+test benchmark::tests::benchmark_all ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.30s
+
+   Doc-tests dcl_gpu
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[EXIT CODE: 0 - OK]
+========================================
+
+################################################################
+# SECTION 12: SUMMARY                                         #
+################################################################
+
+Total commands run:    26
+Commands succeeded:    26
+Commands failed:       0
+
+Generation completed:  Sat Mar 14 23:31:23 IST 2026
+
+╔══════════════════════════════════════════════════════════════════╗
+║                      END OF RESULTS                            ║
+╚══════════════════════════════════════════════════════════════════╝

@@ -1,0 +1,20 @@
+[package]
+name = "dcl-crypto"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dcl-core      = { path = "../dcl-core" }
+dcl-hypergraph = { path = "../dcl-hypergraph" }
+rand          = { workspace = true }
+sha2          = { workspace = true }
+num-bigint    = { workspace = true }
+num-traits    = { workspace = true }
+rayon         = { workspace = true }
+
+[dev-dependencies]
+criterion = { workspace = true }
+
+[[bench]]
+name = "sieve_bench"
+harness = false

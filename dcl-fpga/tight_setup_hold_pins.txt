@@ -1,0 +1,9 @@
++====================+===================+==============================+
+| Launch Setup Clock | Launch Hold Clock | Pin                          |
++====================+===================+==============================+
+| sys_clk_pin        | sys_clk_pin       | u_coprime/u_gcd/ra_reg[62]/D |
+| sys_clk_pin        | sys_clk_pin       | u_coprime/u_gcd/rb_reg[36]/D |
+| sys_clk_pin        | sys_clk_pin       | u_coprime/u_gcd/ra_reg[56]/D |
+| sys_clk_pin        | sys_clk_pin       | u_coprime/u_gcd/rb_reg[38]/D |
+| sys_clk_pin        | sys_clk_pin       | u_coprime/u_gcd/ra_reg[57]/D |
++--------------------+-------------------+------------------------------+

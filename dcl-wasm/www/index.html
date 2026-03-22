@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCL Framework - Interactive Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .controls {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .visualization {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        #graph-canvas {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            width: 100%;
+            height: 500px;
+            cursor: grab;
+        }
+
+        #graph-canvas:active {
+            cursor: grabbing;
+        }
+
+        .info-panel {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-panel h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .evolution-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+
+        .evolution-table th,
+        .evolution-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .evolution-table th {
+            background: #667eea;
+            color: white;
+        }
+
+        .coprime-yes {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .coprime-no {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        #loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 DCL Framework</h1>
+            <p class="subtitle">Dynamic Coprime Labeling - Interactive Visualization</p>
+        </header>
+
+        <div id="loading">
+            <p>Loading WebAssembly module...</p>
+        </div>
+
+        <div id="app" class="hidden">
+            <div class="content">
+                <div class="controls">
+                    <h2 style="margin-bottom: 20px;">Controls</h2>
+
+                    <div class="control-group">
+                        <label for="graph-type">Graph Type</label>
+                        <select id="graph-type">
+                            <option value="complete">Complete Graph (Kₙ)</option>
+                            <option value="cycle">Cycle Graph (Cₙ)</option>
+                            <option value="path">Path Graph (Pₙ)</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="vertex-count">Number of Vertices (n)</label>
+                        <input type="number" id="vertex-count" min="3" max="10" value="5">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="labels-input">Initial Labels (comma-separated)</label>
+                        <input type="text" id="labels-input" value="2, 3, 5, 7, 11" placeholder="e.g., 2, 3, 5, 7, 11">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="evolution-steps">Evolution Steps</label>
+                        <input type="number" id="evolution-steps" min="0" max="10" value="3">
+                    </div>
+
+                    <button id="create-btn" onclick="createGraph()">Create Graph</button>
+                    <button id="evolve-btn" onclick="evolveSequence()" style="margin-top: 10px;">Evolve Sequence</button>
+                    <button id="verify-btn" onclick="verifyLabeling()" style="margin-top: 10px;">Verify Coprimality</button>
+
+                    <div class="control-group" style="margin-top: 20px;">
+                        <h3>Utilities</h3>
+                        <input type="number" id="gcd-a" placeholder="Number A" style="margin-top: 10px;">
+                        <input type="number" id="gcd-b" placeholder="Number B" style="margin-top: 10px;">
+                        <button onclick="computeGcd()" style="margin-top: 10px;">Compute GCD</button>
+                        <button onclick="computeLcm()" style="margin-top: 10px;">Compute LCM</button>
+                        <div id="util-result" style="margin-top: 10px; padding: 10px; background: white; border-radius: 4px; min-height: 20px;"></div>
+                    </div>
+                </div>
+
+                <div class="visualization">
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-value" id="vertex-stat">0</div>
+                            <div class="stat-label">Vertices</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="edge-stat">0</div>
+                            <div class="stat-label">Edges</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="coprime-stat">-</div>
+                            <div class="stat-label">Coprime?</div>
+                        </div>
+                    </div>
+
+                    <canvas id="graph-canvas"></canvas>
+
+                    <div class="info-panel">
+                        <h3>Current Labeling</h3>
+                        <div id="current-labels">No graph created yet</div>
+                    </div>
+
+                    <div id="evolution-panel" class="info-panel hidden">
+                        <h3>Evolution History</h3>
+                        <div id="evolution-data"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import init, { WasmGraph, WasmLabeling, WasmDclSequence, DclUtils } from './pkg/dcl_wasm.js';
+
+        let dcl = null;
+        let currentGraph = null;
+        let currentLabeling = null;
+        let currentSequence = null;
+
+        async function main() {
+            try {
+                await init();
+                dcl = { WasmGraph, WasmLabeling, WasmDclSequence, DclUtils };
+
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('app').classList.remove('hidden');
+
+                // Create initial graph
+                createGraph();
+            } catch (error) {
+                document.getElementById('loading').innerHTML =
+                    `<div class="error">Failed to load WASM module: ${error.message}</div>`;
+            }
+        }
+
+        window.createGraph = function() {
+            const graphType = document.getElementById('graph-type').value;
+            const n = parseInt(document.getElementById('vertex-count').value);
+
+            try {
+                // Create graph
+                if (graphType === 'complete') {
+                    currentGraph = dcl.WasmGraph.complete(n);
+                } else if (graphType === 'cycle') {
+                    currentGraph = dcl.WasmGraph.cycle(n);
+                } else if (graphType === 'path') {
+                    currentGraph = dcl.WasmGraph.path(n);
+                }
+
+                // Update stats
+                document.getElementById('vertex-stat').textContent = currentGraph.vertex_count();
+                document.getElementById('edge-stat').textContent = currentGraph.edge_count();
+
+                // Draw graph
+                drawGraph();
+
+                // Parse and create labeling
+                const labelsText = document.getElementById('labels-input').value;
+                const labels = labelsText.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+
+                if (labels.length !== n) {
+                    alert(`Please provide exactly ${n} labels for ${n} vertices`);
+                    return;
+                }
+
+                currentLabeling = new dcl.WasmLabeling(labels);
+                document.getElementById('current-labels').textContent =
+                    `Labels: [${labels.join(', ')}]`;
+
+                // Create sequence
+                currentSequence = new dcl.WasmDclSequence(currentGraph, currentLabeling);
+
+                // Verify coprimality
+                verifyLabeling();
+
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        };
+
+        window.evolveSequence = function() {
+            if (!currentSequence) {
+                alert('Please create a graph first');
+                return;
+            }
+
+            const steps = parseInt(document.getElementById('evolution-steps').value);
+
+            try {
+                const historyJson = currentSequence.evolve(steps);
+                const history = JSON.parse(historyJson);
+
+                let html = '<table class="evolution-table"><tr><th>Step</th><th>Labels</th></tr>';
+                history.forEach((labels, step) => {
+                    html += `<tr><td>t=${step}</td><td>[${labels.join(', ')}]</td></tr>`;
+                });
+                html += '</table>';
+
+                document.getElementById('evolution-data').innerHTML = html;
+                document.getElementById('evolution-panel').classList.remove('hidden');
+
+            } catch (error) {
+                alert(`Evolution error: ${error.message}`);
+            }
+        };
+
+        window.verifyLabeling = function() {
+            if (!currentSequence) {
+                alert('Please create a graph first');
+                return;
+            }
+
+            try {
+                const isValid = currentSequence.verify_coprime();
+                const statElement = document.getElementById('coprime-stat');
+                statElement.textContent = isValid ? '✓ Yes' : '✗ No';
+                statElement.className = isValid ? 'stat-value coprime-yes' : 'stat-value coprime-no';
+            } catch (error) {
+                alert(`Verification error: ${error.message}`);
+            }
+        };
+
+        window.computeGcd = function() {
+            const a = parseInt(document.getElementById('gcd-a').value);
+            const b = parseInt(document.getElementById('gcd-b').value);
+
+            if (isNaN(a) || isNaN(b)) {
+                document.getElementById('util-result').textContent = 'Please enter valid numbers';
+                return;
+            }
+
+            const result = dcl.DclUtils.gcd(a, b);
+            const coprime = dcl.DclUtils.are_coprime(a, b);
+            document.getElementById('util-result').innerHTML =
+                `GCD(${a}, ${b}) = <strong>${result}</strong><br>Coprime: ${coprime ? '✓ Yes' : '✗ No'}`;
+        };
+
+        window.computeLcm = function() {
+            const a = parseInt(document.getElementById('gcd-a').value);
+            const b = parseInt(document.getElementById('gcd-b').value);
+
+            if (isNaN(a) || isNaN(b)) {
+                document.getElementById('util-result').textContent = 'Please enter valid numbers';
+                return;
+            }
+
+            const result = dcl.DclUtils.lcm(a, b);
+            document.getElementById('util-result').innerHTML =
+                `LCM(${a}, ${b}) = <strong>${result}</strong>`;
+        };
+
+        function drawGraph() {
+            const canvas = document.getElementById('graph-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Set canvas size
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.min(width, height) * 0.35;
+
+            const n = currentGraph.vertex_count();
+            const edgesJson = currentGraph.edges_json();
+            const edges = JSON.parse(edgesJson);
+
+            // Calculate vertex positions
+            const positions = [];
+            for (let i = 0; i < n; i++) {
+                const angle = (2 * Math.PI * i / n) - Math.PI / 2;
+                positions.push({
+                    x: centerX + radius * Math.cos(angle),
+                    y: centerY + radius * Math.sin(angle)
+                });
+            }
+
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw edges
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 2;
+            edges.forEach(([u, v]) => {
+                ctx.beginPath();
+                ctx.moveTo(positions[u].x, positions[u].y);
+                ctx.lineTo(positions[v].x, positions[v].y);
+                ctx.stroke();
+            });
+
+            // Draw vertices
+            const labels = currentLabeling ?
+                document.getElementById('labels-input').value.split(',').map(s => parseInt(s.trim())) :
+                Array.from({length: n}, (_, i) => i + 1);
+
+            positions.forEach((pos, i) => {
+                // Draw circle
+                ctx.fillStyle = '#667eea';
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, 25, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // Draw border
+                ctx.strokeStyle = '#764ba2';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+
+                // Draw label
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 16px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(labels[i], pos.x, pos.y);
+            });
+        }
+
+        main();
+    </script>
+</body>
+</html>

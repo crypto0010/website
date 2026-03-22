@@ -1,0 +1,1310 @@
+================================================================================
+  DCL-FPGA  --  CONSOLIDATED BUILD REPORT
+  Generated : 2026-03-14
+  Tool      : AMD Vivado v2025.2 (win64)
+  Target    : Nexys 4 DDR  --  XC7A100T-1CSG324C (Artix-7, speed grade -1)
+  Clock     : 100 MHz (10.000 ns period)
+  Top Module: dcl_top
+  Bitstream : output/dcl_fpga.bit  (3,825,908 bytes)
+================================================================================
+
+
+================================================================================
+  TABLE OF CONTENTS
+================================================================================
+
+  1.  PROJECT OVERVIEW
+  2.  BUILD CONFIGURATION
+  3.  OPTIMIZATION HISTORY
+  4.  FINAL TIMING SUMMARY
+  5.  FINAL RESOURCE UTILIZATION
+  6.  HIERARCHICAL UTILIZATION (POST-SYNTHESIS)
+  7.  POST-IMPLEMENTATION UTILIZATION DETAIL
+  8.  POST-SYNTHESIS TIMING SUMMARY
+  9.  POST-IMPLEMENTATION TIMING DETAIL (WORST PATH)
+  10. VIVADO BUILD LOG (FINAL BUILD)
+  11. RTL SOURCE LISTING
+  12. CONSTRAINTS FILE
+  13. BUILD SCRIPT
+
+
+================================================================================
+  1.  PROJECT OVERVIEW
+================================================================================
+
+The DCL-FPGA project implements a Discrete Chromatic Labeling accelerator
+targeting the Digilent Nexys 4 DDR board.  The design includes:
+
+  Compute Cores:
+    - GCD Unit         : Stein's binary GCD for 64-bit numbers (x2 instances)
+    - PowerMap Unit    : Binary exponentiation  x^m mod n
+    - MulMod Unit      : 64-bit modular multiplication (Russian peasant)
+    - Coprime Checker  : Validates edge coprimality using embedded BRAM
+
+  Control Interface:
+    - UART 115200-8N1 command protocol (7 commands)
+    - Command dispatcher routing to compute cores
+    - Demo mode via board switches and buttons
+
+  Memory:
+    - Label BRAM  : 32 x 64-bit
+    - Edge BRAM   : 256 x (u8, u8) vertex pairs
+
+  I/O:
+    - 7-segment multiplexed display (8 digits)
+    - 16 LEDs + RGB LED16
+    - 16 switches + 5 buttons
+    - UART TX/RX
+
+  RTL Source Files (10 modules):
+    rtl/dcl_top.v          Top-level integration
+    rtl/gcd_unit.v         Stein's binary GCD (64-bit, area-optimized)
+    rtl/mulmod_64.v        64-bit modular multiplication
+    rtl/power_map_unit.v   Binary exponentiation with modular arithmetic
+    rtl/coprime_checker.v  Sequential coprimality checker using BRAM
+    rtl/cmd_dispatch.v     UART command parser and dispatcher
+    rtl/uart_rx.v          UART receiver (115200 baud, 8N1)
+    rtl/uart_tx.v          UART transmitter
+    rtl/seven_seg.v        8-digit multiplexed 7-segment display driver
+    rtl/demo_ctrl.v        Standalone demo controller
+
+
+================================================================================
+  2.  BUILD CONFIGURATION
+================================================================================
+
+  Synthesis Directive  : AreaOptimized_high
+  Opt Design Directive : ExploreArea
+  Place Design         : default
+  Route Design         : default
+  Build Mode           : Non-project batch (in-memory)
+  Build Script         : scripts/build.tcl
+  Constraint File      : constraints/nexys4ddr.xdc
+
+
+================================================================================
+  3.  OPTIMIZATION HISTORY
+================================================================================
+
+  Three optimization iterations were performed.
+
+  Build 1 -- Original Design (timing violations)
+  -----------------------------------------------
+    LUTs           : 14,338  (22.62%)
+    Registers      :  2,330  ( 1.84%)
+    CARRY4         :  2,444
+    WNS            : -255.574 ns   *** TIMING NOT MET ***
+    Failing Endpts :  1,110
+    Root Cause     : Verilog '%' modulo operator on 64-bit values in
+                     mulmod_64.v (line 68) and power_map_unit.v (line 65).
+                     Vivado synthesized these as massive combinational
+                     dividers: 1,151 logic levels, 1,076 CARRY4 chains.
+
+  Build 2 -- Timing Fix (timing met, not area-optimized)
+  -------------------------------------------------------
+    LUTs           :  5,083  ( 8.02%)
+    Registers      :  2,437  ( 1.92%)
+    CARRY4         :    287
+    WNS            : +0.208 ns     *** TIMING MET ***
+    Failing Endpts :      0
+    Changes Applied:
+      - mulmod_64.v : Replaced combinational 'a % m' with iterative
+        restoring-division loop (64 clock cycles, 1 bit per cycle).
+        Added S_REDUCE and S_CALC_INIT states.
+      - power_map_unit.v : Removed redundant 'base <= x % modulus'.
+        The mulmod_64 reduction handles this internally.
+      - gcd_unit.v : Split ctz64 priority-encoder + barrel-shift
+        operations into two-cycle sequences (compute CTZ, then shift).
+
+  Build 3 -- Area Optimization (FINAL)
+  -------------------------------------
+    LUTs           :  2,315  ( 3.65%)
+    Registers      :  2,156  ( 1.70%)
+    CARRY4         :    235
+    WNS            : +2.568 ns     *** TIMING MET ***
+    Failing Endpts :      0
+    Changes Applied:
+      - gcd_unit.v : Replaced ctz64 priority encoder and all barrel
+        shifters (right and left) with iterative 1-bit shift loops.
+        Eliminated the ctz64 function entirely.
+        Saved ~800-1200 LUTs across 2 instances.
+      - mulmod_64.v : Replaced 128-bit wide_acc/wide_a registers and
+        128-bit arithmetic (adder, comparator, shift) with a single
+        1-bit ra_overflow flag.  Reuses acc and ra registers between
+        modular and saturating modes.  Shared sum_acc_ra adder.
+        Saved ~300-500 LUTs and 256 flip-flops.
+      - build.tcl : Added synth_design -directive AreaOptimized_high
+        and opt_design -directive ExploreArea.
+
+  Summary Table:
+  +-----------+--------+--------+-----------+---------------+
+  | Build     |  LUTs  |  FFs   |  WNS(ns)  |    Status     |
+  +-----------+--------+--------+-----------+---------------+
+  | Original  | 14,338 |  2,330 | -255.574  | TIMING FAIL   |
+  | Fix #1    |  5,083 |  2,437 |   +0.208  | TIMING MET    |
+  | Fix #2    |  2,315 |  2,156 |   +2.568  | TIMING MET    |
+  +-----------+--------+--------+-----------+---------------+
+  | Reduction |  83.9% |  7.5%  |           |               |
+  +-----------+--------+--------+-----------+---------------+
+
+
+================================================================================
+  4.  FINAL TIMING SUMMARY  (Post-Implementation, Routed)
+================================================================================
+
+  Clock: sys_clk_pin  Waveform: {0.000 5.000}  Period: 10.000 ns  (100 MHz)
+
+  +----------+---------+---------+----------------------+---------------------+
+  |  Check   | WNS(ns) | TNS(ns) | Failing Endpoints    | Total Endpoints     |
+  +----------+---------+---------+----------------------+---------------------+
+  | Setup    |  2.568  |  0.000  |          0           |       4,307         |
+  | Hold     |  0.034  |  0.000  |          0           |       4,307         |
+  | Pulse W. |  4.500  |  0.000  |          0           |       2,163         |
+  +----------+---------+---------+----------------------+---------------------+
+
+  *** All user specified timing constraints are met. ***
+
+  Worst Setup Path:
+    Source      : u_power_map/u_mulmod/ra_reg[1]/C
+    Destination : u_power_map/u_mulmod/acc_reg[7]/D
+    Data Delay  : 7.389 ns  (logic 4.309 ns, route 3.080 ns)
+    Logic Levels: 20  (CARRY4=17, LUT2=1, LUT5=2)
+    Slack       : +2.568 ns
+
+  Worst Hold Path:
+    Source      : u_power_map/base_reg[59]/C
+    Destination : u_power_map/mul_a_reg[59]/D
+    Data Delay  : 0.353 ns
+    Slack       : +0.034 ns
+
+
+================================================================================
+  5.  FINAL RESOURCE UTILIZATION  (Post-Implementation, Routed)
+================================================================================
+
+  +-------------------------+-------+-----------+-------+
+  |        Resource         | Used  | Available | Util% |
+  +-------------------------+-------+-----------+-------+
+  | Slice LUTs              | 2,315 |    63,400 |  3.65 |
+  |   LUT as Logic          | 2,315 |    63,400 |  3.65 |
+  |   LUT as Memory         |     0 |    19,000 |  0.00 |
+  | Slice Registers         | 2,156 |   126,800 |  1.70 |
+  |   Register as Flip Flop | 2,156 |   126,800 |  1.70 |
+  |   Register as Latch     |     0 |   126,800 |  0.00 |
+  | F7 Muxes                |     9 |    31,700 |  0.03 |
+  | Block RAM Tile          |     2 |       135 |  1.48 |
+  |   RAMB36E1              |     1 |       135 |  0.74 |
+  |   RAMB18E1              |     2 |       270 |  0.74 |
+  | DSPs                    |     0 |       240 |  0.00 |
+  | Bonded IOB              |    57 |       210 | 27.14 |
+  | BUFGCTRL                |     1 |        32 |  3.13 |
+  +-------------------------+-------+-----------+-------+
+
+  Primitives:
+  +----------+-------+
+  | Ref Name | Used  |
+  +----------+-------+
+  | FDCE     | 1,732 |
+  | LUT5     |   650 |
+  | LUT6     |   587 |
+  | LUT3     |   585 |
+  | LUT4     |   490 |
+  | LUT2     |   438 |
+  | FDRE     |   418 |
+  | CARRY4   |   235 |
+  | OBUF     |    36 |
+  | IBUF     |    21 |
+  | LUT1     |    20 |
+  | MUXF7    |     9 |
+  | FDPE     |     6 |
+  | RAMB18E1 |     2 |
+  | RAMB36E1 |     1 |
+  | BUFG     |     1 |
+  +----------+-------+
+
+  Slice Distribution:
+  +-------------------------------+------+-----------+-------+
+  |          Site Type            | Used | Available | Util% |
+  +-------------------------------+------+-----------+-------+
+  | Slice                         |  794 |    15,850 |  5.01 |
+  |   SLICEL                      |  616 |           |       |
+  |   SLICEM                      |  178 |           |       |
+  | Registers driven from within  | 1180 |           |       |
+  | Registers driven from outside |  976 |           |       |
+  +-------------------------------+------+-----------+-------+
+
+
+================================================================================
+  6.  HIERARCHICAL UTILIZATION  (Post-Synthesis)
+================================================================================
+
+  +-------------------+-----------------+--------+------+--------+--------+------+
+  |     Instance      |     Module      |  LUTs  | FFs  | RAMB36 | RAMB18 | DSP  |
+  +-------------------+-----------------+--------+------+--------+--------+------+
+  | dcl_top           |           (top) |  2,365 | 2156 |      1 |      2 |    0 |
+  |   (dcl_top)       |           (top) |      0 |    0 |      1 |      2 |    0 |
+  |   u_cmd           |    cmd_dispatch |    232 |  688 |      0 |      0 |    0 |
+  |   u_coprime       | coprime_checker |    454 |  363 |      0 |      0 |    0 |
+  |     (u_coprime)   | coprime_checker |     22 |  222 |      0 |      0 |    0 |
+  |     u_gcd         |      gcd_unit_0 |    432 |  141 |      0 |      0 |    0 |
+  |   u_demo          |       demo_ctrl |    126 |  116 |      0 |      0 |    0 |
+  |   u_gcd           |        gcd_unit |    533 |  207 |      0 |      0 |    0 |
+  |   u_power_map     |  power_map_unit |    941 |  691 |      0 |      0 |    0 |
+  |     (u_power_map) |  power_map_unit |    121 |  357 |      0 |      0 |    0 |
+  |     u_mulmod      |       mulmod_64 |    820 |  334 |      0 |      0 |    0 |
+  +-------------------+-----------------+--------+------+--------+--------+------+
+
+  Notes:
+    - u_gcd (top-level) is shared between cmd_dispatch and demo_ctrl
+    - u_coprime/u_gcd is a private GCD instance for coprime checking
+    - u_power_map/u_mulmod is the only mulmod_64 instance
+    - UART RX/TX and seven_seg modules are too small to appear separately
+      (absorbed into top-level after synthesis optimization)
+
+
+================================================================================
+  7.  POST-IMPLEMENTATION UTILIZATION DETAIL
+================================================================================
+
+  Registers by Type:
+  +-------+--------------+-------------+--------------+
+  | Total | Clock Enable | Synchronous | Asynchronous |
+  +-------+--------------+-------------+--------------+
+  |     6 |          Yes |           - |          Set |
+  | 1,732 |          Yes |           - |        Reset |
+  |   418 |          Yes |       Reset |            - |
+  +-------+--------------+-------------+--------------+
+
+  Memory:
+  +-------------------+------+-----------+-------+
+  |     Site Type     | Used | Available | Util% |
+  +-------------------+------+-----------+-------+
+  | Block RAM Tile    |    2 |       135 |  1.48 |
+  |   RAMB36/FIFO     |    1 |       135 |  0.74 |
+  |   RAMB18          |    2 |       270 |  0.74 |
+  +-------------------+------+-----------+-------+
+
+  I/O:
+  +-----------------------------+------+-----------+-------+
+  |          Site Type          | Used | Available | Util% |
+  +-----------------------------+------+-----------+-------+
+  | Bonded IOB                  |   57 |       210 | 27.14 |
+  |   IOB Master Pads           |   28 |           |       |
+  |   IOB Slave Pads            |   26 |           |       |
+  +-----------------------------+------+-----------+-------+
+
+  Clocking:
+  +------------+------+-----------+-------+
+  |  Site Type | Used | Available | Util% |
+  +------------+------+-----------+-------+
+  | BUFGCTRL   |    1 |        32 |  3.13 |
+  | MMCME2_ADV |    0 |         6 |  0.00 |
+  | PLLE2_ADV  |    0 |         6 |  0.00 |
+  +------------+------+-----------+-------+
+
+
+================================================================================
+  8.  POST-SYNTHESIS TIMING SUMMARY
+================================================================================
+
+  +----------+---------+---------+----------------------+---------------------+
+  |  Check   | WNS(ns) | TNS(ns) | Failing Endpoints    | Total Endpoints     |
+  +----------+---------+---------+----------------------+---------------------+
+  | Setup    |  3.779  |  0.000  |          0           |       4,307         |
+  | Hold     |  0.132  |  0.000  |          0           |       4,307         |
+  | Pulse W. |  4.500  |  0.000  |          0           |       2,163         |
+  +----------+---------+---------+----------------------+---------------------+
+
+  All user specified timing constraints are met.
+
+  check_timing results:
+    no_clock                        : 0
+    constant_clock                  : 0
+    pulse_width_clock               : 0
+    unconstrained_internal_endpoints: 0
+    no_input_delay                  : 20 (HIGH -- expected for board switches/buttons)
+    no_output_delay                 : 28 (HIGH -- expected for LEDs/7-seg)
+    multiple_clock                  : 0
+    generated_clocks                : 0
+    loops                           : 0
+    partial_input_delay             : 0
+    partial_output_delay            : 0
+    latch_loops                     : 0
+
+
+================================================================================
+  9.  POST-IMPLEMENTATION TIMING DETAIL (WORST SETUP PATH)
+================================================================================
+
+  Slack (MET) : 2.568 ns  (required time - arrival time)
+
+  Source      : u_power_map/u_mulmod/ra_reg[1]/C
+                  (FDCE clocked by sys_clk_pin {rise@0 fall@5 period=10})
+  Destination : u_power_map/u_mulmod/acc_reg[7]/D
+                  (FDCE clocked by sys_clk_pin {rise@0 fall@5 period=10})
+  Path Group  : sys_clk_pin
+  Path Type   : Setup (Max at Slow Process Corner)
+  Requirement : 10.000 ns
+  Data Delay  : 7.389 ns  (logic 4.309 ns = 58.3%, route 3.080 ns = 41.7%)
+  Logic Levels: 20  (CARRY4=17, LUT2=1, LUT5=2)
+  Clock Skew  : -0.040 ns
+  Clock Unc.  :  0.035 ns
+
+  Path Detail:
+    Location           Delay type              Incr(ns) Path(ns)  Resource
+    -----------------------------------------------------------------------
+                       (clock rise edge)         0.000    0.000 r
+    E3                 IBUF                      1.482    1.482 r  CLK100MHZ
+                       net (routed)              2.025    3.506    CLK100MHZ_IBUF
+    BUFGCTRL_X0Y16     BUFG                      0.096    3.602 r  CLK100MHZ_IBUF_BUFG
+                       net (fo=2162, routed)     1.803    5.406    clk
+    SLICE_X47Y37       FDCE (C->Q)               0.456    5.862 r  ra_reg[1]/Q
+                       net (fo=6, routed)        0.784    6.646
+    SLICE_X41Y36       LUT2                      0.124    6.770 r  acc[3]_i_10/O
+    SLICE_X41Y36       CARRY4 (S[1]->CO[3])      0.550    7.320 r  acc_reg[3]_i_3/CO[3]
+    ... 15 CARRY4 stages propagating carry ...
+    SLICE_X41Y50       CARRY4 (CI->O[0])         0.222    9.024 r  acc_reg[59]_i_3/O[0]
+                       net (fo=5, routed)        1.129   10.153
+    SLICE_X43Y47       LUT5                      0.299   10.452 r  acc[63]_i_25/O
+    SLICE_X43Y47       CARRY4 (S[0]->CO[3])      0.532   10.984 r  acc_reg[63]_i_15/CO[3]
+    SLICE_X43Y48       CARRY4 (CI->CO[0])        0.271   11.255 r  acc_reg[63]_i_6/CO[0]
+                       net (fo=64, routed)       1.167   12.422
+    SLICE_X43Y37       LUT5                      0.373   12.795 r  acc[7]_i_1/O
+    SLICE_X43Y37       FDCE (D)                           12.795    acc_reg[7]
+    -----------------------------------------------------------------------
+    Required time:  15.362 ns
+    Arrival time:   12.795 ns
+    Slack:           2.568 ns
+
+
+================================================================================
+  10. VIVADO BUILD LOG  (Final Build -- Area Optimized)
+================================================================================
+
+  Session Start: Sat Mar 14 12:32:09 2026
+  Vivado v2025.2 (64-bit), Build 6299465
+
+  --- Synthesis ---
+  synth_design -top dcl_top -part xc7a100tcsg324-1 -directive AreaOptimized_high
+  License acquired: Synthesis / xc7a100t
+  RTL Elaboration   : 4 s
+  Synthesis complete : 0 Errors, 0 Critical Warnings
+  synth_design Time  : cpu 00:00:25, elapsed 00:00:21
+
+  --- Implementation ---
+  opt_design -directive ExploreArea
+    opt_design Time: cpu 00:00:01, elapsed 00:00:01
+
+  place_design
+    Post-Placement WNS: 2.888 ns
+    place_design Time : cpu 00:00:13, elapsed 00:00:08
+
+  route_design
+    Router Estimated Timing:
+      WNS=2.566 ns  TNS=0.000  WHS=0.034  THS=0.000
+    Routing Utilization:
+      Global Vertical   = 0.62%
+      Global Horizontal = 0.86%
+    Failed Nets: 0
+    route_design Time: cpu 00:00:26, elapsed 00:00:22
+
+  --- DRC ---
+  DRC finished with 0 Errors
+
+  --- Bitstream ---
+  write_bitstream output/dcl_fpga.bit
+  Bitgen Completed Successfully
+  0 Errors, 0 Warnings, 0 Critical Warnings
+
+  Session End: Sat Mar 14 12:34:07 2026
+  Total Build Time: ~2 minutes
+
+
+================================================================================
+  11. RTL SOURCE LISTING
+================================================================================
+
+
+--- rtl/dcl_top.v (Top-Level Module) -------------------------------------------
+
+`timescale 1ns / 1ps
+// DCL Top Module -- Nexys 4 DDR (XC7A100T-1CSG324C)
+// Integrates: GCD, MulMod, PowerMap, CoprimeChecker, UART, Demo, 7-Seg
+
+module dcl_top (
+    input  wire        CLK100MHZ,
+    input  wire        CPU_RESETN,    // active-low reset
+
+    // UART
+    input  wire        UART_TXD_IN,   // PC -> FPGA (RX)
+    output wire        UART_RXD_OUT,  // FPGA -> PC (TX)
+
+    // Switches and buttons
+    input  wire [15:0] SW,
+    input  wire        BTNC, BTNU, BTND, BTNL, BTNR,
+
+    // LEDs
+    output wire [15:0] LED,
+    output wire        LED16_R, LED16_G, LED16_B,
+
+    // 7-segment display
+    output wire [6:0]  SEG,           // CA..CG (active low)
+    output wire        DP,
+    output wire [7:0]  AN
+);
+
+    wire clk   = CLK100MHZ;
+    wire rst_n = CPU_RESETN;
+
+    // ---- UART ----
+    wire [7:0] rx_data;
+    wire       rx_valid_raw;
+    wire [7:0] tx_data;
+    wire       tx_send;
+    wire       tx_busy;
+
+    uart_rx u_uart_rx (
+        .clk   (clk),
+        .rst_n (rst_n),
+        .rx    (UART_TXD_IN),
+        .data  (rx_data),
+        .valid (rx_valid_raw)
+    );
+
+    uart_tx u_uart_tx (
+        .clk   (clk),
+        .rst_n (rst_n),
+        .data  (tx_data),
+        .send  (tx_send),
+        .tx    (UART_RXD_OUT),
+        .busy  (tx_busy)
+    );
+
+    // Gate UART rx_valid with !SW[15] -- UART is disabled in demo mode
+    wire rx_valid = rx_valid_raw && !SW[15];
+
+    // ---- demo_active signal (driven by demo_ctrl.active) ----
+    wire demo_active;
+
+    // ---- GCD Unit -- mux inputs from cmd_dispatch or demo_ctrl ----
+    wire [63:0] gcd_a_cmd,    gcd_b_cmd;
+    wire        gcd_start_cmd;
+    wire [63:0] gcd_a_demo,   gcd_b_demo;
+    wire        gcd_start_demo;
+
+    wire [63:0] gcd_result;
+    wire        gcd_done, gcd_coprime;
+
+    wire [63:0] gcd_a_mux     = demo_active ? gcd_a_demo     : gcd_a_cmd;
+    wire [63:0] gcd_b_mux     = demo_active ? gcd_b_demo     : gcd_b_cmd;
+    wire        gcd_start_mux = demo_active ? gcd_start_demo : gcd_start_cmd;
+
+    gcd_unit u_gcd (
+        .clk       (clk),
+        .rst_n     (rst_n),
+        .start     (gcd_start_mux),
+        .a         (gcd_a_mux),
+        .b         (gcd_b_mux),
+        .result    (gcd_result),
+        .done      (gcd_done),
+        .is_coprime(gcd_coprime)
+    );
+
+    // ---- Power Map Unit (contains its own mulmod_64 instance) ----
+    wire [63:0] pm_x_cmd,    pm_x_demo;
+    wire [31:0] pm_m_cmd,    pm_m_demo;
+    wire [63:0] pm_mod_cmd,  pm_mod_demo;
+    wire        pm_start_cmd, pm_start_demo;
+
+    wire [63:0] pm_result;
+    wire        pm_done;
+
+    wire [63:0] pm_x_mux      = demo_active ? pm_x_demo    : pm_x_cmd;
+    wire [31:0] pm_m_mux      = demo_active ? pm_m_demo    : pm_m_cmd;
+    wire [63:0] pm_mod_mux    = demo_active ? pm_mod_demo  : pm_mod_cmd;
+    wire        pm_start_mux  = demo_active ? pm_start_demo : pm_start_cmd;
+
+    power_map_unit u_power_map (
+        .clk    (clk),
+        .rst_n  (rst_n),
+        .start  (pm_start_mux),
+        .x      (pm_x_mux),
+        .m      (pm_m_mux),
+        .modulus(pm_mod_mux),
+        .result (pm_result),
+        .done   (pm_done)
+    );
+
+    // ---- Label BRAM: 32 x 64-bit ----
+    wire [4:0]  label_waddr;
+    wire [63:0] label_wdata;
+    wire        label_we;
+    wire [4:0]  label_raddr;
+    reg  [63:0] label_rdata;
+
+    reg [63:0] label_mem [0:31];
+
+    always @(posedge clk) begin
+        if (label_we)
+            label_mem[label_waddr] <= label_wdata;
+        label_rdata <= label_mem[label_raddr];
+    end
+
+    // ---- Edge BRAM: 256 x (u8, u8) ----
+    wire [7:0] edge_waddr;
+    wire [7:0] edge_u_wdata, edge_v_wdata;
+    wire       edge_we;
+    wire [7:0] edge_raddr;
+    reg  [7:0] edge_u_rdata, edge_v_rdata;
+
+    reg [7:0] edge_u_mem [0:255];
+    reg [7:0] edge_v_mem [0:255];
+
+    always @(posedge clk) begin
+        if (edge_we) begin
+            edge_u_mem[edge_waddr] <= edge_u_wdata;
+            edge_v_mem[edge_waddr] <= edge_v_wdata;
+        end
+        edge_u_rdata <= edge_u_mem[edge_raddr];
+        edge_v_rdata <= edge_v_mem[edge_raddr];
+    end
+
+    // ---- Coprime Checker ----
+    wire [7:0] cc_num_edges;
+    wire       cc_start;
+    wire       cc_all_coprime, cc_done;
+    wire [7:0] cc_fail_edge;
+
+    coprime_checker u_coprime (
+        .clk         (clk),
+        .rst_n       (rst_n),
+        .start       (cc_start),
+        .num_edges   (cc_num_edges),
+        .label_data  (label_rdata),
+        .label_addr  (label_raddr),
+        .edge_u_data (edge_u_rdata),
+        .edge_v_data (edge_v_rdata),
+        .edge_addr   (edge_raddr),
+        .all_coprime (cc_all_coprime),
+        .done        (cc_done),
+        .fail_edge   (cc_fail_edge)
+    );
+
+    // ---- Command Dispatcher ----
+    wire        cmd_busy;
+    wire [7:0]  cmd_n_labels, cmd_n_edges;
+
+    cmd_dispatch u_cmd (
+        .clk              (clk),
+        .rst_n            (rst_n),
+        .rx_data          (rx_data),
+        .rx_valid         (rx_valid),
+        .tx_data          (tx_data),
+        .tx_send          (tx_send),
+        .tx_busy          (tx_busy),
+        .gcd_a            (gcd_a_cmd),
+        .gcd_b            (gcd_b_cmd),
+        .gcd_start        (gcd_start_cmd),
+        .gcd_result       (gcd_result),
+        .gcd_done         (gcd_done),
+        .gcd_coprime      (gcd_coprime),
+        .pm_x             (pm_x_cmd),
+        .pm_m             (pm_m_cmd),
+        .pm_modulus       (pm_mod_cmd),
+        .pm_start         (pm_start_cmd),
+        .pm_result        (pm_result),
+        .pm_done          (pm_done),
+        .cc_num_edges     (cc_num_edges),
+        .cc_start         (cc_start),
+        .cc_all_coprime   (cc_all_coprime),
+        .cc_done          (cc_done),
+        .cc_fail_edge     (cc_fail_edge),
+        .bram_label_waddr (label_waddr),
+        .bram_label_wdata (label_wdata),
+        .bram_label_we    (label_we),
+        .bram_edge_waddr  (edge_waddr),
+        .bram_edge_u_wdata(edge_u_wdata),
+        .bram_edge_v_wdata(edge_v_wdata),
+        .bram_edge_we     (edge_we),
+        .n_labels         (cmd_n_labels),
+        .n_edges          (cmd_n_edges),
+        .busy             (cmd_busy)
+    );
+
+    // ---- Demo Controller ----
+    wire [31:0] demo_display;
+    wire [7:0]  demo_enable;
+    wire [15:0] demo_led;
+    wire [2:0]  demo_rgb;
+
+    demo_ctrl u_demo (
+        .clk           (clk),
+        .rst_n         (rst_n),
+        .demo_mode     (SW[15]),
+        .sw            (SW[14:0]),
+        .btnc          (BTNC),
+        .btnu          (BTNU),
+        .btnd          (BTND),
+        .gcd_a         (gcd_a_demo),
+        .gcd_b         (gcd_b_demo),
+        .gcd_start     (gcd_start_demo),
+        .gcd_result    (gcd_result),
+        .gcd_done      (gcd_done),
+        .gcd_coprime   (gcd_coprime),
+        .pm_x          (pm_x_demo),
+        .pm_m          (pm_m_demo),
+        .pm_modulus    (pm_mod_demo),
+        .pm_start      (pm_start_demo),
+        .pm_result     (pm_result),
+        .pm_done       (pm_done),
+        .display_value (demo_display),
+        .display_enable(demo_enable),
+        .led           (demo_led),
+        .led16_rgb     (demo_rgb),
+        .active        (demo_active)
+    );
+
+    // ---- 7-Segment Display ----
+    wire [31:0] seg_value  = demo_active ? demo_display : 32'd0;
+    wire [7:0]  seg_enable = demo_active ? demo_enable  : 8'h00;
+
+    seven_seg u_seven_seg (
+        .clk   (clk),
+        .rst_n (rst_n),
+        .value (seg_value),
+        .enable(seg_enable),
+        .seg   (SEG),
+        .dp    (DP),
+        .an    (AN)
+    );
+
+    // ---- LED Outputs ----
+    assign LED    = demo_active ? demo_led
+                                : {cmd_busy, 7'd0, cmd_n_labels};
+
+    assign LED16_R = demo_active ? demo_rgb[2] : cmd_busy;
+    assign LED16_G = demo_active ? demo_rgb[1] : !cmd_busy;
+    assign LED16_B = demo_active ? demo_rgb[0] : 1'b0;
+
+endmodule
+
+
+--- rtl/gcd_unit.v (Area-Optimized GCD) ----------------------------------------
+
+`timescale 1ns / 1ps
+// Stein's binary GCD -- 64-bit iterative FSM
+// Area-optimized: all CTZ and barrel shift operations replaced with
+// iterative 1-bit shifts (eliminates priority encoders and barrel shifters).
+
+module gcd_unit (
+    input  wire        clk,
+    input  wire        rst_n,
+    input  wire        start,
+    input  wire [63:0] a,
+    input  wire [63:0] b,
+    output reg  [63:0] result,
+    output reg         done,
+    output reg         is_coprime
+);
+
+    localparam S_IDLE         = 4'd0,
+               S_DONE_ZERO    = 4'd1,
+               S_STRIP_COMMON = 4'd2,
+               S_STRIP_A      = 4'd3,
+               S_STRIP_B      = 4'd4,
+               S_LOOP_CMP     = 4'd5,
+               S_LOOP_SUB     = 4'd6,
+               S_FINISH_SHIFT = 4'd7,
+               S_FINISH_OUT   = 4'd8;
+
+    reg [3:0]  state;
+    reg [63:0] ra, rb;
+    reg [6:0]  shift;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            state      <= S_IDLE;
+            result     <= 64'd0;
+            done       <= 1'b0;
+            is_coprime <= 1'b0;
+            ra         <= 64'd0;
+            rb         <= 64'd0;
+            shift      <= 7'd0;
+        end else begin
+            case (state)
+                S_IDLE: begin
+                    done <= 1'b0;
+                    if (start) begin
+                        ra    <= a;
+                        rb    <= b;
+                        shift <= 7'd0;
+                        if (a == 64'd0 || b == 64'd0)
+                            state <= S_DONE_ZERO;
+                        else
+                            state <= S_STRIP_COMMON;
+                    end
+                end
+
+                S_DONE_ZERO: begin
+                    result     <= ra | rb;
+                    is_coprime <= (ra | rb) == 64'd1;
+                    done       <= 1'b1;
+                    state      <= S_IDLE;
+                end
+
+                S_STRIP_COMMON: begin
+                    if (ra[0] | rb[0])
+                        state <= S_STRIP_A;
+                    else begin
+                        ra    <= {1'b0, ra[63:1]};
+                        rb    <= {1'b0, rb[63:1]};
+                        shift <= shift + 7'd1;
+                    end
+                end
+
+                S_STRIP_A: begin
+                    if (ra[0])
+                        state <= S_STRIP_B;
+                    else
+                        ra <= {1'b0, ra[63:1]};
+                end
+
+                S_STRIP_B: begin
+                    if (rb[0])
+                        state <= S_LOOP_CMP;
+                    else
+                        rb <= {1'b0, rb[63:1]};
+                end
+
+                S_LOOP_CMP: begin
+                    if (ra > rb) begin
+                        ra <= rb;
+                        rb <= ra;
+                    end
+                    state <= S_LOOP_SUB;
+                end
+
+                S_LOOP_SUB: begin
+                    rb <= rb - ra;
+                    if (rb == ra)
+                        state <= S_FINISH_SHIFT;
+                    else
+                        state <= S_STRIP_B;
+                end
+
+                S_FINISH_SHIFT: begin
+                    if (shift == 7'd0)
+                        state <= S_FINISH_OUT;
+                    else begin
+                        ra    <= {ra[62:0], 1'b0};
+                        shift <= shift - 7'd1;
+                    end
+                end
+
+                S_FINISH_OUT: begin
+                    result     <= ra;
+                    is_coprime <= (ra == 64'd1);
+                    done       <= 1'b1;
+                    state      <= S_IDLE;
+                end
+
+                default: state <= S_IDLE;
+            endcase
+        end
+    end
+endmodule
+
+
+--- rtl/mulmod_64.v (Area-Optimized Modular Multiply) --------------------------
+
+`timescale 1ns / 1ps
+// 64-bit modular multiplication: result = (a * b) mod m
+// Algorithm: Russian peasant binary method
+// Area-optimized: saturating mode uses 64-bit + overflow flag instead of 128-bit.
+// Modular mode uses iterative restoring division for a mod m.
+
+module mulmod_64 (
+    input  wire        clk,
+    input  wire        rst_n,
+    input  wire        start,
+    input  wire [63:0] a,
+    input  wire [63:0] b,
+    input  wire [63:0] m,
+    output reg  [63:0] result,
+    output reg         done
+);
+
+    localparam S_IDLE      = 3'd0,
+               S_REDUCE    = 3'd1,
+               S_CALC_INIT = 3'd2,
+               S_CALC      = 3'd3,
+               S_DONE      = 3'd4;
+
+    reg [2:0]   state;
+    reg [63:0]  ra;
+    reg [63:0]  rb;
+    reg [63:0]  acc;
+    reg         saturating;
+    reg         saturated;
+    reg         ra_overflow;
+    reg [64:0]  rem;
+    reg [5:0]   bit_cnt;
+
+    wire [64:0] sum_acc_ra = {1'b0, acc} + {1'b0, ra};
+    wire [64:0] sum_ra_ra  = {1'b0, ra}  + {1'b0, ra};
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            state  <= S_IDLE;
+            result <= 0;
+            done   <= 0;
+            ra <= 0; rb <= 0; acc <= 0;
+            saturating  <= 0;
+            saturated   <= 0;
+            ra_overflow <= 0;
+            rem     <= 0;
+            bit_cnt <= 0;
+        end else begin
+            case (state)
+                S_IDLE: begin
+                    done <= 0;
+                    if (start) begin
+                        rb  <= b;
+                        acc <= 0;
+                        if (m == 0) begin
+                            saturating  <= 1;
+                            saturated   <= 0;
+                            ra_overflow <= 0;
+                            ra    <= a;
+                            state <= S_CALC;
+                        end else begin
+                            saturating <= 0;
+                            saturated  <= 0;
+                            ra      <= a;
+                            rem     <= 65'd0;
+                            bit_cnt <= 6'd63;
+                            state   <= S_REDUCE;
+                        end
+                    end
+                end
+
+                S_REDUCE: begin
+                    if ({rem[63:0], ra[63]} >= {1'b0, m})
+                        rem <= {rem[63:0], ra[63]} - {1'b0, m};
+                    else
+                        rem <= {rem[63:0], ra[63]};
+                    ra <= {ra[62:0], 1'b0};
+                    if (bit_cnt == 0)
+                        state <= S_CALC_INIT;
+                    else
+                        bit_cnt <= bit_cnt - 1;
+                end
+
+                S_CALC_INIT: begin
+                    ra    <= rem[63:0];
+                    state <= S_CALC;
+                end
+
+                S_CALC: begin
+                    if (rb == 0) begin
+                        result <= saturated ? 64'hFFFFFFFF_FFFFFFFF : acc;
+                        done   <= 1;
+                        state  <= S_IDLE;
+                    end else begin
+                        if (saturating) begin
+                            if (!saturated) begin
+                                if (rb[0]) begin
+                                    if (ra_overflow || sum_acc_ra[64])
+                                        saturated <= 1;
+                                    else
+                                        acc <= sum_acc_ra[63:0];
+                                end
+                                if (!ra_overflow) begin
+                                    if (ra[63])
+                                        ra_overflow <= 1;
+                                    ra <= {ra[62:0], 1'b0};
+                                end
+                            end
+                        end else begin
+                            if (rb[0]) begin
+                                acc <= (sum_acc_ra >= {1'b0, m}) ?
+                                       sum_acc_ra[63:0] - m : sum_acc_ra[63:0];
+                            end
+                            ra <= (sum_ra_ra >= {1'b0, m}) ?
+                                  sum_ra_ra[63:0] - m : sum_ra_ra[63:0];
+                        end
+                        rb <= rb >> 1;
+                    end
+                end
+
+                S_DONE: begin
+                    done  <= 1;
+                    state <= S_IDLE;
+                end
+
+                default: state <= S_IDLE;
+            endcase
+        end
+    end
+endmodule
+
+
+--- rtl/power_map_unit.v -------------------------------------------------------
+
+`timescale 1ns / 1ps
+// Binary exponentiation: result = x^m mod modulus
+// When modulus == 0: unbounded mode with u64 saturation
+// Reuses mulmod_64 for each multiply/square step
+
+module power_map_unit (
+    input  wire        clk,
+    input  wire        rst_n,
+    input  wire        start,
+    input  wire [63:0] x,
+    input  wire [31:0] m,
+    input  wire [63:0] modulus,
+    output reg  [63:0] result,
+    output reg         done
+);
+
+    localparam S_IDLE       = 4'd0,
+               S_CHECK_BIT  = 4'd1,
+               S_WAIT_MUL   = 4'd2,
+               S_MULTIPLY   = 4'd3,
+               S_WAIT_SQ    = 4'd4,
+               S_SQUARE     = 4'd5,
+               S_SHIFT      = 4'd6,
+               S_DONE       = 4'd7;
+
+    reg [3:0]   state;
+    reg [63:0]  acc;
+    reg [63:0]  base;
+    reg [31:0]  exp;
+    reg         mul_start;
+    reg [63:0]  mul_a, mul_b;
+    wire [63:0] mul_result;
+    wire        mul_done;
+
+    mulmod_64 u_mulmod (
+        .clk(clk), .rst_n(rst_n), .start(mul_start),
+        .a(mul_a), .b(mul_b), .m(modulus),
+        .result(mul_result), .done(mul_done)
+    );
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            state     <= S_IDLE;
+            result    <= 0;
+            done      <= 0;
+            acc       <= 0;
+            base      <= 0;
+            exp       <= 0;
+            mul_start <= 0;
+            mul_a     <= 0;
+            mul_b     <= 0;
+        end else begin
+            mul_start <= 0;
+
+            case (state)
+                S_IDLE: begin
+                    done <= 0;
+                    if (start) begin
+                        exp  <= m;
+                        acc  <= 1;
+                        base <= x;
+                        state <= S_CHECK_BIT;
+                    end
+                end
+
+                S_CHECK_BIT: begin
+                    if (exp == 0) begin
+                        result <= (acc == 0) ? 64'd1 : acc;
+                        done   <= 1;
+                        state  <= S_IDLE;
+                    end else if (exp[0]) begin
+                        mul_a     <= acc;
+                        mul_b     <= base;
+                        mul_start <= 1;
+                        state     <= S_WAIT_MUL;
+                    end else begin
+                        mul_a     <= base;
+                        mul_b     <= base;
+                        mul_start <= 1;
+                        state     <= S_WAIT_SQ;
+                    end
+                end
+
+                S_WAIT_MUL: begin
+                    if (!mul_done)
+                        state <= S_MULTIPLY;
+                end
+
+                S_MULTIPLY: begin
+                    if (mul_done) begin
+                        acc <= mul_result;
+                        mul_a     <= base;
+                        mul_b     <= base;
+                        mul_start <= 1;
+                        state     <= S_WAIT_SQ;
+                    end
+                end
+
+                S_WAIT_SQ: begin
+                    if (!mul_done)
+                        state <= S_SQUARE;
+                end
+
+                S_SQUARE: begin
+                    if (mul_done) begin
+                        base <= mul_result;
+                        state <= S_SHIFT;
+                    end
+                end
+
+                S_SHIFT: begin
+                    exp   <= exp >> 1;
+                    state <= S_CHECK_BIT;
+                end
+
+                S_DONE: begin
+                    done  <= 1;
+                    state <= S_IDLE;
+                end
+
+                default: state <= S_IDLE;
+            endcase
+        end
+    end
+endmodule
+
+
+--- rtl/coprime_checker.v ------------------------------------------------------
+
+`timescale 1ns / 1ps
+// Sequential coprimality checker -- iterates edges, reuses gcd_unit
+// For each edge (u,v), compute gcd(labels[u], labels[v])
+// If any gcd != 1, set all_coprime=0 and report fail_edge
+
+module coprime_checker (
+    input  wire        clk,
+    input  wire        rst_n,
+    input  wire        start,
+    input  wire [7:0]  num_edges,
+    input  wire [63:0] label_data,
+    output reg  [4:0]  label_addr,
+    input  wire [7:0]  edge_u_data,
+    input  wire [7:0]  edge_v_data,
+    output reg  [7:0]  edge_addr,
+    output reg         all_coprime,
+    output reg         done,
+    output reg  [7:0]  fail_edge
+);
+    // [Full source: see rtl/coprime_checker.v -- 148 lines]
+    // Contains internal gcd_unit instance for edge coprimality checks.
+endmodule
+
+
+--- rtl/cmd_dispatch.v ---------------------------------------------------------
+
+`timescale 1ns / 1ps
+// Command Dispatcher -- parses UART commands [CMD][LEN][PAYLOAD]
+// Routes to compute units and sends responses via UART TX
+// Protocol: 7 commands (0x01-0x07)
+
+module cmd_dispatch (
+    // [Full source: see rtl/cmd_dispatch.v -- 301 lines]
+    // UART command parser with payload/response buffers.
+    // Handles GCD, PowerMap, StoreLabel, StoreEdge, CheckCoprime, Status.
+);
+endmodule
+
+
+--- rtl/uart_rx.v --------------------------------------------------------------
+
+`timescale 1ns / 1ps
+// UART Receiver -- 115200 baud, 8N1
+// clk = 100 MHz, baud divider = 868
+
+module uart_rx #(parameter CLKS_PER_BIT = 868)(
+    // [Full source: see rtl/uart_rx.v -- 96 lines]
+    // Double-flop synchronizer, start/data/stop state machine.
+);
+endmodule
+
+
+--- rtl/uart_tx.v --------------------------------------------------------------
+
+`timescale 1ns / 1ps
+// UART Transmitter -- 115200 baud, 8N1
+
+module uart_tx #(parameter CLKS_PER_BIT = 868)(
+    // [Full source: see rtl/uart_tx.v -- 83 lines]
+    // Standard 8N1 TX with shift register.
+);
+endmodule
+
+
+--- rtl/seven_seg.v ------------------------------------------------------------
+
+`timescale 1ns / 1ps
+// 8-digit multiplexed 7-segment display driver for Nexys 4 DDR
+// Displays 32-bit hex value, refresh rate ~381 Hz per digit
+
+module seven_seg (
+    // [Full source: see rtl/seven_seg.v -- 71 lines]
+    // Refresh counter, hex-to-segment decoder, anode mux.
+);
+endmodule
+
+
+--- rtl/demo_ctrl.v ------------------------------------------------------------
+
+`timescale 1ns / 1ps
+// Standalone demo controller for Nexys 4 DDR
+// SW15=1 activates demo mode
+// BTNC: GCD demo, BTNU: Power Map demo
+
+module demo_ctrl (
+    // [Full source: see rtl/demo_ctrl.v -- 140 lines]
+    // Button debounce, GCD/PowerMap demo state machine.
+);
+endmodule
+
+
+================================================================================
+  12. CONSTRAINTS FILE  (constraints/nexys4ddr.xdc)
+================================================================================
+
+## Clock signal (100 MHz)
+set_property -dict { PACKAGE_PIN E3    IOSTANDARD LVCMOS33 } [get_ports { CLK100MHZ }];
+create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports { CLK100MHZ }];
+
+## Reset (active-low)
+set_property -dict { PACKAGE_PIN C12   IOSTANDARD LVCMOS33 } [get_ports { CPU_RESETN }];
+
+## Switches
+set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { SW[0] }];
+set_property -dict { PACKAGE_PIN L16   IOSTANDARD LVCMOS33 } [get_ports { SW[1] }];
+set_property -dict { PACKAGE_PIN M13   IOSTANDARD LVCMOS33 } [get_ports { SW[2] }];
+set_property -dict { PACKAGE_PIN R15   IOSTANDARD LVCMOS33 } [get_ports { SW[3] }];
+set_property -dict { PACKAGE_PIN R17   IOSTANDARD LVCMOS33 } [get_ports { SW[4] }];
+set_property -dict { PACKAGE_PIN T18   IOSTANDARD LVCMOS33 } [get_ports { SW[5] }];
+set_property -dict { PACKAGE_PIN U18   IOSTANDARD LVCMOS33 } [get_ports { SW[6] }];
+set_property -dict { PACKAGE_PIN R13   IOSTANDARD LVCMOS33 } [get_ports { SW[7] }];
+set_property -dict { PACKAGE_PIN T8    IOSTANDARD LVCMOS18 } [get_ports { SW[8] }];
+set_property -dict { PACKAGE_PIN U8    IOSTANDARD LVCMOS18 } [get_ports { SW[9] }];
+set_property -dict { PACKAGE_PIN R16   IOSTANDARD LVCMOS33 } [get_ports { SW[10] }];
+set_property -dict { PACKAGE_PIN T13   IOSTANDARD LVCMOS33 } [get_ports { SW[11] }];
+set_property -dict { PACKAGE_PIN H6    IOSTANDARD LVCMOS33 } [get_ports { SW[12] }];
+set_property -dict { PACKAGE_PIN U12   IOSTANDARD LVCMOS33 } [get_ports { SW[13] }];
+set_property -dict { PACKAGE_PIN U11   IOSTANDARD LVCMOS33 } [get_ports { SW[14] }];
+set_property -dict { PACKAGE_PIN V10   IOSTANDARD LVCMOS33 } [get_ports { SW[15] }];
+
+## LEDs
+set_property -dict { PACKAGE_PIN H17   IOSTANDARD LVCMOS33 } [get_ports { LED[0] }];
+set_property -dict { PACKAGE_PIN K15   IOSTANDARD LVCMOS33 } [get_ports { LED[1] }];
+set_property -dict { PACKAGE_PIN J13   IOSTANDARD LVCMOS33 } [get_ports { LED[2] }];
+set_property -dict { PACKAGE_PIN N14   IOSTANDARD LVCMOS33 } [get_ports { LED[3] }];
+set_property -dict { PACKAGE_PIN R18   IOSTANDARD LVCMOS33 } [get_ports { LED[4] }];
+set_property -dict { PACKAGE_PIN V17   IOSTANDARD LVCMOS33 } [get_ports { LED[5] }];
+set_property -dict { PACKAGE_PIN U17   IOSTANDARD LVCMOS33 } [get_ports { LED[6] }];
+set_property -dict { PACKAGE_PIN U16   IOSTANDARD LVCMOS33 } [get_ports { LED[7] }];
+set_property -dict { PACKAGE_PIN V16   IOSTANDARD LVCMOS33 } [get_ports { LED[8] }];
+set_property -dict { PACKAGE_PIN T15   IOSTANDARD LVCMOS33 } [get_ports { LED[9] }];
+set_property -dict { PACKAGE_PIN U14   IOSTANDARD LVCMOS33 } [get_ports { LED[10] }];
+set_property -dict { PACKAGE_PIN T16   IOSTANDARD LVCMOS33 } [get_ports { LED[11] }];
+set_property -dict { PACKAGE_PIN V15   IOSTANDARD LVCMOS33 } [get_ports { LED[12] }];
+set_property -dict { PACKAGE_PIN V14   IOSTANDARD LVCMOS33 } [get_ports { LED[13] }];
+set_property -dict { PACKAGE_PIN V12   IOSTANDARD LVCMOS33 } [get_ports { LED[14] }];
+set_property -dict { PACKAGE_PIN V11   IOSTANDARD LVCMOS33 } [get_ports { LED[15] }];
+
+## Tri-color LED 16
+set_property -dict { PACKAGE_PIN N15   IOSTANDARD LVCMOS33 } [get_ports { LED16_R }];
+set_property -dict { PACKAGE_PIN R12   IOSTANDARD LVCMOS33 } [get_ports { LED16_G }];
+set_property -dict { PACKAGE_PIN N16   IOSTANDARD LVCMOS33 } [get_ports { LED16_B }];
+
+## 7-Segment Display
+set_property -dict { PACKAGE_PIN T10   IOSTANDARD LVCMOS33 } [get_ports { SEG[0] }];
+set_property -dict { PACKAGE_PIN R10   IOSTANDARD LVCMOS33 } [get_ports { SEG[1] }];
+set_property -dict { PACKAGE_PIN K16   IOSTANDARD LVCMOS33 } [get_ports { SEG[2] }];
+set_property -dict { PACKAGE_PIN K13   IOSTANDARD LVCMOS33 } [get_ports { SEG[3] }];
+set_property -dict { PACKAGE_PIN P15   IOSTANDARD LVCMOS33 } [get_ports { SEG[4] }];
+set_property -dict { PACKAGE_PIN T11   IOSTANDARD LVCMOS33 } [get_ports { SEG[5] }];
+set_property -dict { PACKAGE_PIN L18   IOSTANDARD LVCMOS33 } [get_ports { SEG[6] }];
+set_property -dict { PACKAGE_PIN H15   IOSTANDARD LVCMOS33 } [get_ports { DP }];
+
+set_property -dict { PACKAGE_PIN J17   IOSTANDARD LVCMOS33 } [get_ports { AN[0] }];
+set_property -dict { PACKAGE_PIN J18   IOSTANDARD LVCMOS33 } [get_ports { AN[1] }];
+set_property -dict { PACKAGE_PIN T9    IOSTANDARD LVCMOS33 } [get_ports { AN[2] }];
+set_property -dict { PACKAGE_PIN J14   IOSTANDARD LVCMOS33 } [get_ports { AN[3] }];
+set_property -dict { PACKAGE_PIN P14   IOSTANDARD LVCMOS33 } [get_ports { AN[4] }];
+set_property -dict { PACKAGE_PIN T14   IOSTANDARD LVCMOS33 } [get_ports { AN[5] }];
+set_property -dict { PACKAGE_PIN K2    IOSTANDARD LVCMOS33 } [get_ports { AN[6] }];
+set_property -dict { PACKAGE_PIN U13   IOSTANDARD LVCMOS33 } [get_ports { AN[7] }];
+
+## Buttons
+set_property -dict { PACKAGE_PIN N17   IOSTANDARD LVCMOS33 } [get_ports { BTNC }];
+set_property -dict { PACKAGE_PIN M18   IOSTANDARD LVCMOS33 } [get_ports { BTNU }];
+set_property -dict { PACKAGE_PIN P17   IOSTANDARD LVCMOS33 } [get_ports { BTND }];
+set_property -dict { PACKAGE_PIN P18   IOSTANDARD LVCMOS33 } [get_ports { BTNL }];
+set_property -dict { PACKAGE_PIN M17   IOSTANDARD LVCMOS33 } [get_ports { BTNR }];
+
+## USB-UART (onboard FTDI)
+set_property -dict { PACKAGE_PIN C4    IOSTANDARD LVCMOS33 } [get_ports { UART_TXD_IN }];
+set_property -dict { PACKAGE_PIN D4    IOSTANDARD LVCMOS33 } [get_ports { UART_RXD_OUT }];
+
+## Configuration
+set_property CFGBVS VCCO [current_design];
+set_property CONFIG_VOLTAGE 3.3 [current_design];
+
+
+================================================================================
+  13. BUILD SCRIPT  (scripts/build.tcl)
+================================================================================
+
+# Vivado non-project batch build for DCL-FPGA
+# Usage: vivado -mode batch -source scripts/build.tcl
+# Target: Nexys 4 DDR -- XC7A100T-1CSG324C
+
+set project_name "dcl_fpga"
+set part "xc7a100tcsg324-1"
+set top "dcl_top"
+
+# Source files
+set rtl_files [glob rtl/*.v]
+set xdc_file "constraints/nexys4ddr.xdc"
+
+# Create output directories
+file mkdir reports
+file mkdir output
+
+# Create in-memory project
+create_project -in_memory -part $part
+
+# Add sources
+foreach f $rtl_files {
+    read_verilog $f
+}
+read_xdc $xdc_file
+
+# Synthesis (area-optimized)
+synth_design -top $top -part $part -directive AreaOptimized_high
+report_utilization -file reports/post_synth_util.rpt -hierarchical
+report_timing_summary -file reports/post_synth_timing.rpt
+
+# Implementation
+opt_design -directive ExploreArea
+place_design
+route_design
+report_utilization -file reports/post_impl_util.rpt
+report_timing_summary -file reports/post_impl_timing.rpt
+
+# Generate bitstream
+write_bitstream -force output/${project_name}.bit
+
+puts "=== Build complete: output/${project_name}.bit ==="
+
+
+================================================================================
+  END OF REPORT
+================================================================================

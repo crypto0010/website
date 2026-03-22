@@ -1,0 +1,295 @@
+==========================================
+  DCL Framework - Full Results
+  Date: Tue Feb 24 22:19:06 IST 2026
+==========================================
+
+==========================================
+  COMMAND: labeling
+==========================================
+=== DCL Simulation: path-5 | g(x)=x^2 | 10 steps ===
+f_0: [v0=1, v1=2, v2=3, v3=5, v4=7]
+f_1: [v0=1, v1=4, v2=9, v3=25, v4=49] | coprime=true
+f_2: [v0=1, v1=16, v2=81, v3=625, v4=2401] | coprime=true
+f_3: [v0=1, v1=256, v2=6561, v3=390625, v4=5764801] | coprime=true
+f_4: [v0=1, v1=65536, v2=43046721, v3=152587890625, v4=33232930569601] | coprime=true
+f_5: [v0=1, v1=4294967296, v2=1853020188851841, v3=18446744073709551615, v4=18446744073709551615] | coprime=false
+
+==========================================
+  COMMAND: bfs
+==========================================
+
+==========================================
+  COMMAND: hypergraph
+==========================================
+=== Hypergraph DCL: K^3_{5} | g(x)=x^2 | 20 steps ===
+  Hyperedges: 10
+  f_0 valid : true
+  Existence Equivalence (Theorem 4.2): ✗ FAILED
+
+==========================================
+  COMMAND: sieve
+==========================================
+=== HDCL-SP Safe-Prime Sieve ===
+  Nodes: 6, Edge size: 3, MR rounds: 40
+  [1] Safe prime: 4259 (attempts=27, time=0ms)
+  [2] Safe prime: 11003 (attempts=39, time=0ms)
+  [3] Safe prime: 4007 (attempts=35, time=0ms)
+  [4] Safe prime: 93503 (attempts=111, time=0ms)
+  [5] Safe prime: 13523 (attempts=28, time=0ms)
+  [6] Safe prime: 87587 (attempts=281, time=0ms)
+  [7] Safe prime: 41879 (attempts=47, time=0ms)
+  [8] Safe prime: 48947 (attempts=28, time=0ms)
+  [9] Safe prime: 422099 (attempts=183, time=0ms)
+  [10] Safe prime: 5087 (attempts=11, time=0ms)
+  [11] Safe prime: 3004403 (attempts=505, time=0ms)
+  [12] Safe prime: 263 (attempts=23, time=0ms)
+  [13] Safe prime: 4259 (attempts=27, time=0ms)
+  [14] Safe prime: 11003 (attempts=39, time=0ms)
+  [15] Safe prime: 4007 (attempts=35, time=0ms)
+  [16] Safe prime: 93503 (attempts=111, time=0ms)
+  [17] Safe prime: 13523 (attempts=28, time=0ms)
+  [18] Safe prime: 87587 (attempts=281, time=0ms)
+  [19] Safe prime: 41879 (attempts=47, time=0ms)
+  [20] Safe prime: 48947 (attempts=28, time=0ms)
+
+--- HDCL-SP Summary ---
+  Generated  : 20/20
+  Total attempts: 1914
+  Success rate: 1.04%
+
+--- Baseline Comparison (standard random) ---
+  [1] Baseline safe prime: 103079 (attempts=44)
+  [2] Baseline safe prime: 130367 (attempts=15)
+  [3] Baseline safe prime: 105263 (attempts=33)
+  [4] Baseline safe prime: 71999 (attempts=61)
+  [5] Baseline safe prime: 68507 (attempts=2)
+  Avg baseline attempts: 31
+
+==========================================
+  COMMAND: security
+==========================================
+=== DCL Security Analysis ===
+  Valid f_0 labelings: 20/20
+=== Indistinguishability Game ===
+  Adversary  : Random
+  Trials     : 20
+  Wins       : 0
+  Win rate   : 0.0000%
+  Assessment : ✓ No significant advantage (secure)
+
+==========================================
+  COMMAND: ramsey
+==========================================
+=== Ramsey Conservation: path-5 | g(x)=x^2 | 50 steps ===
+=== Ramsey Conservation: path-5 (n=5) ===
+  Steps verified     : 50
+  Conservation holds : false
+  First failure at   : step 5  ← THEOREM VIOLATED
+
+==========================================
+  COMMAND: big-int
+==========================================
+=== BigInt DCL Evolution: path-5 | g(x)=x^2 | 20 steps ===
+
+f_0: [v0=1, v1=2, v2=3, v3=5, v4=7]
+Using unlimited BigInt (no modulus)
+
+f_5: [v0=1, v1=4294967296, v2=1853020188851841, v3=23283064365386962..., v4=11044276742439206...] | coprime=true
+f_10: [v0=1, v1=17976931348623159..., v2=37339184874102004..., v3=55626846462680034..., v4=24010045032050349...] | coprime=true
+f_15: [v0=1, v1=14154610310449547..., v2=20383307390199759..., v3=70648359655776364..., v4=14879049451060398...] | coprime=true
+f_20: [v0=1, v1=67411401254990734..., v2=78847681000342654..., v3=14834285912814577..., v4=33297067718557193...] | coprime=true
+
+✅ Coprimality maintained for all 20 steps!
+Note: Labels are now HUGE (would have overflowed u64 around step 5)
+
+==========================================
+  COMMAND: optimized-bfs
+==========================================
+=== Optimized BFS Search ===
+Graph: path-4
+Max Label: 30
+Pruning: primes=true, symmetry=true, max_sum=None
+
+Searching...
+
+=== Results ===
+Solutions Found: 5
+States Explored: 31
+States Pruned: 225 (87.9% pruned)
+
+✅ Found Solutions:
+  [1] [17, 19, 23, 29]
+  [2] [13, 19, 23, 29]
+  [3] [13, 17, 23, 29]
+  [4] [13, 17, 19, 29]
+  [5] [13, 17, 19, 23]
+
+Max Label Used: 29
+
+Pruning Efficiency: 8.26× reduction
+
+==========================================
+  COMMAND: cryptanalysis
+==========================================
+
+╔══════════════════════════════════════════════════════╗
+║     DCL CRYPTANALYSIS - COMPREHENSIVE SECURITY      ║
+╚══════════════════════════════════════════════════════╝
+
+Configuration:
+  Graph: path-4
+  Power Map: g(x) = x^2
+  Mode: FULL
+
+Running comprehensive security analysis...
+
+=== Running Comprehensive Cryptanalysis ===
+
+Testing brute-force resistance...
+..... done
+
+Testing preimage resistance (one-wayness)...
+  Preimage attacks successful: 0/20
+
+Testing collision resistance...
+  Found 0 collisions in 57 unique outputs
+
+Testing timing attack vulnerabilities...
+  Timing variance: 0.000065ms
+  Correlation coefficient: 0.0352
+
+Testing statistical properties...
+  Frequency test: FAIL
+  Runs test: PASS
+  Entropy: 4.67 bits (expected: 8.0 bits)
+
+
+╔═══════════════════════════════════════════════════════════╗
+║          COMPREHENSIVE SECURITY ANALYSIS REPORT          ║
+╚═══════════════════════════════════════════════════════════╝
+
+1. BRUTE-FORCE RESISTANCE
+   Success Rate: 0.00%
+   Search Space: 160000
+   Avg Attack Time: 1.23487ms
+   Assessment: ✓ GOOD
+
+2. PREIMAGE RESISTANCE (One-Wayness)
+   Resistant: true
+   Success Rate: 0.00%
+   Avg Attempts: 2500
+   Assessment: ✓ STRONG
+
+3. COLLISION RESISTANCE
+   Collisions Found: 0
+   Unique Outputs: 57
+   Collision Rate: 0.00%
+   Assessment: ✓ GOOD
+
+4. TIMING ATTACK VULNERABILITY
+   Vulnerable: false
+   Timing Variance: 0.000065ms
+   Correlation: 0.0352
+   Assessment: ✓ RESISTANT
+
+5. STATISTICAL PROPERTIES
+   Frequency Test: FAIL
+   Runs Test: PASS
+   Entropy: 4.67 / 8.00 bits
+   Assessment: ⚠ MODERATE
+
+═══════════════════════════════════════════════════════════
+OVERALL SECURITY LEVEL: High
+═══════════════════════════════════════════════════════════
+
+
+╔══════════════════════════════════════════════════════╗
+║                   RECOMMENDATIONS                    ║
+╚══════════════════════════════════════════════════════╝
+
+✅ Security is EXCELLENT for this configuration
+   Safe for production deployment
+
+For enhanced security, use:
+  dcl-cli enhanced-security --help
+
+==========================================
+  COMMAND: nist-tests
+==========================================
+
+╔══════════════════════════════════════════════════════════╗
+║       NIST SP 800-22 STATISTICAL TEST SUITE             ║
+║       for DCL Framework Prime Generation                ║
+╚══════════════════════════════════════════════════════════╝
+
+Configuration:
+  Prime Count: 100
+  Miller-Rabin Rounds: 40
+  Significance Level (α): 0.01
+  Generation Mode: SEQUENTIAL
+
+Step 1/3: Generating 100 safe primes...
+
+==========================================
+  COMMAND: telemetry
+==========================================
+[2m2026-02-24T17:16:23.837844Z[0m [32m INFO[0m [2mdcl_security::telemetry[0m[2m:[0m [2m36:[0m Telemetry initialized with config: TelemetryConfig { log_level: "info", json_output: false, include_target: true, include_thread_ids: false, include_line_numbers: true, metrics_enabled: true, performance_tracking: true }
+
+╔══════════════════════════════════════════════════════════╗
+║           DCL FRAMEWORK TELEMETRY & MONITORING           ║
+╚══════════════════════════════════════════════════════════╝
+
+Running telemetry demo with 100 operations...
+
+1. Prime Generation (instrumented)
+   Generated 0 primes
+2. GCD Computations
+3. Side-Channel Operations
+4. NIST Test Execution (simulated)
+
+Demo completed. See telemetry snapshot below.
+
+
+╔══════════════════════════════════════════════════════════╗
+║              TELEMETRY SNAPSHOT                          ║
+╚══════════════════════════════════════════════════════════╝
+
+Uptime: 5.84s
+Events Recorded: 1
+
+Metrics:
+  nist_test_runs_passed = 1 (counter)
+  nist_test_rank_passed = 1 (counter)
+  gcd_computations = 100 (counter)
+  demo_operations_completed = 100 (counter)
+  nist_test_frequency_p_value = 0.18 avg (1 samples)
+  side_channel_gcd_constant_time = 100 (counter)
+  gcd_input_size = 9.76 avg (100 samples)
+  nist_test_rank = 1 (counter)
+  side_channel_gcd_constant_time_constant_time = 100 (counter)
+  primes_generated = 0 (counter)
+  nist_test_runs = 1 (counter)
+  nist_test_entropy_passed = 1 (counter)
+  nist_test_frequency = 1 (counter)
+  gcd_demo_completed = 1.00 (gauge)
+  nist_test_dft_p_value = 0.41 avg (1 samples)
+  prime_generation_rate = 0.00 (gauge)
+  nist_test_dft_passed = 1 (counter)
+  coprime_pairs = 34 (counter)
+  nist_test_dft = 1 (counter)
+  nist_test_entropy_p_value = 0.06 avg (1 samples)
+  system_health = 0.95 (gauge)
+  nist_test_rank_p_value = 0.47 avg (1 samples)
+  operation_distribution = 100.00 avg (1 samples)
+  nist_test_runs_p_value = 0.13 avg (1 samples)
+  nist_test_entropy = 1 (counter)
+
+Performance:
+  prime_generation:
+    Count: 1
+    Average: 5.84s
+    Min: 5.84s
+    Max: 5.84s
+    Ops/sec: 0.17
+
+

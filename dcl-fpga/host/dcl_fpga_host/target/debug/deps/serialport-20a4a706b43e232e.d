@@ -1,0 +1,10 @@
+C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-fpga\host\dcl_fpga_host\target\debug\deps\serialport-20a4a706b43e232e.d: C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\lib.rs C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\mod.rs C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\com.rs C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\dcb.rs C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\enumerate.rs C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\error.rs
+
+C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-fpga\host\dcl_fpga_host\target\debug\deps\libserialport-20a4a706b43e232e.rmeta: C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\lib.rs C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\mod.rs C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\com.rs C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\dcb.rs C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\enumerate.rs C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\error.rs
+
+C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\lib.rs:
+C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\mod.rs:
+C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\com.rs:
+C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\dcb.rs:
+C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\enumerate.rs:
+C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serialport-4.8.1\src\windows\error.rs:

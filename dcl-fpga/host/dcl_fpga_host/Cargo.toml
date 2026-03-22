@@ -1,0 +1,11 @@
+[package]
+name = "dcl_fpga_host"
+version = "0.1.0"
+edition = "2021"
+description = "Host-side UART driver for DCL FPGA accelerator"
+
+[workspace]
+
+[dependencies]
+serialport = "4"
+thiserror = "2"

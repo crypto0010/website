@@ -1,0 +1,15 @@
+[package]
+name = "dcl-gpu"
+version = "0.2.0"
+edition = "2021"
+
+[dependencies]
+dcl-core = { path = "../dcl-core" }
+dcl-security = { path = "../dcl-security" }
+cudarc = { workspace = true }
+bytemuck = { version = "1.14", features = ["derive"] }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+rand = { workspace = true }

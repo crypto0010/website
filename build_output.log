@@ -1,0 +1,164 @@
+   Compiling windows-sys v0.61.2
+   Compiling getrandom v0.2.17
+   Compiling serde_json v1.0.149
+   Compiling gpu-allocator v0.26.0
+   Compiling hassle-rs v0.11.0
+   Compiling wasm-bindgen v0.2.110
+   Compiling futures-macro v0.3.32
+   Compiling tracing-attributes v0.1.31
+   Compiling tracing-serde v0.2.0
+   Compiling bytemuck_derive v1.10.2
+   Compiling clap_derive v4.5.55
+   Compiling rand_core v0.6.4
+   Compiling rand_chacha v0.3.1
+   Compiling rand v0.8.5
+   Compiling futures-util v0.3.32
+   Compiling bytemuck v1.25.0
+   Compiling js-sys v0.3.87
+   Compiling console_error_panic_hook v0.1.7
+   Compiling dcl-core v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-core)
+   Compiling tracing v0.1.44
+   Compiling winapi-util v0.1.11
+   Compiling anstyle-query v1.1.5
+   Compiling anstyle-wincon v3.0.11
+   Compiling nu-ansi-term v0.50.3
+   Compiling termcolor v1.4.1
+   Compiling anstream v0.6.21
+   Compiling dcl-hypergraph v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-hypergraph)
+   Compiling dcl-complexity v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-complexity)
+   Compiling dcl-ramsey v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-ramsey)
+   Compiling dcl-zkp v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-zkp)
+warning: unused imports: `HashSet` and `VecDeque`
+ --> dcl-complexity\src\bfs_optimized.rs:6:24
+  |
+6 | use std::collections::{HashSet, VecDeque};
+  |                        ^^^^^^^  ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling tracing-subscriber v0.3.22
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `pos`
+   --> dcl-complexity\src\bfs_optimized.rs:140:30
+    |
+140 |     fn get_candidates(&self, pos: usize) -> Vec<u64> {
+    |                              ^^^ help: if this is intentional, prefix it with an underscore: `_pos`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:95:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+95 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling dcl-crypto v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-crypto)
+   Compiling codespan-reporting v0.11.1
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling clap_builder v4.5.60
+warning: `dcl-complexity` (lib) generated 3 warnings (run `cargo fix --lib -p dcl-complexity` to apply 2 suggestions)
+   Compiling naga v22.1.0
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+   Compiling dcl-security v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-security)
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `test_iterations` is never read
+  --> dcl-security\src\cryptanalysis.rs:80:5
+   |
+77 | pub struct Cryptanalyzer<'a> {
+   |            ------------- field in this struct
+...
+80 |     test_iterations: usize,
+   |     ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling futures-executor v0.3.32
+   Compiling futures v0.3.32
+   Compiling clap v4.5.60
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+   Compiling web-sys v0.3.87
+   Compiling serde-wasm-bindgen v0.6.5
+   Compiling dcl-wasm v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-wasm)
+   Compiling wgpu-hal v22.0.0
+   Compiling wgpu-core v22.1.0
+   Compiling wgpu v22.1.0
+   Compiling dcl-gpu v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-gpu)
+   Compiling dcl-cli v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-cli)
+    Finished `release` profile [optimized] target(s) in 59.72s

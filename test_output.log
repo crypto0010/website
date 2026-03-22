@@ -1,0 +1,391 @@
+   Compiling serde_json v1.0.149
+   Compiling regex-automata v0.4.14
+   Compiling zerocopy-derive v0.8.39
+   Compiling serde v1.0.228
+   Compiling same-file v1.0.6
+   Compiling plotters v0.3.7
+   Compiling is-terminal v0.4.17
+   Compiling walkdir v2.5.0
+   Compiling tracing-serde v0.2.0
+   Compiling serde-wasm-bindgen v0.6.5
+   Compiling tinytemplate v1.2.1
+   Compiling zerocopy v0.8.39
+   Compiling regex v1.12.3
+   Compiling matchers v0.2.0
+   Compiling tracing-subscriber v0.3.22
+   Compiling ppv-lite86 v0.2.21
+   Compiling half v2.7.1
+   Compiling ciborium-ll v0.2.2
+   Compiling rand_chacha v0.3.1
+   Compiling ciborium v0.2.2
+   Compiling rand v0.8.5
+   Compiling criterion v0.5.1
+   Compiling dcl-core v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-core)
+   Compiling dcl-hypergraph v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-hypergraph)
+   Compiling dcl-complexity v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-complexity)
+   Compiling dcl-security v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-security)
+   Compiling dcl-ramsey v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-ramsey)
+   Compiling dcl-zkp v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-zkp)
+warning: unused imports: `HashSet` and `VecDeque`
+ --> dcl-complexity\src\bfs_optimized.rs:6:24
+  |
+6 | use std::collections::{HashSet, VecDeque};
+  |                        ^^^^^^^  ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PowerMap`
+  --> dcl-ramsey\src\ramsey.rs:10:40
+   |
+10 | use dcl_core::transform::{IdentityMap, PowerMap, Transform};
+   |                                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-ramsey\src\carmichael.rs:85:12
+   |
+85 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `pos`
+   --> dcl-complexity\src\bfs_optimized.rs:140:30
+    |
+140 |     fn get_candidates(&self, pos: usize) -> Vec<u64> {
+    |                              ^^^ help: if this is intentional, prefix it with an underscore: `_pos`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling dcl-crypto v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-crypto)
+warning: method `check_symmetry` is never used
+  --> dcl-complexity\src\bfs_optimized.rs:95:8
+   |
+52 | impl<'a> OptimizedBfs<'a> {
+   | ------------------------- method in this implementation
+...
+95 |     fn check_symmetry(&self, labels: &[u64]) -> bool {
+   |        ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `HashSet`
+ --> dcl-security\src\cryptanalysis.rs:9:33
+  |
+9 | use std::collections::{HashMap, HashSet};
+  |                                 ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> dcl-security\src\side_channel.rs:224:9
+    |
+224 |     use super::*;
+    |         ^^^^^^^^
+
+warning: unused import: `error`
+ --> dcl-security\src\telemetry.rs:9:22
+  |
+9 | use tracing::{debug, error, info, warn, Level};
+  |                      ^^^^^
+
+warning: variable does not need to be mutable
+ --> dcl-crypto\src\miller_rabin.rs:7:16
+  |
+7 | pub fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+  |                ----^^^^
+  |                |
+  |                help: remove this `mut`
+  |
+  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling dcl-gpu v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-gpu)
+warning: variable does not need to be mutable
+  --> dcl-security\src\dl_experiment.rs:29:12
+   |
+29 | fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+   |            ----^^^^
+   |            |
+   |            help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dcl-complexity` (lib) generated 3 warnings (run `cargo fix --lib -p dcl-complexity` to apply 2 suggestions)
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:124:9
+    |
+124 |     let mut base = base % modulus;
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> dcl-security\src\side_channel.rs:125:9
+    |
+125 |     let mut exp = exp;
+    |         ----^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: `dcl-ramsey` (lib) generated 2 warnings (run `cargo fix --lib -p dcl-ramsey` to apply 2 suggestions)
+warning: field `test_iterations` is never read
+  --> dcl-security\src\cryptanalysis.rs:80:5
+   |
+77 | pub struct Cryptanalyzer<'a> {
+   |            ------------- field in this struct
+...
+80 |     test_iterations: usize,
+   |     ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-hypergraph\src\repair.rs:58:13
+   |
+58 |         let mut lab = Labeling::new(vec![6, 9, 5]);
+   |             ----^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> dcl-hypergraph\src\repair.rs:60:13
+   |
+60 |         let mut lab2 = Labeling::new(vec![6, 3, 5]);
+   |             ----^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: `dcl-crypto` (lib) generated 1 warning (run `cargo fix --lib -p dcl-crypto` to apply 1 suggestion)
+   Compiling dcl-wasm v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-wasm)
+warning: `dcl-hypergraph` (lib test) generated 2 warnings (run `cargo fix --lib -p dcl-hypergraph --tests` to apply 2 suggestions)
+warning: `dcl-ramsey` (lib test) generated 2 warnings (2 duplicates)
+warning: `dcl-security` (lib) generated 7 warnings (run `cargo fix --lib -p dcl-security` to apply 6 suggestions)
+   Compiling dcl-cli v0.1.0 (C:\Users\HP\Documents\C_Skills\dcl-rs\dcl-cli)
+warning: `dcl-security` (lib test) generated 7 warnings (7 duplicates)
+warning: comparison is useless due to type limits
+   --> dcl-crypto\src\sieve_improved.rs:293:17
+    |
+293 |         assert!(result.success_count >= 0);
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_comparisons)]` on by default
+
+warning: `dcl-complexity` (lib test) generated 3 warnings (3 duplicates)
+warning: `dcl-crypto` (lib test) generated 2 warnings (1 duplicate)
+    Finished `release` profile [optimized] target(s) in 21.71s
+     Running unittests src\main.rs (target\release\deps\dcl_cli-5730b90ba3525d9a.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\release\deps\dcl_complexity-f72f206951513b41.exe)
+
+running 9 tests
+test bfs_optimized::tests::sieve_primes_correctness ... ok
+test bfs::tests::bfs_none_for_infeasible ... ok
+test bfs_optimized::tests::optimized_bfs_path3 ... ok
+test bfs_optimized::tests::prune_efficiency ... ok
+test index::tests::mu_cycle4 ... ok
+test bfs::tests::bfs_finds_labeling_path5 ... ok
+test bfs::tests::bfs_wheel_w5 ... ok
+test index::tests::mu_path5 ... ok
+test bfs::tests::bfs_cycle_c6 ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running unittests src\lib.rs (target\release\deps\dcl_core-5da300ac99de1702.exe)
+
+running 30 tests
+test dcl::tests::dcl_cycle_c6_identity ... ok
+test dcl::tests::dcl_hypercube_q3_identity ... ok
+test error::tests::dimension_mismatch_error ... ok
+test dcl::tests::dcl_path_p5_identity_100_steps ... ok
+test gcd::tests::extended_gcd_basic ... ok
+test gcd::tests::setwise_gcd_basic ... ok
+test dcl::tests::dcl_power_map_one_step ... ok
+test error::tests::overflow_error ... ok
+test error::tests::result_conversion ... ok
+test gcd::tests::coprime_basic ... ok
+test dcl::tests::dcl_wheel_w5_identity ... ok
+test gcd::tests::gcd_basic ... ok
+test dcl::tests::isomorphic_conservation_path_identity ... ok
+test error::tests::coprimality_violation_error ... ok
+test error::tests::error_display ... ok
+test graph::tests::coprime_labeling_path ... ok
+test graph::tests::hypercube_q3 ... ok
+test graph::tests::cycle_edges ... ok
+test graph::tests::path_edges ... ok
+test graph::tests::wheel_edges ... ok
+test labeling::tests::edge_coprime ... ok
+test labeling::tests::labeling_evolve ... ok
+test labeling::tests::labeling_injective ... ok
+test labeling_bigint::tests::bigint_coprimality_preserved ... ok
+test labeling_bigint::tests::bigint_no_overflow ... ok
+test labeling_bigint::tests::gcd_computation ... ok
+test transform::tests::identity_coprime_preserving ... ok
+test transform::tests::power_map_apply ... ok
+test transform::tests::power_map_coprime_preserving ... ok
+test labeling_bigint::tests::modular_arithmetic_bounded ... ok
+
+test result: ok. 30 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\error_handling_tests.rs (target\release\deps\error_handling_tests-94c92c7f6b3e8239.exe)
+
+running 12 tests
+test test_backward_compatibility ... ok
+test test_dcl_verify_steps_with_error ... ok
+test test_dcl_dimension_mismatch ... ok
+test test_dcl_coprimality_violation_initial ... ok
+test test_dcl_valid_initialization ... ok
+test test_graph_edge_out_of_bounds ... ok
+test test_error_display_messages ... ok
+test test_invalid_labeling_set_zero ... ok
+test test_dcl_new_panics_on_invalid - should panic ... ok
+test test_invalid_labeling_zero ... ok
+test test_labeling_index_out_of_bounds ... ok
+test test_labeling_new_panics_on_zero - should panic ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\release\deps\dcl_crypto-5225a5b7d81ba4d7.exe)
+
+running 11 tests
+test sieve_improved::tests::improved_sieve_basic_functionality ... ok
+test baseline::tests::standard_baseline_produces_safe_prime ... ok
+test bias::tests::bias_test_uniform_safe_primes ... ok
+test miller_rabin::tests::miller_rabin_known_primes ... ok
+test sieve::tests::sieve_produces_safe_prime ... ok
+test miller_rabin::tests::miller_rabin_known_composites ... ok
+test miller_rabin::tests::mod_pow_correctness ... ok
+test sieve::tests::sieve_property_lemma ... ok
+test miller_rabin::tests::safe_prime_detection ... ok
+test sieve_improved::tests::batch_generation_basic ... ok
+test sieve_improved::tests::hash_mixing_reduces_bias ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src\lib.rs (target\release\deps\dcl_gpu-5e249c7d6c93f222.exe)
+
+running 10 tests
+test tests::test_backend_conversion ... ok
+test gpu_context::tests::test_gpu_context_creation ... ok
+test prime_sieve::tests::test_count_primes ... FAILED
+test prime_sieve::tests::test_sieve_range ... FAILED
+test gcd_batch::tests::test_gpu_coprime_batch ... FAILED
+test compute::tests::test_compute_kernel ... FAILED
+test gpu_context::tests::test_buffer_size_limit ... ok
+test prime_sieve::tests::test_gpu_prime_sieve ... FAILED
+test gcd_batch::tests::test_gpu_gcd_batch ... FAILED
+test tests::test_gpu_availability ... ok
+
+failures:
+
+---- prime_sieve::tests::test_count_primes stdout ----
+
+thread 'prime_sieve::tests::test_count_primes' (19020) panicked at C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wgpu-22.1.0\src\backend\wgpu_core.rs:3411:5:
+wgpu error: Validation Error
+
+Caused by:
+  In Device::create_compute_pipeline, label = 'Compute Pipeline'
+    Error matching shader requirements against the pipeline
+      Shader global ResourceBinding { group: 0, binding: 0 } is not available in the pipeline layout
+        Storage class Storage { access: StorageAccess(LOAD | STORE) } doesn't match the shader Storage { access: StorageAccess(LOAD) }
+
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- prime_sieve::tests::test_sieve_range stdout ----
+
+thread 'prime_sieve::tests::test_sieve_range' (18796) panicked at C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wgpu-22.1.0\src\backend\wgpu_core.rs:3411:5:
+wgpu error: Validation Error
+
+Caused by:
+  In Device::create_compute_pipeline, label = 'Compute Pipeline'
+    Error matching shader requirements against the pipeline
+      Shader global ResourceBinding { group: 0, binding: 0 } is not available in the pipeline layout
+        Storage class Storage { access: StorageAccess(LOAD | STORE) } doesn't match the shader Storage { access: StorageAccess(LOAD) }
+
+
+
+---- gcd_batch::tests::test_gpu_coprime_batch stdout ----
+
+thread 'gcd_batch::tests::test_gpu_coprime_batch' (45464) panicked at C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wgpu-22.1.0\src\backend\wgpu_core.rs:3411:5:
+wgpu error: Validation Error
+
+Caused by:
+  In Device::create_shader_module, label = 'Compute Shader'
+    
+Shader 'Compute Shader' parsing error: name `mut` is a reserved keyword
+   ┌─ wgsl:11:16
+   │
+11 │         fn gcd(mut a: u32, mut b: u32) -> u32 {
+   │                ^^^ definition of `mut`
+
+
+      name `mut` is a reserved keyword
+
+
+
+---- compute::tests::test_compute_kernel stdout ----
+
+thread 'compute::tests::test_compute_kernel' (27480) panicked at C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wgpu-22.1.0\src\backend\wgpu_core.rs:3411:5:
+wgpu error: Validation Error
+
+Caused by:
+  In Device::create_compute_pipeline, label = 'Compute Pipeline'
+    Error matching shader requirements against the pipeline
+      Shader global ResourceBinding { group: 0, binding: 0 } is not available in the pipeline layout
+        Storage class Storage { access: StorageAccess(LOAD | STORE) } doesn't match the shader Storage { access: StorageAccess(LOAD) }
+
+
+
+---- prime_sieve::tests::test_gpu_prime_sieve stdout ----
+
+thread 'prime_sieve::tests::test_gpu_prime_sieve' (31824) panicked at C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wgpu-22.1.0\src\backend\wgpu_core.rs:3411:5:
+wgpu error: Validation Error
+
+Caused by:
+  In Device::create_compute_pipeline, label = 'Compute Pipeline'
+    Error matching shader requirements against the pipeline
+      Shader global ResourceBinding { group: 0, binding: 0 } is not available in the pipeline layout
+        Storage class Storage { access: StorageAccess(LOAD | STORE) } doesn't match the shader Storage { access: StorageAccess(LOAD) }
+
+
+
+---- gcd_batch::tests::test_gpu_gcd_batch stdout ----
+
+thread 'gcd_batch::tests::test_gpu_gcd_batch' (19244) panicked at C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wgpu-22.1.0\src\backend\wgpu_core.rs:3411:5:
+wgpu error: Validation Error
+
+Caused by:
+  In Device::create_shader_module, label = 'Compute Shader'
+    
+Shader 'Compute Shader' parsing error: name `mut` is a reserved keyword
+   ┌─ wgsl:11:16
+   │
+11 │         fn gcd(mut a: u32, mut b: u32) -> u32 {
+   │                ^^^ definition of `mut`
+
+
+      name `mut` is a reserved keyword
+
+
+
+
+failures:
+    compute::tests::test_compute_kernel
+    gcd_batch::tests::test_gpu_coprime_batch
+    gcd_batch::tests::test_gpu_gcd_batch
+    prime_sieve::tests::test_count_primes
+    prime_sieve::tests::test_gpu_prime_sieve
+    prime_sieve::tests::test_sieve_range
+
+test result: FAILED. 4 passed; 6 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.79s
+
+error: test failed, to rerun pass `-p dcl-gpu --lib`
