@@ -140,10 +140,13 @@ body *, body *::before, body *::after {
 .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--text-primary); }
 .nav-logo-img {
   height: 44px; width: auto; object-fit: contain;
-  transition: filter 0.4s ease;
+  transition: filter 0.4s ease, opacity 0.4s ease;
 }
+/* SVG logo text is white — invert for light mode */
 [data-theme="dark"] .nav-logo-img { filter: brightness(1); }
-[data-theme="light"] .nav-logo-img { filter: brightness(0.9); }
+[data-theme="light"] .nav-logo-img {
+  filter: brightness(0.2) saturate(1.5);
+}
 /* Fallback icon when logo.png not yet added */
 .nav-logo-icon {
   width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 8px;

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galaxy Hospital — Logo Design Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0e0e0e;
+      color: #f5f5f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1 {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 300;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+      color: #a3a3a0;
+    }
+    .subtitle { font-size: 13px; color: #666; margin-bottom: 60px; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* ===== LOGO VARIATIONS GRID ===== */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      max-width: 1200px;
+      width: 100%;
+      margin-bottom: 80px;
+    }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+    .logo-card {
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 48px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      background: #141414;
+      transition: border-color 0.3s;
+    }
+    .logo-card:hover { border-color: rgba(255,255,255,0.12); }
+    .logo-card-label {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: #e8562a;
+    }
+    .logo-card-bg-light { background: #f8f7f4; }
+    .logo-card-bg-light .logo-card-label { color: #d14a1f; }
+
+    /* ===== 3D CANVAS ===== */
+    .logo-3d-hero {
+      width: 100%; max-width: 600px;
+      aspect-ratio: 1;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      overflow: hidden;
+      background: #0e0e0e;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .logo-3d-hero canvas { width: 100% !important; height: 100% !important; }
+
+    /* ===== STATIC SVG LOGOS ===== */
+    .logo-static {
+      width: 180px; height: 180px;
+    }
+    .logo-horizontal {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .logo-horizontal svg { width: 48px; height: 48px; flex-shrink: 0; }
+    .logo-horizontal .logo-text-group { text-align: left; }
+    .logo-horizontal .logo-name {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 500; font-size: 22px;
+      letter-spacing: -0.02em; line-height: 1.1;
+    }
+    .logo-horizontal .logo-tagline {
+      font-size: 9px; font-weight: 400;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      opacity: 0.5; margin-top: 2px;
+    }
+    .logo-text-dark .logo-name { color: #f5f5f0; }
+    .logo-text-dark .logo-tagline { color: #666; }
+    .logo-text-light .logo-name { color: #1a1a18; }
+    .logo-text-light .logo-tagline { color: #8a8a86; }
+
+    /* Dividers */
+    .divider {
+      width: 100%; max-width: 1200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+      margin: 20px 0 60px;
+    }
+
+    .section-title {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 300; font-size: 20px;
+      color: #a3a3a0; letter-spacing: -0.01em;
+      margin-bottom: 32px;
+    }
+
+    /* Favicon preview */
+    .favicon-row {
+      display: flex; gap: 32px; align-items: center;
+      margin-bottom: 80px;
+    }
+    .favicon-box {
+      width: 64px; height: 64px;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      background: #141414;
+    }
+    .favicon-box svg { width: 32px; height: 32px; }
+    .favicon-box.light { background: #f8f7f4; border-color: rgba(0,0,0,0.08); }
+    .favicon-label { font-size: 11px; color: #666; text-align: center; margin-top: 8px; }
+  </style>
+</head>
+<body>
+
+  <h1>Galaxy Hospital — Logo System</h1>
+  <p class="subtitle">Original Design Concept</p>
+
+  <!-- ===== 3D ANIMATED HERO LOGO ===== -->
+  <div class="logo-3d-hero" id="logo3d-wrap">
+    <canvas id="logo-3d"></canvas>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="section-title">Static Variations</p>
+
+  <!-- ===== STATIC LOGO GRID ===== -->
+  <div class="grid">
+
+    <!-- 1. Icon Mark — Dark bg -->
+    <div class="logo-card">
+      <div class="logo-card-label">Icon Mark — Dark</div>
+      <svg class="logo-static" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer orbital ring -->
+        <ellipse cx="100" cy="100" rx="88" ry="88" stroke="#e8562a" stroke-width="0.5" opacity="0.2"/>
+        <ellipse cx="100" cy="100" rx="78" ry="42" stroke="#c9a84c" stroke-width="0.5" opacity="0.15" transform="rotate(-30 100 100)"/>
+        <ellipse cx="100" cy="100" rx="78" ry="42" stroke="#c9a84c" stroke-width="0.5" opacity="0.15" transform="rotate(30 100 100)"/>
+
+        <!-- Galaxy star (6-point) -->
+        <path d="M100 28 L112 72 L156 60 L124 88 L156 116 L112 104 L100 148 L88 104 L44 116 L76 88 L44 60 L88 72 Z" fill="url(#starGrad)" opacity="0.9"/>
+
+        <!-- Center heart -->
+        <path d="M100 82 C100 74, 88 68, 82 74 C76 80, 76 90, 100 106 C124 90, 124 80, 118 74 C112 68, 100 74, 100 82Z" fill="url(#heartGrad)"/>
+
+        <!-- Medical cross (subtle) -->
+        <rect x="96" y="88" width="8" height="24" rx="2" fill="#f5f5f0" opacity="0.9"/>
+        <rect x="88" y="96" width="24" height="8" rx="2" fill="#f5f5f0" opacity="0.9"/>
+
+        <!-- Dot accents -->
+        <circle cx="100" cy="28" r="2.5" fill="#c9a84c" opacity="0.8"/>
+        <circle cx="156" cy="60" r="2" fill="#c9a84c" opacity="0.6"/>
+        <circle cx="156" cy="116" r="2" fill="#c9a84c" opacity="0.6"/>
+        <circle cx="100" cy="148" r="2.5" fill="#c9a84c" opacity="0.8"/>
+        <circle cx="44" cy="116" r="2" fill="#c9a84c" opacity="0.6"/>
+        <circle cx="44" cy="60" r="2" fill="#c9a84c" opacity="0.6"/>
+
+        <defs>
+          <linearGradient id="starGrad" x1="44" y1="28" x2="156" y2="148">
+            <stop offset="0%" stop-color="#e8562a"/>
+            <stop offset="50%" stop-color="#c9a84c"/>
+            <stop offset="100%" stop-color="#e8562a"/>
+          </linearGradient>
+          <linearGradient id="heartGrad" x1="82" y1="68" x2="118" y2="106">
+            <stop offset="0%" stop-color="#e8562a"/>
+            <stop offset="100%" stop-color="#d14a1f"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- 2. Icon Mark — Light bg -->
+    <div class="logo-card logo-card-bg-light">
+      <div class="logo-card-label">Icon Mark — Light</div>
+      <svg class="logo-static" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="100" cy="100" rx="88" ry="88" stroke="#d14a1f" stroke-width="0.5" opacity="0.15"/>
+        <ellipse cx="100" cy="100" rx="78" ry="42" stroke="#a07c28" stroke-width="0.5" opacity="0.12" transform="rotate(-30 100 100)"/>
+        <ellipse cx="100" cy="100" rx="78" ry="42" stroke="#a07c28" stroke-width="0.5" opacity="0.12" transform="rotate(30 100 100)"/>
+        <path d="M100 28 L112 72 L156 60 L124 88 L156 116 L112 104 L100 148 L88 104 L44 116 L76 88 L44 60 L88 72 Z" fill="url(#starGradL)" opacity="0.85"/>
+        <path d="M100 82 C100 74, 88 68, 82 74 C76 80, 76 90, 100 106 C124 90, 124 80, 118 74 C112 68, 100 74, 100 82Z" fill="url(#heartGradL)"/>
+        <rect x="96" y="88" width="8" height="24" rx="2" fill="#ffffff" opacity="0.95"/>
+        <rect x="88" y="96" width="24" height="8" rx="2" fill="#ffffff" opacity="0.95"/>
+        <circle cx="100" cy="28" r="2.5" fill="#a07c28" opacity="0.7"/>
+        <circle cx="156" cy="60" r="2" fill="#a07c28" opacity="0.5"/>
+        <circle cx="156" cy="116" r="2" fill="#a07c28" opacity="0.5"/>
+        <circle cx="100" cy="148" r="2.5" fill="#a07c28" opacity="0.7"/>
+        <circle cx="44" cy="116" r="2" fill="#a07c28" opacity="0.5"/>
+        <circle cx="44" cy="60" r="2" fill="#a07c28" opacity="0.5"/>
+        <defs>
+          <linearGradient id="starGradL" x1="44" y1="28" x2="156" y2="148">
+            <stop offset="0%" stop-color="#d14a1f"/>
+            <stop offset="50%" stop-color="#a07c28"/>
+            <stop offset="100%" stop-color="#d14a1f"/>
+          </linearGradient>
+          <linearGradient id="heartGradL" x1="82" y1="68" x2="118" y2="106">
+            <stop offset="0%" stop-color="#d14a1f"/>
+            <stop offset="100%" stop-color="#b83d17"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- 3. Minimal icon -->
+    <div class="logo-card">
+      <div class="logo-card-label">Minimal Icon</div>
+      <svg class="logo-static" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M100 28 L112 72 L156 60 L124 88 L156 116 L112 104 L100 148 L88 104 L44 116 L76 88 L44 60 L88 72 Z" stroke="#e8562a" stroke-width="1" fill="none" opacity="0.3"/>
+        <path d="M100 82 C100 74, 88 68, 82 74 C76 80, 76 90, 100 106 C124 90, 124 80, 118 74 C112 68, 100 74, 100 82Z" fill="#e8562a"/>
+        <rect x="96" y="88" width="8" height="24" rx="2" fill="#f5f5f0"/>
+        <rect x="88" y="96" width="24" height="8" rx="2" fill="#f5f5f0"/>
+      </svg>
+    </div>
+
+    <!-- 4. Horizontal — Dark bg -->
+    <div class="logo-card" style="grid-column: span 2;">
+      <div class="logo-card-label">Horizontal Lockup — Dark</div>
+      <div class="logo-horizontal logo-text-dark">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="100" cy="100" rx="88" ry="88" stroke="#e8562a" stroke-width="0.5" opacity="0.2"/>
+          <ellipse cx="100" cy="100" rx="78" ry="42" stroke="#c9a84c" stroke-width="0.5" opacity="0.15" transform="rotate(-30 100 100)"/>
+          <ellipse cx="100" cy="100" rx="78" ry="42" stroke="#c9a84c" stroke-width="0.5" opacity="0.15" transform="rotate(30 100 100)"/>
+          <path d="M100 28 L112 72 L156 60 L124 88 L156 116 L112 104 L100 148 L88 104 L44 116 L76 88 L44 60 L88 72 Z" fill="url(#hStarD)" opacity="0.9"/>
+          <path d="M100 82 C100 74, 88 68, 82 74 C76 80, 76 90, 100 106 C124 90, 124 80, 118 74 C112 68, 100 74, 100 82Z" fill="url(#hHeartD)"/>
+          <rect x="96" y="88" width="8" height="24" rx="2" fill="#f5f5f0" opacity="0.9"/>
+          <rect x="88" y="96" width="24" height="8" rx="2" fill="#f5f5f0" opacity="0.9"/>
+          <circle cx="100" cy="28" r="2.5" fill="#c9a84c" opacity="0.8"/>
+          <circle cx="100" cy="148" r="2.5" fill="#c9a84c" opacity="0.8"/>
+          <defs>
+            <linearGradient id="hStarD" x1="44" y1="28" x2="156" y2="148"><stop offset="0%" stop-color="#e8562a"/><stop offset="50%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#e8562a"/></linearGradient>
+            <linearGradient id="hHeartD" x1="82" y1="68" x2="118" y2="106"><stop offset="0%" stop-color="#e8562a"/><stop offset="100%" stop-color="#d14a1f"/></linearGradient>
+          </defs>
+        </svg>
+        <div class="logo-text-group">
+          <div class="logo-name">Galaxy Hospital</div>
+          <div class="logo-tagline">Bhopal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Horizontal — Light bg -->
+    <div class="logo-card logo-card-bg-light">
+      <div class="logo-card-label">Horizontal — Light</div>
+      <div class="logo-horizontal logo-text-light">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M100 28 L112 72 L156 60 L124 88 L156 116 L112 104 L100 148 L88 104 L44 116 L76 88 L44 60 L88 72 Z" fill="url(#hStarL)" opacity="0.85"/>
+          <path d="M100 82 C100 74, 88 68, 82 74 C76 80, 76 90, 100 106 C124 90, 124 80, 118 74 C112 68, 100 74, 100 82Z" fill="#d14a1f"/>
+          <rect x="96" y="88" width="8" height="24" rx="2" fill="#fff"/>
+          <rect x="88" y="96" width="24" height="8" rx="2" fill="#fff"/>
+          <defs>
+            <linearGradient id="hStarL" x1="44" y1="28" x2="156" y2="148"><stop offset="0%" stop-color="#d14a1f"/><stop offset="50%" stop-color="#a07c28"/><stop offset="100%" stop-color="#d14a1f"/></linearGradient>
+          </defs>
+        </svg>
+        <div class="logo-text-group">
+          <div class="logo-name">Galaxy Hospital</div>
+          <div class="logo-tagline">Bhopal</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="section-title">Favicon / App Icon</p>
+  <div class="favicon-row">
+    <div>
+      <div class="favicon-box">
+        <svg viewBox="0 0 200 200" fill="none"><path d="M100 28 L112 72 L156 60 L124 88 L156 116 L112 104 L100 148 L88 104 L44 116 L76 88 L44 60 L88 72 Z" fill="url(#fG1)" opacity="0.9"/><path d="M100 82 C100 74, 88 68, 82 74 C76 80, 76 90, 100 106 C124 90, 124 80, 118 74 C112 68, 100 74, 100 82Z" fill="#e8562a"/><rect x="96" y="88" width="8" height="24" rx="2" fill="#f5f5f0"/><rect x="88" y="96" width="24" height="8" rx="2" fill="#f5f5f0"/><defs><linearGradient id="fG1" x1="44" y1="28" x2="156" y2="148"><stop stop-color="#e8562a"/><stop offset="1" stop-color="#c9a84c"/></linearGradient></defs></svg>
+      </div>
+      <div class="favicon-label">Dark 32px</div>
+    </div>
+    <div>
+      <div class="favicon-box light">
+        <svg viewBox="0 0 200 200" fill="none"><path d="M100 28 L112 72 L156 60 L124 88 L156 116 L112 104 L100 148 L88 104 L44 116 L76 88 L44 60 L88 72 Z" fill="url(#fG2)" opacity="0.85"/><path d="M100 82 C100 74, 88 68, 82 74 C76 80, 76 90, 100 106 C124 90, 124 80, 118 74 C112 68, 100 74, 100 82Z" fill="#d14a1f"/><rect x="96" y="88" width="8" height="24" rx="2" fill="#fff"/><rect x="88" y="96" width="24" height="8" rx="2" fill="#fff"/><defs><linearGradient id="fG2" x1="44" y1="28" x2="156" y2="148"><stop stop-color="#d14a1f"/><stop offset="1" stop-color="#a07c28"/></linearGradient></defs></svg>
+      </div>
+      <div class="favicon-label">Light 32px</div>
+    </div>
+    <div>
+      <div class="favicon-box" style="width:40px;height:40px;border-radius:6px">
+        <svg viewBox="0 0 200 200" fill="none" style="width:20px;height:20px"><path d="M100 28 L112 72 L156 60 L124 88 L156 116 L112 104 L100 148 L88 104 L44 116 L76 88 L44 60 L88 72 Z" fill="#e8562a" opacity="0.9"/><path d="M100 82 C100 74, 88 68, 82 74 C76 80, 76 90, 100 106 C124 90, 124 80, 118 74 C112 68, 100 74, 100 82Z" fill="#e8562a"/><rect x="96" y="88" width="8" height="24" rx="2" fill="#f5f5f0"/><rect x="88" y="96" width="24" height="8" rx="2" fill="#f5f5f0"/></svg>
+      </div>
+      <div class="favicon-label">16px</div>
+    </div>
+  </div>
+
+  <!-- ===== THREE.JS 3D ANIMATED LOGO ===== -->
+  <script>
+  (function() {
+    const wrap = document.getElementById('logo3d-wrap');
+    const canvas = document.getElementById('logo-3d');
+    if (!wrap || !canvas) return;
+
+    const size = Math.min(wrap.clientWidth, wrap.clientHeight) || 600;
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setSize(size, size);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+    camera.position.z = 14;
+
+    const mainGroup = new THREE.Group();
+    scene.add(mainGroup);
+
+    // ===== HEART SHAPE MATH =====
+    function heartPos(u, v) {
+      u *= Math.PI * 2;
+      v = v * Math.PI - Math.PI / 2;
+      const x = Math.pow(Math.sin(u), 3);
+      const y = (13*Math.cos(u) - 5*Math.cos(2*u) - 2*Math.cos(3*u) - Math.cos(4*u)) / 16;
+      const z = Math.sin(u) * Math.cos(v) * 0.4;
+      return { x: x * 1.8, y: y * 1.8 + 0.6, z: z * 1.8 };
+    }
+
+    // ===== HEART POINT CLOUD =====
+    const hCount = 2000;
+    const hPos = new Float32Array(hCount * 3);
+    const hCol = new Float32Array(hCount * 3);
+    const cOrange = new THREE.Color(0xe8562a);
+    const cGold = new THREE.Color(0xc9a84c);
+    const cBright = new THREE.Color(0xf0d78c);
+
+    for (let i = 0; i < hCount; i++) {
+      const p = heartPos(Math.random(), Math.random());
+      hPos[i*3] = p.x; hPos[i*3+1] = p.y; hPos[i*3+2] = p.z;
+      const mix = Math.random();
+      const c = mix < 0.5 ? cOrange.clone().lerp(cGold, mix*2) : cGold.clone().lerp(cBright, (mix-0.5)*2);
+      hCol[i*3] = c.r; hCol[i*3+1] = c.g; hCol[i*3+2] = c.b;
+    }
+    const hGeo = new THREE.BufferGeometry();
+    hGeo.setAttribute('position', new THREE.BufferAttribute(hPos, 3));
+    hGeo.setAttribute('color', new THREE.BufferAttribute(hCol, 3));
+    const hMat = new THREE.PointsMaterial({
+      size: 0.03, vertexColors: true, transparent: true, opacity: 0.85,
+      blending: THREE.AdditiveBlending, sizeAttenuation: true
+    });
+    const heartCloud = new THREE.Points(hGeo, hMat);
+    mainGroup.add(heartCloud);
+
+    // ===== HEART WIREFRAME =====
+    const wVerts = [], wIdx = [];
+    const wRes = 35;
+    for (let i = 0; i <= wRes; i++) {
+      for (let j = 0; j <= wRes; j++) {
+        const p = heartPos(i/wRes, j/wRes);
+        wVerts.push(p.x, p.y, p.z);
+        if (i < wRes && j < wRes) {
+          const a = i*(wRes+1)+j, b=a+1, c=a+(wRes+1), d=c+1;
+          wIdx.push(a,b,c, b,d,c);
+        }
+      }
+    }
+    const wGeo = new THREE.BufferGeometry();
+    wGeo.setAttribute('position', new THREE.Float32BufferAttribute(wVerts, 3));
+    wGeo.setIndex(wIdx);
+    const wireMat = new THREE.MeshBasicMaterial({ color: 0xe8562a, wireframe: true, transparent: true, opacity: 0.06 });
+    const wireHeart = new THREE.Mesh(wGeo, wireMat);
+    mainGroup.add(wireHeart);
+
+    // ===== MEDICAL CROSS at center of heart =====
+    const crossMat = new THREE.MeshBasicMaterial({ color: 0xf5f5f0, transparent: true, opacity: 0.9 });
+    const crossV = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.55, 0.15), crossMat);
+    crossV.position.y = 0.3;
+    mainGroup.add(crossV);
+    const crossH = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.15, 0.15), crossMat.clone());
+    crossH.position.y = 0.3;
+    mainGroup.add(crossH);
+
+    // ===== 6-POINT STAR OUTLINE (galaxy) =====
+    function starPoints(n, outerR, innerR) {
+      const pts = [];
+      for (let i = 0; i < n * 2; i++) {
+        const a = (i / (n*2)) * Math.PI * 2 - Math.PI/2;
+        const r = i % 2 === 0 ? outerR : innerR;
+        pts.push(new THREE.Vector3(Math.cos(a)*r, Math.sin(a)*r + 0.5, 0));
+      }
+      pts.push(pts[0].clone());
+      return pts;
+    }
+    const starGeo = new THREE.BufferGeometry().setFromPoints(starPoints(6, 4.2, 2.2));
+    const starMat = new THREE.LineBasicMaterial({ color: 0xe8562a, transparent: true, opacity: 0.2 });
+    mainGroup.add(new THREE.Line(starGeo, starMat));
+
+    // Second star, rotated
+    const star2Geo = new THREE.BufferGeometry().setFromPoints(starPoints(6, 3.8, 2.0));
+    const star2Line = new THREE.Line(star2Geo, new THREE.LineBasicMaterial({ color: 0xc9a84c, transparent: true, opacity: 0.1 }));
+    star2Line.rotation.z = Math.PI / 6;
+    mainGroup.add(star2Line);
+
+    // ===== ORBITAL RINGS =====
+    for (let i = 0; i < 3; i++) {
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(3.5 + i*0.7, 0.012, 8, 100),
+        new THREE.MeshBasicMaterial({ color: i===1 ? 0xc9a84c : 0xe8562a, transparent: true, opacity: 0.12 })
+      );
+      ring.rotation.x = Math.PI/4 + i*0.5;
+      ring.rotation.y = i*0.6;
+      ring.position.y = 0.3;
+      mainGroup.add(ring);
+    }
+
+    // ===== GOLD DUST PARTICLES =====
+    const dustCount = 400;
+    const dustPos = new Float32Array(dustCount * 3);
+    const dustCol = new Float32Array(dustCount * 3);
+    const dustData = [];
+    const golds = [0xc9a84c, 0xf0d78c, 0xe8c55a, 0xd4a037];
+
+    for (let i = 0; i < dustCount; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 2.5 + Math.random() * 3;
+      const height = (Math.random() - 0.5) * 5 + 0.5;
+      dustPos[i*3] = Math.cos(angle)*radius;
+      dustPos[i*3+1] = height;
+      dustPos[i*3+2] = Math.sin(angle)*radius;
+      const gc = new THREE.Color(golds[Math.floor(Math.random()*golds.length)]);
+      dustCol[i*3]=gc.r; dustCol[i*3+1]=gc.g; dustCol[i*3+2]=gc.b;
+      dustData.push({ angle, radius, height, speed: (Math.random()*0.2+0.1)*(Math.random()>0.5?1:-1), ySpeed: (Math.random()-0.5)*0.008 });
+    }
+    const dustGeo = new THREE.BufferGeometry();
+    dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+    dustGeo.setAttribute('color', new THREE.BufferAttribute(dustCol, 3));
+    const dustMat = new THREE.PointsMaterial({ size: 0.06, vertexColors: true, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, sizeAttenuation: true });
+    const goldDust = new THREE.Points(dustGeo, dustMat);
+    mainGroup.add(goldDust);
+
+    // ===== STAR TIP DOTS =====
+    const tipGeo = new THREE.SphereGeometry(0.06, 8, 8);
+    const tipMat = new THREE.MeshBasicMaterial({ color: 0xc9a84c, transparent: true, opacity: 0.8 });
+    for (let i = 0; i < 6; i++) {
+      const a = (i/6)*Math.PI*2 - Math.PI/2;
+      const dot = new THREE.Mesh(tipGeo, tipMat.clone());
+      dot.position.set(Math.cos(a)*4.2, Math.sin(a)*4.2 + 0.5, 0);
+      mainGroup.add(dot);
+    }
+
+    // ===== MOUSE INTERACTION =====
+    let mx = 0, my = 0;
+    wrap.addEventListener('mousemove', e => {
+      const r = wrap.getBoundingClientRect();
+      mx = ((e.clientX-r.left)/r.width - 0.5)*2;
+      my = ((e.clientY-r.top)/r.height - 0.5)*2;
+    });
+    wrap.addEventListener('mouseleave', () => { mx=0; my=0; });
+
+    // ===== ANIMATE =====
+    function animate() {
+      requestAnimationFrame(animate);
+      const t = Date.now() * 0.001;
+
+      // Heartbeat
+      const beat = 1 + Math.pow(Math.sin(t * 2.2), 8) * 0.07;
+      heartCloud.scale.set(beat, beat, beat);
+      wireHeart.scale.set(beat, beat, beat);
+      crossV.scale.set(beat, beat, beat);
+      crossH.scale.set(beat, beat, beat);
+
+      // Slow rotation
+      mainGroup.rotation.y = t * 0.15;
+      mainGroup.rotation.x = Math.sin(t * 0.2) * 0.08;
+
+      // Gold dust orbit
+      const gp = goldDust.geometry.attributes.position.array;
+      for (let i = 0; i < dustCount; i++) {
+        const d = dustData[i];
+        d.angle += d.speed * 0.008;
+        d.height += d.ySpeed;
+        if (d.height > 3.5) d.ySpeed = -Math.abs(d.ySpeed);
+        if (d.height < -2.5) d.ySpeed = Math.abs(d.ySpeed);
+        const wobble = Math.sin(t*0.5 + i) * 0.2;
+        gp[i*3]   = Math.cos(d.angle) * (d.radius + wobble);
+        gp[i*3+1] = d.height;
+        gp[i*3+2] = Math.sin(d.angle) * (d.radius + wobble);
+      }
+      goldDust.geometry.attributes.position.needsUpdate = true;
+      dustMat.opacity = 0.55 + Math.sin(t*1.2)*0.15;
+
+      // Rings rotate
+      mainGroup.children.forEach(c => {
+        if (c.geometry && c.geometry.type === 'TorusGeometry') c.rotation.z += 0.002;
+      });
+
+      // Camera parallax
+      camera.position.x += (mx*3 - camera.position.x) * 0.03;
+      camera.position.y += (-my*3 - camera.position.y) * 0.03;
+      camera.lookAt(0, 0.3, 0);
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    new ResizeObserver(() => {
+      const s = Math.min(wrap.clientWidth, wrap.clientHeight) || 600;
+      renderer.setSize(s, s);
+    }).observe(wrap);
+  })();
+  </script>
+</body>
+</html>
