@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="500" viewBox="0 0 400 500" fill="none">
+  <rect width="400" height="500" fill="#1a1a1a"/>
+  <circle cx="200" cy="180" r="60" stroke="#333" stroke-width="2" fill="none"/>
+  <circle cx="200" cy="160" r="28" stroke="#333" stroke-width="2" fill="none"/>
+  <path d="M140 240 Q200 200 260 240 Q280 300 200 310 Q120 300 140 240Z" stroke="#333" stroke-width="2" fill="none"/>
+  <text x="200" y="380" font-family="Inter, sans-serif" font-size="14" fill="#555" text-anchor="middle">Drop photo here</text>
+  <text x="200" y="400" font-family="Inter, sans-serif" font-size="11" fill="#444" text-anchor="middle">images/team/dr-name.jpg</text>
+</svg>

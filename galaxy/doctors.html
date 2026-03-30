@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Specialists — Galaxy Hospital Bhopal</title>
+  <meta name="description" content="Meet the expert orthopedic surgeons and medical team at Galaxy Hospital Bhopal." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script>(function(){ document.documentElement.setAttribute('data-theme', localStorage.getItem('galaxy-theme')||'dark'); })();</script>
+</head>
+<body>
+  <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+  <div class="grain-overlay" aria-hidden="true"></div>
+  <canvas id="webgl-bg" aria-hidden="true"></canvas>
+
+  <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Galaxy Hospital Bhopal" class="nav-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="nav-logo-icon" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg></div><div><div class="nav-logo-text">Galaxy Hospital</div><div class="nav-logo-sub">Bhopal</div></div></a>
+    <div class="nav-right">
+      <ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="doctors.html" class="active">Specialists</a></li><li><a href="contact.html">Contact</a></li></ul>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"><svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg><svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
+      <a href="contact.html" class="nav-cta">Inquire <i data-lucide="arrow-right" style="width:14px;height:14px"></i></a>
+      <button class="nav-mobile-btn" id="mobile-open" aria-label="Open menu"><i data-lucide="menu" style="width:20px;height:20px"></i></button>
+    </div>
+  </nav>
+  <div class="mobile-nav" id="mobile-nav"><button class="mobile-nav-close" id="mobile-close" aria-label="Close"><i data-lucide="x" style="width:20px;height:20px"></i></button><a href="index.html" class="mobile-link">Home</a><a href="about.html" class="mobile-link">About</a><a href="services.html" class="mobile-link">Services</a><a href="doctors.html" class="mobile-link">Specialists</a><a href="contact.html" class="mobile-link">Contact</a></div>
+
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=1920&q=80&fit=crop')"></div>
+      <div class="page-hero-overlay"></div>
+      <div class="page-hero-content">
+        <div class="page-hero-eyebrow"><span class="dot"></span> Expert Team</div>
+        <h1 class="page-hero-title">Our <span class="accent">Specialists</span></h1>
+        <p class="page-hero-subtitle">A team of fellowship-trained orthopedic surgeons with decades of combined experience and thousands of successful outcomes.</p>
+      </div>
+    </section>
+
+    <!-- LEAD SURGEONS -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label reveal-up">Lead Surgeons</div>
+        <h2 class="section-heading reveal-up mb-48">The minds behind <em>your care</em></h2>
+
+        <!-- Doctor 1 - Featured -->
+        <div class="grid-2 mb-48">
+          <div class="img-card reveal-up" style="height:500px;overflow:hidden">
+            <img src="images/team/dr-vipin-sharma.jpg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=800&q=80&fit=crop&crop=top'" alt="Dr. Vipin Sharma" style="width:100%;height:100%;object-fit:cover;filter:brightness(var(--img-brightness))">
+          </div>
+          <div>
+            <h2 class="section-heading reveal-up" style="font-size:clamp(28px,3.5vw,44px)">Dr. Vipin Sharma</h2>
+            <p class="reveal-up" style="color:var(--accent);font-size:15px;margin-bottom:20px">Senior Orthopedic Surgeon & Founder</p>
+            <p class="section-desc reveal-up" style="margin-bottom:16px">With over 15 years of dedicated orthopedic practice and a fellowship in joint replacement from a leading European center, Dr. Sharma has performed more than 5,000 successful joint replacement surgeries.</p>
+            <p class="section-desc reveal-up" style="margin-bottom:24px">His expertise spans total knee replacement, complex revision surgeries, and minimally invasive techniques. He is a regular faculty member at national and international orthopedic conferences.</p>
+            <div class="about-badges reveal-up">
+              <div class="about-badge">MS Orthopedics</div>
+              <div class="about-badge">Fellowship — Joint Replacement</div>
+              <div class="about-badge">5,000+ Surgeries</div>
+            </div>
+            <div class="mt-32 reveal-up"><a href="contact.html" class="btn-primary btn-sm">Book Consultation <i data-lucide="arrow-right" style="width:14px;height:14px"></i></a></div>
+          </div>
+        </div>
+
+        <div class="divider mb-48"></div>
+
+        <!-- Doctor 2 - Featured -->
+        <div class="grid-2 mb-48">
+          <div>
+            <h2 class="section-heading reveal-up" style="font-size:clamp(28px,3.5vw,44px)">Dr. Ankit Jain</h2>
+            <p class="reveal-up" style="color:var(--accent);font-size:15px;margin-bottom:20px">Arthroscopy & Sports Medicine Specialist</p>
+            <p class="section-desc reveal-up" style="margin-bottom:16px">Dr. Jain specializes in arthroscopic surgery and sports medicine, with advanced fellowship training in knee arthroscopy. As ABFT Consultant, he works closely with elite athletes requiring specialized sports injury care.</p>
+            <p class="section-desc reveal-up" style="margin-bottom:24px">He has pioneered several minimally invasive techniques for ACL reconstruction in the region and is recognized for his high return-to-sport rates among athletes.</p>
+            <div class="about-badges reveal-up">
+              <div class="about-badge">MS Orthopedics</div>
+              <div class="about-badge">Fellowship — Arthroscopy</div>
+              <div class="about-badge">ABFT Consultant</div>
+            </div>
+            <div class="mt-32 reveal-up"><a href="contact.html" class="btn-primary btn-sm">Book Consultation <i data-lucide="arrow-right" style="width:14px;height:14px"></i></a></div>
+          </div>
+          <div class="img-card reveal-up" style="height:500px;overflow:hidden">
+            <img src="images/team/dr-ankit-jain.jpg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=800&q=80&fit=crop&crop=top'" alt="Dr. Ankit Jain" style="width:100%;height:100%;object-fit:cover;filter:brightness(var(--img-brightness))">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- FULL TEAM -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label reveal-up">Complete Team</div>
+        <h2 class="section-heading reveal-up mb-48">Our medical <em>professionals</em></h2>
+
+        <div class="doctors-grid">
+          <div class="card reveal-up">
+            <div class="doctor-visual"><img src="images/team/dr-priya-mehta.jpg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1594824476967-48c8b964f137?w=500&q=80&fit=crop&crop=top'" alt="Dr. Priya Mehta"></div>
+            <div class="card-body"><h3 class="card-title">Dr. Priya Mehta</h3><p class="card-subtitle">Physiotherapy & Rehab Head</p><p class="card-text">MPT | Sports Rehab Specialist | 10+ Years Experience</p><div class="card-tags"><span class="card-tag">Rehab</span><span class="card-tag">Physio</span><span class="card-tag">Sports</span></div></div>
+          </div>
+          <div class="card reveal-up">
+            <div class="doctor-visual"><img src="images/team/dr-kavita-singh.jpg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=500&q=80&fit=crop&crop=top'" alt="Dr. Kavita Singh"></div>
+            <div class="card-body"><h3 class="card-title">Dr. Kavita Singh</h3><p class="card-subtitle">Anesthesiologist</p><p class="card-text">MD Anesthesia | Regional Anesthesia Specialist | 12+ Years</p><div class="card-tags"><span class="card-tag">Anesthesia</span><span class="card-tag">Pain Mgmt</span></div></div>
+          </div>
+          <div class="card reveal-up">
+            <div class="doctor-visual"><img src="images/team/dr-rajesh-gupta.jpg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=500&q=80&fit=crop&crop=top'" alt="Dr. Rajesh Gupta"></div>
+            <div class="card-body"><h3 class="card-title">Dr. Rajesh Gupta</h3><p class="card-subtitle">Orthopedic Trauma Surgeon</p><p class="card-text">MS Ortho | Fellowship in Trauma | 8+ Years Experience</p><div class="card-tags"><span class="card-tag">Trauma</span><span class="card-tag">Fractures</span><span class="card-tag">Emergency</span></div></div>
+          </div>
+          <div class="card reveal-up">
+            <div class="doctor-visual"><img src="images/team/dr-neha-rawat.jpg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=500&q=80&fit=crop&crop=top'" alt="Dr. Neha Rawat"></div>
+            <div class="card-body"><h3 class="card-title">Dr. Neha Rawat</h3><p class="card-subtitle">Sports Physiotherapist</p><p class="card-text">BPT, MPT Sports | Certified Strength & Conditioning | 6+ Years</p><div class="card-tags"><span class="card-tag">Sports Physio</span><span class="card-tag">S&C</span></div></div>
+          </div>
+          <div class="card reveal-up">
+            <div class="doctor-visual"><img src="images/team/dr-amit-tiwari.jpg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1622902046580-2b47f47f5471?w=500&q=80&fit=crop&crop=top'" alt="Dr. Amit Tiwari"></div>
+            <div class="card-body"><h3 class="card-title">Dr. Amit Tiwari</h3><p class="card-subtitle">Radiologist</p><p class="card-text">MD Radiology | MSK Imaging Specialist | 10+ Years</p><div class="card-tags"><span class="card-tag">MRI</span><span class="card-tag">MSK Imaging</span></div></div>
+          </div>
+          <div class="card reveal-up">
+            <div class="doctor-visual"><img src="images/team/dr-sanjay-verma.jpg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1651008376811-b90baee60c1f?w=500&q=80&fit=crop&crop=top'" alt="Dr. Sanjay Verma"></div>
+            <div class="card-body"><h3 class="card-title">Dr. Sanjay Verma</h3><p class="card-subtitle">General Medicine</p><p class="card-text">MD Medicine | Pre & Post-Op Care Specialist | 14+ Years</p><div class="card-tags"><span class="card-tag">Internal Med</span><span class="card-tag">Pre-Op</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="section">
+      <div class="container cta-section">
+        <div class="section-label reveal-up" style="justify-content:center">Schedule</div>
+        <h2 class="section-heading reveal-up" style="text-align:center">Consult with the <em>right specialist</em></h2>
+        <p class="section-desc reveal-up" style="text-align:center;margin-bottom:40px">Not sure who to see? Contact us and we'll match you with the right specialist for your condition.</p>
+        <div class="cta-actions reveal-up"><a href="contact.html" class="btn-primary">Book Appointment <i data-lucide="arrow-right" style="width:16px;height:16px"></i></a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand"><a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Galaxy Hospital Bhopal" class="nav-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="nav-logo-icon" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg></div><div><div class="nav-logo-text">Galaxy Hospital</div><div class="nav-logo-sub">Bhopal</div></div></a><p>India's premier orthopedic hospital.</p></div>
+        <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="doctors.html">Specialists</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div class="footer-col"><h5>Services</h5><ul><li><a href="services.html">Knee Surgery</a></li><li><a href="services.html">ACL Reconstruction</a></li><li><a href="services.html">Shoulder Surgery</a></li><li><a href="services.html">Arthroscopy</a></li></ul></div>
+        <div class="footer-col"><h5>Contact</h5><ul><li style="color:var(--text-muted);font-size:13px">+91 755-400-0000</li><li style="color:var(--text-muted);font-size:13px">info@galaxyhospitalbpl.com</li></ul></div>
+      </div>
+      <div class="footer-bottom"><p>&copy; 2024 Galaxy Hospital Bhopal.</p><div class="footer-bottom-links"><a href="#">Privacy</a><a href="#">Terms</a></div></div>
+    </div>
+  </footer>
+  <button class="back-to-top" id="btt" aria-label="Back to top"><i data-lucide="arrow-up"></i></button>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

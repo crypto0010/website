@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="60" viewBox="0 0 200 60" fill="none">
+  <rect width="200" height="60" rx="8" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+  <path d="M24 14L27.09 20.26L34 21.27L29 26.14L30.18 33.02L24 29.77L17.82 33.02L19 26.14L14 21.27L20.91 20.26L24 14Z" fill="#e8562a"/>
+  <text x="44" y="28" font-family="Inter Tight, sans-serif" font-size="16" font-weight="500" fill="#f5f5f0">Galaxy Hospital</text>
+  <text x="44" y="44" font-family="Inter, sans-serif" font-size="9" fill="#666" letter-spacing="2">BHOPAL</text>
+</svg>

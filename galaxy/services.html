@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services — Galaxy Hospital Bhopal</title>
+  <meta name="description" content="Comprehensive orthopedic services: knee surgery, ACL reconstruction, shoulder surgery, arthroscopy, sports medicine, and rehabilitation." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script>(function(){ document.documentElement.setAttribute('data-theme', localStorage.getItem('galaxy-theme')||'dark'); })();</script>
+</head>
+<body>
+  <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+  <div class="grain-overlay" aria-hidden="true"></div>
+  <canvas id="webgl-bg" aria-hidden="true"></canvas>
+
+  <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Galaxy Hospital Bhopal" class="nav-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="nav-logo-icon" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg></div><div><div class="nav-logo-text">Galaxy Hospital</div><div class="nav-logo-sub">Bhopal</div></div></a>
+    <div class="nav-right">
+      <ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html" class="active">Services</a></li><li><a href="doctors.html">Specialists</a></li><li><a href="contact.html">Contact</a></li></ul>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"><svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg><svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
+      <a href="contact.html" class="nav-cta">Inquire <i data-lucide="arrow-right" style="width:14px;height:14px"></i></a>
+      <button class="nav-mobile-btn" id="mobile-open" aria-label="Open menu"><i data-lucide="menu" style="width:20px;height:20px"></i></button>
+    </div>
+  </nav>
+  <div class="mobile-nav" id="mobile-nav"><button class="mobile-nav-close" id="mobile-close" aria-label="Close"><i data-lucide="x" style="width:20px;height:20px"></i></button><a href="index.html" class="mobile-link">Home</a><a href="about.html" class="mobile-link">About</a><a href="services.html" class="mobile-link">Services</a><a href="doctors.html" class="mobile-link">Specialists</a><a href="contact.html" class="mobile-link">Contact</a></div>
+
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1551076805-e1869033e561?w=1920&q=80&fit=crop')"></div>
+      <div class="page-hero-overlay"></div>
+      <div class="page-hero-content">
+        <div class="page-hero-eyebrow"><span class="dot"></span> Our Specialties</div>
+        <h1 class="page-hero-title">Comprehensive <span class="accent">Services</span></h1>
+        <p class="page-hero-subtitle">From minimally invasive arthroscopy to complex joint reconstructions — a full spectrum of orthopedic treatments powered by the latest technology.</p>
+      </div>
+    </section>
+
+    <!-- SERVICE DETAIL CARDS -->
+    <section class="section" id="knee">
+      <div class="container">
+        <div class="grid-2">
+          <div class="img-card reveal-up" style="height:420px;overflow:hidden">
+            <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&q=80&fit=crop" alt="Knee surgery procedure" style="width:100%;height:100%;object-fit:cover;filter:brightness(var(--img-brightness))">
+          </div>
+          <div>
+            <div class="section-label reveal-up">01</div>
+            <h2 class="section-heading reveal-up">Knee <em>Surgery</em></h2>
+            <p class="section-desc reveal-up" style="margin-bottom:20px">Our knee surgery program encompasses the full range of procedures — from total and partial knee replacement to complex revision surgeries. We use computer-assisted navigation systems that achieve alignment accuracy within 1 degree.</p>
+            <p class="section-desc reveal-up" style="margin-bottom:24px">Patients benefit from rapid recovery protocols, same-day mobilization, and personalized rehabilitation plans that get them back on their feet faster.</p>
+            <div class="about-badges reveal-up">
+              <div class="about-badge">Total Knee Replacement</div>
+              <div class="about-badge">Partial Knee Replacement</div>
+              <div class="about-badge">Revision Surgery</div>
+              <div class="about-badge">Computer Navigation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="section" id="acl">
+      <div class="container">
+        <div class="grid-2">
+          <div>
+            <div class="section-label reveal-up">02</div>
+            <h2 class="section-heading reveal-up">ACL <em>Reconstruction</em></h2>
+            <p class="section-desc reveal-up" style="margin-bottom:20px">Our arthroscopic ACL reconstruction program uses anatomical single-bundle and double-bundle techniques with autograft or allograft options. We specialize in helping athletes return to competitive sports safely.</p>
+            <p class="section-desc reveal-up" style="margin-bottom:24px">Combined with our ABFT partnership, athletes receive comprehensive care from injury through return-to-sport, including sport-specific rehabilitation protocols.</p>
+            <div class="about-badges reveal-up">
+              <div class="about-badge">Single Bundle ACL</div>
+              <div class="about-badge">Double Bundle ACL</div>
+              <div class="about-badge">Multi-Ligament Repair</div>
+              <div class="about-badge">Return-to-Sport Program</div>
+            </div>
+          </div>
+          <div class="img-card reveal-up" style="height:420px;overflow:hidden">
+            <img src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=800&q=80&fit=crop" alt="ACL reconstruction procedure" style="width:100%;height:100%;object-fit:cover;filter:brightness(var(--img-brightness))">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="section" id="shoulder">
+      <div class="container">
+        <div class="grid-2">
+          <div class="img-card reveal-up" style="height:420px;overflow:hidden">
+            <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=800&q=80&fit=crop" alt="Shoulder examination" style="width:100%;height:100%;object-fit:cover;filter:brightness(var(--img-brightness))">
+          </div>
+          <div>
+            <div class="section-label reveal-up">03</div>
+            <h2 class="section-heading reveal-up">Shoulder <em>Surgery</em></h2>
+            <p class="section-desc reveal-up" style="margin-bottom:20px">Our shoulder surgery program includes rotator cuff repair, shoulder replacement (anatomic and reverse), labral repair, and stabilization procedures — all performed using the latest minimally invasive techniques.</p>
+            <p class="section-desc reveal-up" style="margin-bottom:24px">We also offer non-surgical treatment options including PRP therapy, guided injections, and structured physiotherapy programs for patients who may not need surgery.</p>
+            <div class="about-badges reveal-up">
+              <div class="about-badge">Rotator Cuff Repair</div>
+              <div class="about-badge">Shoulder Replacement</div>
+              <div class="about-badge">Bankart Repair</div>
+              <div class="about-badge">Frozen Shoulder</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- REMAINING SERVICES IN GRID -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label reveal-up">More Services</div>
+        <h2 class="section-heading reveal-up mb-48">Additional <em>specialties</em></h2>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px" class="reveal-up">
+          <div class="service-card-img">
+            <div class="svc-img-wrap"><img class="svc-img" src="https://images.unsplash.com/photo-1551190822-a9ce113ac100?w=600&q=80&fit=crop" alt="Arthroscopy equipment"></div>
+            <div class="svc-body"><div class="svc-icon"><i data-lucide="scan-eye"></i></div><h3 class="card-title">Arthroscopy</h3><p class="card-text">HD arthroscopic systems for knee, shoulder, ankle, and elbow joint problems with minimal scarring and fast recovery.</p></div>
+          </div>
+          <div class="service-card-img">
+            <div class="svc-img-wrap"><img class="svc-img" src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80&fit=crop" alt="Sports medicine rehabilitation"></div>
+            <div class="svc-body"><div class="svc-icon"><i data-lucide="zap"></i></div><h3 class="card-title">Sports Medicine</h3><p class="card-text">ABFT-partnered sports injury management for athletes at every level — from weekend warriors to Olympians.</p></div>
+          </div>
+          <div class="service-card-img">
+            <div class="svc-img-wrap"><img class="svc-img" src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80&fit=crop" alt="Physiotherapy rehabilitation"></div>
+            <div class="svc-body"><div class="svc-icon"><i data-lucide="heart-handshake"></i></div><h3 class="card-title">Rehabilitation</h3><p class="card-text">Post-surgical and injury rehabilitation with dedicated physio team, guided exercise, and recovery monitoring.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container cta-section">
+        <div class="section-label reveal-up" style="justify-content:center">Need Help?</div>
+        <h2 class="section-heading reveal-up" style="text-align:center">Not sure which <em>service</em> you need?</h2>
+        <p class="section-desc reveal-up" style="text-align:center;margin-bottom:40px">Our team will assess your condition and recommend the best treatment plan tailored to your needs.</p>
+        <div class="cta-actions reveal-up">
+          <a href="contact.html" class="btn-primary">Get a Consultation <i data-lucide="arrow-right" style="width:16px;height:16px"></i></a>
+          <a href="doctors.html" class="btn-outline">Meet Our Specialists</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand"><a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Galaxy Hospital Bhopal" class="nav-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="nav-logo-icon" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg></div><div><div class="nav-logo-text">Galaxy Hospital</div><div class="nav-logo-sub">Bhopal</div></div></a><p>India's premier orthopedic hospital specializing in advanced knee, shoulder, and sports injury treatments.</p></div>
+        <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="doctors.html">Specialists</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div class="footer-col"><h5>Services</h5><ul><li><a href="#knee">Knee Surgery</a></li><li><a href="#acl">ACL Reconstruction</a></li><li><a href="#shoulder">Shoulder Surgery</a></li><li><a href="services.html">Arthroscopy</a></li><li><a href="services.html">Sports Medicine</a></li></ul></div>
+        <div class="footer-col"><h5>Contact</h5><ul><li style="color:var(--text-muted);font-size:13px">+91 755-400-0000</li><li style="color:var(--text-muted);font-size:13px">info@galaxyhospitalbpl.com</li><li style="color:var(--text-muted);font-size:13px">Near Habibganj Station, Bhopal</li></ul></div>
+      </div>
+      <div class="footer-bottom"><p>&copy; 2024 Galaxy Hospital Bhopal. All rights reserved.</p><div class="footer-bottom-links"><a href="#">Privacy Policy</a><a href="#">Terms</a></div></div>
+    </div>
+  </footer>
+  <button class="back-to-top" id="btt" aria-label="Back to top"><i data-lucide="arrow-up"></i></button>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — Galaxy Hospital Bhopal</title>
+  <meta name="description" content="Learn about Galaxy Hospital Bhopal's mission, history, accreditations, and our partnership with the Abhinav Bindra Foundation." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script>(function(){ document.documentElement.setAttribute('data-theme', localStorage.getItem('galaxy-theme')||'dark'); })();</script>
+</head>
+<body>
+  <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+  <div class="grain-overlay" aria-hidden="true"></div>
+  <canvas id="webgl-bg" aria-hidden="true"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo" aria-label="Galaxy Hospital Home"><img src="images/logo.png" alt="Galaxy Hospital Bhopal" class="nav-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="nav-logo-icon" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg></div><div><div class="nav-logo-text">Galaxy Hospital</div><div class="nav-logo-sub">Bhopal</div></div></a>
+    <div class="nav-right">
+      <ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="about.html" class="active">About</a></li><li><a href="services.html">Services</a></li><li><a href="doctors.html">Specialists</a></li><li><a href="contact.html">Contact</a></li></ul>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"><svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg><svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
+      <a href="contact.html" class="nav-cta">Inquire <i data-lucide="arrow-right" style="width:14px;height:14px"></i></a>
+      <button class="nav-mobile-btn" id="mobile-open" aria-label="Open menu"><i data-lucide="menu" style="width:20px;height:20px"></i></button>
+    </div>
+  </nav>
+  <div class="mobile-nav" id="mobile-nav"><button class="mobile-nav-close" id="mobile-close" aria-label="Close"><i data-lucide="x" style="width:20px;height:20px"></i></button><a href="index.html" class="mobile-link">Home</a><a href="about.html" class="mobile-link">About</a><a href="services.html" class="mobile-link">Services</a><a href="doctors.html" class="mobile-link">Specialists</a><a href="contact.html" class="mobile-link">Contact</a></div>
+
+  <main>
+    <!-- HERO -->
+    <section class="page-hero">
+      <div class="page-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=1920&q=80&fit=crop')"></div>
+      <div class="page-hero-overlay"></div>
+      <div class="page-hero-content">
+        <div class="page-hero-eyebrow"><span class="dot"></span> About Galaxy Hospital</div>
+        <h1 class="page-hero-title">Our <span class="accent">Story</span></h1>
+        <p class="page-hero-subtitle">Founded with a singular vision — to make world-class orthopedic care accessible to all in Central India and beyond.</p>
+      </div>
+    </section>
+
+    <!-- MISSION -->
+    <section class="section">
+      <div class="container">
+        <div class="grid-2">
+          <div>
+            <div class="section-label reveal-up">Our Mission</div>
+            <h2 class="section-heading reveal-up">Redefining <em>orthopedic excellence</em></h2>
+            <p class="section-desc reveal-up" style="margin-bottom:20px">Galaxy Hospital Bhopal was established with the belief that every patient deserves access to cutting-edge orthopedic treatment, regardless of background. Our team of fellowship-trained surgeons combines international expertise with deep local commitment.</p>
+            <p class="section-desc reveal-up">We continuously invest in the latest surgical technologies, from computer-navigated joint replacement systems to HD arthroscopy platforms, ensuring our patients receive the same quality of care available at the world's leading medical institutions.</p>
+          </div>
+          <div class="img-card reveal-up" style="height:450px;overflow:hidden">
+            <img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&q=80&fit=crop" alt="Medical team discussing patient care in a modern hospital" style="width:100%;height:100%;object-fit:cover;filter:brightness(var(--img-brightness))">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stats-bar-inner">
+        <div class="stat-item reveal-up"><div class="stat-number"><span class="counter" data-target="15">0</span><span class="hl">+</span></div><div class="stat-label">Years of Excellence</div></div>
+        <div class="stat-item reveal-up"><div class="stat-number"><span class="counter" data-target="10000">0</span><span class="hl">+</span></div><div class="stat-label">Patients Treated</div></div>
+        <div class="stat-item reveal-up"><div class="stat-number"><span class="counter" data-target="8000">0</span><span class="hl">+</span></div><div class="stat-label">Successful Surgeries</div></div>
+        <div class="stat-item reveal-up"><div class="stat-number"><span class="counter" data-target="98">0</span><span class="hl">%</span></div><div class="stat-label">Success Rate</div></div>
+      </div>
+    </div>
+
+    <!-- VISION & VALUES -->
+    <section class="section">
+      <div class="container">
+        <div class="grid-2">
+          <div class="img-card reveal-up" style="height:450px;overflow:hidden">
+            <img src="https://images.unsplash.com/photo-1581595220892-b0739db3ba8c?w=800&q=80&fit=crop" alt="Advanced surgical technology and equipment" style="width:100%;height:100%;object-fit:cover;filter:brightness(var(--img-brightness))">
+          </div>
+          <div>
+            <div class="section-label reveal-up">Our Vision</div>
+            <h2 class="section-heading reveal-up">Building the <em>future</em> of healthcare</h2>
+            <p class="section-desc reveal-up" style="margin-bottom:20px">Our vision extends beyond surgical excellence. We aim to build a comprehensive orthopedic ecosystem — from prevention and early diagnosis through surgery and complete rehabilitation.</p>
+            <p class="section-desc reveal-up" style="margin-bottom:32px">Through our partnership with the Abhinav Bindra Foundation, we also contribute to the development of India's sporting talent, providing specialized sports medicine and rehabilitation services to athletes at every level.</p>
+            <div class="about-badges reveal-up">
+              <div class="about-badge"><i data-lucide="shield-check" style="width:16px;height:16px"></i> NABH Accredited</div>
+              <div class="about-badge"><i data-lucide="award" style="width:16px;height:16px"></i> ISO 9001 Certified</div>
+              <div class="about-badge"><i data-lucide="credit-card" style="width:16px;height:16px"></i> Cashless Insurance</div>
+              <div class="about-badge"><i data-lucide="clock" style="width:16px;height:16px"></i> 24/7 Emergency</div>
+              <div class="about-badge"><i data-lucide="dumbbell" style="width:16px;height:16px"></i> ABFT Partner</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- GALLERY -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label reveal-up">Our Facility</div>
+        <h2 class="section-heading reveal-up mb-48">Inside <em>Galaxy Hospital</em></h2>
+        <div class="img-grid img-grid-masonry reveal-up">
+          <div class="img-card span-2"><img src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=600&q=80&fit=crop" alt="Hospital reception area" style="width:100%;height:100%;object-fit:cover;filter:brightness(var(--img-brightness))"></div>
+          <div class="img-card"><img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&q=80&fit=crop" alt="Modern patient room" style="width:100%;height:100%;object-fit:cover;filter:brightness(var(--img-brightness))"></div>
+          <div class="img-card"><img src="https://images.unsplash.com/photo-1581093458791-9d42e3c7e117?w=400&q=80&fit=crop" alt="Surgical operation theater" style="width:100%;height:100%;object-fit:cover;filter:brightness(var(--img-brightness))"></div>
+          <div class="img-card span-2"><img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80&fit=crop" alt="Rehabilitation and physiotherapy center" style="width:100%;height:100%;object-fit:cover;filter:brightness(var(--img-brightness))"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container cta-section">
+        <div class="section-label reveal-up" style="justify-content:center">Join Us</div>
+        <h2 class="section-heading reveal-up" style="text-align:center">Experience <em>world-class</em> care</h2>
+        <p class="section-desc reveal-up" style="text-align:center;margin-bottom:40px">Schedule a visit to see our facilities firsthand and meet our expert team.</p>
+        <div class="cta-actions reveal-up">
+          <a href="contact.html" class="btn-primary">Book a Visit <i data-lucide="arrow-right" style="width:16px;height:16px"></i></a>
+          <a href="doctors.html" class="btn-outline">Meet Our Team</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand"><a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Galaxy Hospital Bhopal" class="nav-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="nav-logo-icon" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg></div><div><div class="nav-logo-text">Galaxy Hospital</div><div class="nav-logo-sub">Bhopal</div></div></a><p>India's premier orthopedic hospital specializing in advanced knee, shoulder, and sports injury treatments.</p></div>
+        <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="doctors.html">Specialists</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div class="footer-col"><h5>Services</h5><ul><li><a href="services.html">Knee Surgery</a></li><li><a href="services.html">ACL Reconstruction</a></li><li><a href="services.html">Shoulder Surgery</a></li><li><a href="services.html">Arthroscopy</a></li><li><a href="services.html">Sports Medicine</a></li></ul></div>
+        <div class="footer-col"><h5>Contact</h5><ul><li style="color:var(--text-muted);font-size:13px">+91 755-400-0000</li><li style="color:var(--text-muted);font-size:13px">info@galaxyhospitalbpl.com</li><li style="color:var(--text-muted);font-size:13px">Near Habibganj Station, Bhopal</li></ul></div>
+      </div>
+      <div class="footer-bottom"><p>&copy; 2024 Galaxy Hospital Bhopal. All rights reserved.</p><div class="footer-bottom-links"><a href="#">Privacy Policy</a><a href="#">Terms</a></div></div>
+    </div>
+  </footer>
+  <button class="back-to-top" id="btt" aria-label="Back to top"><i data-lucide="arrow-up"></i></button>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
