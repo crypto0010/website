@@ -35,7 +35,7 @@ export function createStrandMaterial(color) {
         float fresnel = pow(1.0 - abs(dot(vNormal, vViewDir)), 3.0);
         vec3 emissive = uColor * uEmissiveIntensity;
         vec3 finalColor = mix(uColor * 0.3, emissive, fresnel);
-        float alpha = 0.85 + fresnel * 0.15;
+        float alpha = (0.85 + fresnel * 0.15) * 0.5;
         gl_FragColor = vec4(finalColor, alpha);
       }
     `,
@@ -55,6 +55,8 @@ export function createRungMaterial() {
     emissiveIntensity: 0.4,
     roughness: 0.3,
     metalness: 0.5,
+    transparent: true,
+    opacity: 0.5,
   });
 }
 
@@ -65,7 +67,7 @@ export function createRungMaterial() {
 export function createParticleMaterial() {
   return new THREE.ShaderMaterial({
     uniforms: {
-      uSizeScale: { value: 1.0 },
+      uSizeScale: { value: 0.5 },
       uOpacity: { value: 1.0 },
     },
     vertexShader: /* glsl */ `
