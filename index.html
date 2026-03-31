@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script type="importmap">
         {
@@ -23,15 +23,29 @@
             --neural-blue: #00d4ff;
             --quantum-purple: #a855f7;
             --cyber-green: #10b981;
-            --dark-base: #0a0e1a;
-            --dark-elevated: #131820;
+            --dark-base: #06080f;
+            --dark-elevated: #0d1117;
             --accent-glow: rgba(0, 212, 255, 0.15);
+            --glass-bg: rgba(13, 17, 23, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.06);
         }
-        
+
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Syne', sans-serif;
             background: var(--dark-base);
-            color: #e2e8f0;
+            color: #c9d1d9;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 256px 256px;
         }
         
         .mono {
@@ -39,21 +53,25 @@
         }
         
         .hero-gradient {
-            background: radial-gradient(ellipse at top, #1e1b4b 0%, var(--dark-base) 50%);
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at top center, #0f0a1f 0%, var(--dark-base) 60%);
             position: relative;
         }
         
         .glass-morphism {
-            background: rgba(19, 24, 32, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px) saturate(1.2);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.04);
         }
         
         .neural-grid {
-            background-image: 
-                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
+            background-image:
+                linear-gradient(rgba(0, 212, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
             background-position: -1px -1px;
         }
         
@@ -62,14 +80,33 @@
         }
         
         .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--glass-border);
+            position: relative;
         }
-        
+
+        .card-hover::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, transparent, var(--neural-blue), transparent, var(--quantum-purple), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
         .card-hover:hover {
-            transform: translateY(-4px);
-            border-color: var(--neural-blue);
-            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.1);
+            transform: translateY(-6px);
+            box-shadow: 0 24px 48px rgba(0, 212, 255, 0.08), 0 0 0 1px rgba(0, 212, 255, 0.15);
+        }
+
+        .card-hover:hover::after {
+            opacity: 1;
         }
         
         @keyframes pulse-glow {
@@ -116,9 +153,15 @@
         }
 
         .tech-badge {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(168, 85, 247, 0.1));
-            border: 1px solid rgba(0, 212, 255, 0.3);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.06), rgba(168, 85, 247, 0.06));
+            border: 1px solid rgba(0, 212, 255, 0.15);
             backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .tech-badge:hover {
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
         }
         
         .section-title::before {
@@ -149,8 +192,9 @@
             bottom: -4px;
             left: 0;
             width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--neural-blue), var(--quantum-purple));
+            height: 1px;
+            background: var(--neural-blue);
+            box-shadow: 0 0 8px var(--neural-blue);
             transition: width 0.3s;
         }
         
@@ -168,10 +212,10 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neural-blue), transparent);
-            animation: scan-line 8s linear infinite;
-            opacity: 0.3;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.4), rgba(168, 85, 247, 0.3), transparent);
+            animation: scan-line 10s linear infinite;
+            opacity: 0.15;
             pointer-events: none;
             z-index: 9999;
         }
@@ -207,10 +251,43 @@
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            width: 2px;
-            height: 50px;
-            background: linear-gradient(180deg, transparent, var(--neural-blue), transparent);
-            animation: pulse-glow 2s ease-in-out infinite;
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(180deg, transparent, var(--neural-blue), var(--quantum-purple), transparent);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neural-blue), var(--quantum-purple), transparent);
+            opacity: 0.2;
+            margin: 0 auto;
+            max-width: 60%;
+        }
+
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.05); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.12); }
+        }
+
+        .stagger-1 { animation: fade-up 0.8s ease both; animation-delay: 0.1s; }
+        .stagger-2 { animation: fade-up 0.8s ease both; animation-delay: 0.2s; }
+        .stagger-3 { animation: fade-up 0.8s ease both; animation-delay: 0.3s; }
+        .stagger-4 { animation: fade-up 0.8s ease both; animation-delay: 0.4s; }
+        .stagger-5 { animation: fade-up 0.8s ease both; animation-delay: 0.5s; }
+
+        .h-2 .bg-gradient-to-r {
+            box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--neural-blue) !important;
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1), 0 0 20px rgba(0, 212, 255, 0.05);
         }
     </style>
 </head>
@@ -265,30 +342,30 @@
         <div class="max-w-7xl mx-auto px-6 relative z-10 py-20">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div>
-                    <div class="inline-block mb-6 px-4 py-2 tech-badge rounded-full">
+                    <div class="stagger-1 inline-block mb-6 px-4 py-2 tech-badge rounded-full">
                         <span class="text-xs mono text-[var(--neural-blue)]">⚡ POST-QUANTUM CRYPTOGRAPHY SPECIALIST</span>
                     </div>
-                    
-                    <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
+
+                    <h1 class="stagger-2 text-5xl md:text-7xl font-black mb-6 leading-tight">
                         <span class="block text-white">Dr. Hemraj</span>
                         <span class="block text-white">Lamkuche</span>
                     </h1>
-                    
-                    <div class="mb-8 space-y-2">
+
+                    <div class="stagger-3 mb-8 space-y-2">
                         <p class="text-xl text-[var(--neural-blue)] mono">// Securing Intelligence</p>
                         <p class="text-lg text-slate-400 leading-relaxed max-w-xl">
                             Pioneering lightweight cryptographic systems and AI robustness frameworks at the intersection of quantum computing and machine learning security.
                         </p>
                     </div>
-                    
-                    <div class="flex flex-wrap gap-3 mb-10">
+
+                    <div class="stagger-4 flex flex-wrap gap-3 mb-10">
                         <span class="tech-badge px-4 py-2 rounded-lg text-sm mono">Quantum-Resistant</span>
                         <span class="tech-badge px-4 py-2 rounded-lg text-sm mono">IoT Security</span>
                         <span class="tech-badge px-4 py-2 rounded-lg text-sm mono">ML Adversarial</span>
                         <span class="tech-badge px-4 py-2 rounded-lg text-sm mono">FPGA/ASIC</span>
                     </div>
-                    
-                    <div class="flex flex-col sm:flex-row gap-4">
+
+                    <div class="stagger-5 flex flex-col sm:flex-row gap-4">
                         <a href="#research" class="group px-8 py-4 bg-gradient-to-r from-[var(--neural-blue)] to-[var(--quantum-purple)] rounded-lg font-bold text-white mono text-sm hover:shadow-lg hover:shadow-[var(--neural-blue)]/50 transition-all flex items-center justify-center gap-2">
                             EXPLORE RESEARCH
                             <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
@@ -337,6 +414,8 @@
         <div class="scroll-indicator"></div>
     </section>
     
+    <div class="section-divider"></div>
+
     <!-- Research Focus Section -->
     <section id="research" class="py-24 relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-6">
@@ -466,6 +545,8 @@
         </div>
     </section>
     
+    <div class="section-divider"></div>
+
     <!-- Expertise Timeline -->
     <section id="expertise" class="py-24 bg-[var(--dark-elevated)] relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-6">
@@ -632,6 +713,8 @@
         </div>
     </section>
     
+    <div class="section-divider"></div>
+
     <!-- Publications Section -->
     <section id="publications" class="py-24 relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-6">
@@ -776,6 +859,8 @@
         </div>
     </section>
     
+    <div class="section-divider"></div>
+
     <!-- Contact Section -->
     <section id="contact" class="py-24 bg-[var(--dark-elevated)] relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-6">
