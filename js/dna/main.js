@@ -78,7 +78,9 @@ const resizeObserver = new ResizeObserver(() => resizeToContainer());
 resizeObserver.observe(container);
 
 // --- GUI Controls ---
-const gui = new GUI({ title: 'DNA Controls', container: document.getElementById('dna-gui-container') });
+const gui = new GUI({ title: 'DNA Controls' });
+const guiContainer = document.getElementById('dna-gui-container');
+guiContainer.appendChild(gui.domElement);
 
 const bloomFolder = gui.addFolder('Bloom');
 bloomFolder.add(bloomPass, 'strength', 0, 3, 0.05).name('Strength');
