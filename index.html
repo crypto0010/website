@@ -10,6 +10,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/",
+                "lil-gui": "https://unpkg.com/lil-gui@0.19.2/dist/lil-gui.esm.js"
+            }
+        }
+    </script>
     <style>
         :root {
             --neural-blue: #00d4ff;
@@ -100,6 +109,31 @@
             mask-composite: exclude;
         }
         
+        #dna-canvas-container canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 1rem;
+        }
+
+        #dna-gui-container .lil-gui {
+            --background-color: rgba(19, 24, 32, 0.85);
+            --text-color: #e2e8f0;
+            --title-background-color: rgba(0, 212, 255, 0.15);
+            --title-text-color: #00d4ff;
+            --widget-color: rgba(0, 212, 255, 0.2);
+            --hover-color: rgba(0, 212, 255, 0.3);
+            --number-color: #00d4ff;
+            --string-color: #a855f7;
+            width: 100% !important;
+            max-width: 100% !important;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            backdrop-filter: blur(20px);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+        }
+
         .tech-badge {
             background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(168, 85, 247, 0.1));
             border: 1px solid rgba(0, 212, 255, 0.3);
@@ -287,35 +321,36 @@
                 
                 <div class="relative">
                     <div class="relative aspect-square max-w-md mx-auto">
-                        <!-- AI-Generated Profile Frame -->
-                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-[var(--neural-blue)] to-[var(--quantum-purple)] opacity-20 blur-3xl"></div>
-                        <div class="relative gradient-border rounded-2xl overflow-hidden">
-                            <img src="https://picsum.photos/seed/hemraj-ai/800/800" alt="Dr. Hemraj Lamkuche" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
-                            <div class="absolute inset-0 bg-gradient-to-t from-[var(--dark-base)] via-transparent to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 right-0 p-6 glass-morphism m-4 rounded-lg">
-                                <div class="flex items-center justify-between mb-2">
-                                    <span class="text-xs mono text-[var(--neural-blue)]">PROFILE.STATUS</span>
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-2 h-2 rounded-full bg-[var(--cyber-green)] pulse-glow"></div>
-                                        <span class="text-xs mono">ACTIVE</span>
-                                    </div>
+                        <!-- 3D DNA Helix -->
+                        <div id="dna-canvas-container" class="absolute inset-0 rounded-2xl overflow-hidden" style="z-index: 1;"></div>
+
+                        <!-- Profile info overlay at bottom -->
+                        <div class="absolute bottom-0 left-0 right-0 p-6 glass-morphism m-4 rounded-lg" style="z-index: 2;">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs mono text-[var(--neural-blue)]">PROFILE.STATUS</span>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-2 h-2 rounded-full bg-[var(--cyber-green)] pulse-glow"></div>
+                                    <span class="text-xs mono">ACTIVE</span>
                                 </div>
-                                <div class="text-2xl font-bold mono">SENIOR_PROFESSOR</div>
-                                <div class="text-sm text-slate-400">VIT Bhopal University</div>
                             </div>
+                            <div class="text-2xl font-bold mono">SENIOR_PROFESSOR</div>
+                            <div class="text-sm text-slate-400">VIT Bhopal University</div>
                         </div>
-                        
+
                         <!-- Floating Metrics -->
-                        <div class="absolute -top-4 -right-4 glass-morphism px-6 py-4 rounded-xl float-animation">
+                        <div class="absolute -top-4 -right-4 glass-morphism px-6 py-4 rounded-xl float-animation" style="z-index: 2;">
                             <div class="text-3xl font-bold text-[var(--neural-blue)] metric-display">12+</div>
                             <div class="text-xs mono text-slate-400">YEARS EXP</div>
                         </div>
-                        
-                        <div class="absolute -bottom-4 -left-4 glass-morphism px-6 py-4 rounded-xl float-animation" style="animation-delay: -3s;">
+
+                        <div class="absolute -bottom-4 -left-4 glass-morphism px-6 py-4 rounded-xl float-animation" style="z-index: 2; animation-delay: -3s;">
                             <div class="text-3xl font-bold text-[var(--quantum-purple)] metric-display">450+</div>
                             <div class="text-xs mono text-slate-400">CITATIONS</div>
                         </div>
                     </div>
+
+                    <!-- DNA GUI Controls -->
+                    <div id="dna-gui-container" class="mt-6"></div>
                 </div>
             </div>
         </div>
@@ -1047,6 +1082,7 @@
             observer.observe(card);
         });
     </script>
+    <script type="module" src="js/dna/main.js"></script>
 </body>
 
 </html>
