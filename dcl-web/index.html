@@ -2096,12 +2096,17 @@ function initApp() {
 document.addEventListener('DOMContentLoaded', initApp);
 
 // ---- Theme Toggle ----
+// Note: toggleTheme and scanGpu are both invoked from inline onclick= handlers
+// in the markup. Because this entire script lives inside an IIFE, function
+// declarations are not on `window` and inline handlers can't see them. The
+// `window.x = x` lines below expose only what the HTML needs, keeping the
+// closure isolation otherwise intact.
 function toggleTheme() {
     var html = document.documentElement;
     var current = html.getAttribute('data-theme') || 'dark';
     var next = current === 'dark' ? 'light' : 'dark';
     html.setAttribute('data-theme', next);
-    localStorage.setItem('dcl-theme', next);
+    try { localStorage.setItem('dcl-theme', next); } catch (e) { /* private mode */ }
     var btn = document.getElementById('themeToggle');
     btn.textContent = next === 'dark' ? '\uD83C\uDF19' : '\u2600\uFE0F';
     // Restart particle colors
@@ -2113,14 +2118,20 @@ function toggleTheme() {
     }
 }
 
+// Expose the two functions called from inline onclick= attributes in the HTML.
+window.toggleTheme = toggleTheme;
+window.scanGpu = scanGpu;
+
 // Restore saved theme
 (function() {
-    var saved = localStorage.getItem('dcl-theme');
-    if (saved) {
-        document.documentElement.setAttribute('data-theme', saved);
-        var btn = document.getElementById('themeToggle');
-        if (btn) btn.textContent = saved === 'dark' ? '\uD83C\uDF19' : '\u2600\uFE0F';
-    }
+    try {
+        var saved = localStorage.getItem('dcl-theme');
+        if (saved === 'light' || saved === 'dark') {
+            document.documentElement.setAttribute('data-theme', saved);
+            var btn = document.getElementById('themeToggle');
+            if (btn) btn.textContent = saved === 'dark' ? '\uD83C\uDF19' : '\u2600\uFE0F';
+        }
+    } catch (e) { /* localStorage may be blocked (private mode, etc.) \u2014 fall back to default theme */ }
 })();
 
 // ---- 3D Particle Network Background ----
