@@ -1,0 +1,92 @@
+name: Auto-restore home page after dcl-web demo
+
+# Purpose: temporarily replace /index.html with the dcl-web demo from
+# 2026-05-11 to 2026-05-18. On 2026-05-18 (UTC) this workflow restores the
+# original home page from tag `backup-home-2026-05-11` and stops acting.
+#
+# Mechanism: daily cron + date gate. Daily cadence is more reliable than a
+# once-a-year specific-date cron (GitHub Actions can delay schedules under
+# load). After a successful restore a marker file `.home-restored-2026-05-18`
+# is committed; subsequent runs detect it and no-op.
+#
+# Injection-safety note: this workflow takes NO untrusted input.  All branches
+# operate on string literals (tag name, target date) and outputs derived from
+# `date -u` (system time, not user-controlled).  No `github.event.*` fields
+# are interpolated into `run:` blocks.
+
+on:
+  schedule:
+    - cron: '0 2 * * *'   # every day at 02:00 UTC
+  workflow_dispatch: {}   # manual trigger fallback
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rollback-home
+  cancel-in-progress: false
+
+jobs:
+  maybe-restore:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check trigger date
+        id: gate
+        run: |
+          today_utc=$(date -u +%F)
+          target='2026-05-18'
+          echo "today=$today_utc" >> "$GITHUB_OUTPUT"
+          if [[ "$today_utc" < "$target" ]]; then
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "Today is $today_utc (target $target). Skipping."
+          else
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "Today is $today_utc (>= $target). Will attempt restore."
+          fi
+
+      - name: Checkout main
+        if: steps.gate.outputs.should_run == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Skip if already restored
+        if: steps.gate.outputs.should_run == 'true'
+        id: marker
+        run: |
+          if [[ -f .home-restored-2026-05-18 ]]; then
+            echo "already=true" >> "$GITHUB_OUTPUT"
+            echo "Marker file present; nothing to do."
+          else
+            echo "already=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Restore home page from backup tag
+        if: steps.gate.outputs.should_run == 'true' && steps.marker.outputs.already == 'false'
+        run: |
+          set -euo pipefail
+          TAG=backup-home-2026-05-11
+          git fetch origin --tags --quiet
+
+          # Restore the public-facing home page assets only.
+          # We do NOT touch /dcl-web/* — those updates persist past the demo.
+          for f in index.html script.js styles.css; do
+            if git cat-file -e "$TAG:$f" 2>/dev/null; then
+              git checkout "$TAG" -- "$f"
+              echo "restored $f"
+            else
+              echo "skip: $f not present at $TAG"
+            fi
+          done
+
+          # Marker so future runs no-op.
+          printf 'Home page restored from %s on %s UTC by rollback-home.yml\n' \
+            "$TAG" "$(date -u +%FT%TZ)" > .home-restored-2026-05-18
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html script.js styles.css .home-restored-2026-05-18 2>/dev/null || true
+          git diff --staged --quiet && { echo 'nothing changed'; exit 0; }
+          git commit -m "chore: auto-restore home page from $TAG (dcl-web demo ended)"
+          git push origin main
