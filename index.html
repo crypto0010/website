@@ -1,2290 +1,1279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DCL CUDA Explorer — Dr. Hemraj Lamkuche</title>
-<meta name="description" content="Interactive GPU-accelerated exploration of Dynamic Coprime Labeling (DCL) by Dr. Hemraj Lamkuche. Browser demo of cryptographic research.">
-<link rel="canonical" href="https://drhemraj.in/">
-<!-- Temporary home page: dcl-web demo running 2026-05-11 → 2026-05-18. Auto-rollback by .github/workflows/rollback-home.yml. Original portfolio backed up at tag backup-home-2026-05-11. -->
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Hemraj Lamkuche | Cryptography in the Age of AI</title>
+    <meta name="description" content="Dr. Hemraj Lamkuche - Pioneering Post-Quantum Cryptography and AI Security Research">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@800;900&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --neural-blue: #00d4ff;
+            --quantum-purple: #a855f7;
+            --cyber-green: #10b981;
+            --dark-base: #06080f;
+            --dark-elevated: #0d1117;
+            --accent-glow: rgba(0, 212, 255, 0.15);
+            --glass-bg: rgba(13, 17, 23, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.06);
+        }
 
-:root, [data-theme="dark"] {
-    --bg: #0f172a;
-    --bg-rgb: 15,23,42;
-    --card-bg: #1e293b;
-    --card-border: #334155;
-    --text: #e2e8f0;
-    --text-muted: #94a3b8;
-    --accent: #3b82f6;
-    --accent-hover: #2563eb;
-    --green: #22c55e;
-    --red: #ef4444;
-    --yellow: #f59e0b;
-    --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
-    --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    --max-w: 1200px;
-    --radius: 8px;
-    --particle-color: 59,130,246;
-    --nav-bg: rgba(15,23,42,0.85);
-    --code-bg: rgba(59,130,246,0.15);
-    --svg-bg: #0c1322;
-}
+        body {
+            font-family: 'Syne', sans-serif;
+            background: var(--dark-base);
+            color: #c9d1d9;
+        }
 
-[data-theme="light"] {
-    --bg: #f1f5f9;
-    --bg-rgb: 241,245,249;
-    --card-bg: #ffffff;
-    --card-border: #cbd5e1;
-    --text: #1e293b;
-    --text-muted: #475569;
-    --accent: #2563eb;
-    --accent-hover: #1d4ed8;
-    --green: #16a34a;
-    --red: #dc2626;
-    --yellow: #d97706;
-    --particle-color: 37,99,235;
-    --nav-bg: rgba(241,245,249,0.85);
-    --code-bg: rgba(37,99,235,0.1);
-    --svg-bg: #e2e8f0;
-}
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 256px 256px;
+        }
+        
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .hero-gradient {
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at top center, #0f0a1f 0%, var(--dark-base) 60%);
+            position: relative;
+        }
+        
+        .glass-morphism {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px) saturate(1.2);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+        
+        .neural-grid {
+            background-image:
+                linear-gradient(rgba(0, 212, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            background-position: -1px -1px;
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 20px var(--neural-blue), 0 0 40px var(--neural-blue);
+        }
+        
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--glass-border);
+            position: relative;
+        }
 
-html { scroll-behavior: smooth; }
+        .card-hover::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, transparent, var(--neural-blue), transparent, var(--quantum-purple), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
 
-body {
-    font-family: var(--sans);
-    background: var(--bg);
-    color: var(--text);
-    font-size: 0.95rem;
-    line-height: 1.6;
-    min-height: 100vh;
-    transition: background 0.3s, color 0.3s;
-}
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 48px rgba(0, 212, 255, 0.08), 0 0 0 1px rgba(0, 212, 255, 0.15);
+        }
 
-/* 3D Background Canvas */
-#bgCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    pointer-events: none;
-}
+        .card-hover:hover::after {
+            opacity: 1;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .gradient-border {
+            position: relative;
+            background: var(--dark-elevated);
+        }
+        
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--neural-blue), var(--quantum-purple), var(--cyber-green));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+        
+        #dna-canvas-container canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 1rem;
+        }
 
-/* Theme Toggle */
-.theme-toggle {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    color: var(--text);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    transition: background 0.2s, border-color 0.2s, transform 0.2s;
-    padding: 0;
-    line-height: 1;
-}
-.theme-toggle:hover { border-color: var(--accent); transform: scale(1.1); }
+        .tech-badge {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.06), rgba(168, 85, 247, 0.06));
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
 
-/* Sticky Nav */
-nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: var(--nav-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--card-border);
-    padding: 0.6rem 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-nav .nav-brand { font-weight: 700; font-size: 1.1rem; color: var(--accent); }
-nav .nav-links { display: flex; gap: 1.2rem; }
-nav .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
-nav .nav-links a:hover { color: var(--text); }
+        .tech-badge:hover {
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+        
+        .section-title::before {
+            content: '>';
+            color: var(--neural-blue);
+            margin-right: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .quantum-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neural-blue);
+            border-radius: 50%;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--neural-blue);
+            box-shadow: 0 0 8px var(--neural-blue);
+            transition: width 0.3s;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        @keyframes scan-line {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+        
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.4), rgba(168, 85, 247, 0.3), transparent);
+            animation: scan-line 10s linear infinite;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        
+        .metric-display {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .research-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--neural-blue), var(--quantum-purple));
+        }
+        
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 3px solid var(--neural-blue);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+        }
+        
+        @keyframes matrix-rain {
+            0% { transform: translateY(-100%); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(180deg, transparent, var(--neural-blue), var(--quantum-purple), transparent);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
 
-/* Container */
-.container { max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem; }
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neural-blue), var(--quantum-purple), transparent);
+            opacity: 0.2;
+            margin: 0 auto;
+            max-width: 60%;
+        }
 
-/* Hero */
-.hero {
-    text-align: center;
-    padding: 4rem 1rem 3rem;
-}
-.hero h1 {
-    font-size: 2.5rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, var(--accent), #a78bfa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 0.5rem;
-}
-.hero .subtitle {
-    font-size: 1.15rem;
-    color: var(--text-muted);
-    margin-bottom: 1.5rem;
-}
-.status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 999px;
-    padding: 0.35rem 1rem;
-    font-size: 0.8rem;
-    font-family: var(--mono);
-}
-.status-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--yellow);
-}
-.status-dot.active { background: var(--green); animation: pulse-dot 2s infinite; }
-@keyframes pulse-dot {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
-    50% { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
-}
-/* GPU Scan Panel */
-.gpu-scan-panel {
-    display: inline-block;
-    margin: 1.5rem auto 0;
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-    padding: 1.2rem 2rem;
-    max-width: 600px;
-    width: 100%;
-    text-align: center;
-}
-.gpu-scan-panel.scanning { border-color: var(--accent); }
-.gpu-scan-panel.gpu-found { border-color: var(--green); }
-.gpu-scan-panel.cpu-mode { border-color: var(--yellow); }
-.gpu-scan-panel.offline { border-color: var(--red); }
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.scan-btn {
-    background: var(--accent);
-    color: white;
-    border: none;
-    padding: 0.6rem 1.8rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 0.95rem;
-    font-family: var(--sans);
-    transition: opacity 0.2s, transform 0.1s;
-}
-.scan-btn:hover { opacity: 0.85; }
-.scan-btn:active { transform: scale(0.97); }
-.scan-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.scan-btn .spinner {
-    display: inline-block;
-    width: 14px; height: 14px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-    vertical-align: middle;
-    margin-right: 6px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.05); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.12); }
+        }
 
-.scan-result {
-    margin-top: 1rem;
-    font-family: var(--mono);
-    font-size: 0.85rem;
-    line-height: 1.8;
-    display: none;
-}
-.scan-result.show { display: block; }
-.scan-result .label { color: var(--text-muted); }
-.scan-result .value { color: var(--text); font-weight: 600; }
-.scan-result .value.gpu { color: var(--green); }
-.scan-result .value.cpu { color: var(--yellow); }
-.scan-result .value.err { color: var(--red); }
-.scan-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .stagger-1 { animation: fade-up 0.8s ease both; animation-delay: 0.1s; }
+        .stagger-2 { animation: fade-up 0.8s ease both; animation-delay: 0.2s; }
+        .stagger-3 { animation: fade-up 0.8s ease both; animation-delay: 0.3s; }
+        .stagger-4 { animation: fade-up 0.8s ease both; animation-delay: 0.4s; }
+        .stagger-5 { animation: fade-up 0.8s ease both; animation-delay: 0.5s; }
 
-/* Offline banner */
-.offline-banner {
-    display: none;
-    background: rgba(245,158,11,0.15);
-    border: 1px solid var(--yellow);
-    color: var(--yellow);
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius);
-    margin-bottom: 2rem;
-    text-align: center;
-    font-size: 0.85rem;
-    font-family: var(--mono);
-}
-.offline-banner.show { display: block; }
+        .h-2 .bg-gradient-to-r {
+            box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+        }
 
-/* Section titles */
-.section-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 3rem 0 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--card-border);
-}
-
-/* Cards */
-.card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-    margin-bottom: 1rem;
-    overflow: hidden;
-}
-
-/* Learn cards */
-.learn-grid { display: grid; gap: 1rem; }
-details.learn-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-    overflow: hidden;
-}
-details.learn-card summary {
-    padding: 1rem 1.25rem;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 1.05rem;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    user-select: none;
-    transition: background 0.2s;
-}
-details.learn-card summary:hover { background: rgba(59,130,246,0.08); }
-details.learn-card summary::before { content: '\25B6'; font-size: 0.7rem; color: var(--accent); transition: transform 0.2s; }
-details.learn-card[open] summary::before { transform: rotate(90deg); }
-details.learn-card .learn-body {
-    padding: 0 1.25rem 1.25rem;
-    color: var(--text-muted);
-    line-height: 1.7;
-}
-details.learn-card .learn-body ul { padding-left: 1.2rem; margin: 0.5rem 0; }
-details.learn-card .learn-body li { margin-bottom: 0.3rem; }
-details.learn-card .learn-body code {
-    background: var(--code-bg);
-    padding: 0.15rem 0.4rem;
-    border-radius: 4px;
-    font-family: var(--mono);
-    font-size: 0.85rem;
-    color: var(--accent);
-}
-.try-link { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.9rem; display: inline-block; margin-top: 0.5rem; }
-.try-link:hover { text-decoration: underline; }
-
-/* Graph Workspace */
-.graph-controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-.graph-controls label { font-size: 0.85rem; color: var(--text-muted); }
-.graph-controls input[type="range"] { width: 100px; accent-color: var(--accent); }
-
-.svg-container {
-    background: var(--svg-bg);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    position: relative;
-}
-.svg-container svg { display: block; width: 100%; height: auto; }
-.graph-instructions {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-top: 0.5rem;
-    text-align: center;
-}
-
-/* Buttons */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
-    font-family: var(--sans);
-}
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover { background: var(--accent-hover); }
-.btn-primary:disabled { background: #475569; cursor: not-allowed; opacity: 0.6; }
-.btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
-.btn-outline {
-    background: transparent;
-    border: 1px solid var(--card-border);
-    color: var(--text-muted);
-}
-.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-.btn-outline.active { border-color: var(--accent); color: var(--accent); background: rgba(59,130,246,0.1); }
-.btn-danger { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
-.btn-danger:hover { background: rgba(239,68,68,0.25); }
-
-/* Playground grid */
-.playground-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-}
-.playground-grid .panel-full { grid-column: 1 / -1; }
-
-/* Panels */
-.panel {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-.panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.8rem 1rem;
-    border-bottom: 1px solid var(--card-border);
-}
-.panel-header .panel-title {
-    font-weight: 700;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-.panel-header .panel-title .panel-icon {
-    width: 10px; height: 10px;
-    background: var(--accent);
-    border-radius: 2px;
-}
-.panel-desc {
-    padding: 0.5rem 1rem 0;
-    font-size: 0.82rem;
-    color: var(--text-muted);
-}
-.panel-body { padding: 1rem; flex: 1; }
-.panel-footer {
-    padding: 0.6rem 1rem;
-    border-top: 1px solid var(--card-border);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.75rem;
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    font-family: var(--mono);
-}
-.panel-footer .timing { display: flex; align-items: center; gap: 0.3rem; }
-
-/* Inputs */
-textarea, input[type="text"], input[type="number"], select {
-    background: #0f172a;
-    border: 1px solid var(--card-border);
-    color: var(--text);
-    border-radius: 6px;
-    padding: 0.5rem 0.7rem;
-    font-size: 0.85rem;
-    font-family: var(--mono);
-    width: 100%;
-    resize: vertical;
-    outline: none;
-    transition: border-color 0.2s;
-}
-textarea:focus, input:focus, select:focus { border-color: var(--accent); }
-textarea { min-height: 70px; }
-.input-row {
-    display: flex;
-    gap: 0.5rem;
-    align-items: flex-end;
-    margin-bottom: 0.75rem;
-    flex-wrap: wrap;
-}
-.input-group { flex: 1; min-width: 100px; }
-.input-group label {
-    display: block;
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    margin-bottom: 0.25rem;
-}
-.full-width { width: 100%; }
-
-/* Results */
-.results { display: none; margin-top: 0.75rem; }
-.results.show { display: block; }
-
-/* Tables */
-.result-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--mono);
-    font-size: 0.82rem;
-}
-.result-table th {
-    text-align: left;
-    padding: 0.4rem 0.6rem;
-    border-bottom: 2px solid var(--card-border);
-    color: var(--text-muted);
-    font-weight: 600;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-.result-table td {
-    padding: 0.4rem 0.6rem;
-    border-bottom: 1px solid rgba(51,65,85,0.5);
-}
-.result-table tr:hover { background: rgba(59,130,246,0.05); }
-.result-table .highlight-row { background: rgba(59,130,246,0.12); }
-.result-table .overflow-cell { color: var(--yellow); font-weight: 600; }
-
-/* Badges */
-.badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.15rem 0.5rem;
-    border-radius: 999px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    font-family: var(--mono);
-}
-.badge-pass { background: rgba(34,197,94,0.15); color: var(--green); }
-.badge-fail { background: rgba(239,68,68,0.15); color: var(--red); }
-.badge-warn { background: rgba(245,158,11,0.15); color: var(--yellow); }
-.badge-info { background: rgba(59,130,246,0.15); color: var(--accent); }
-
-/* Summary badges */
-.summary-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.4rem 0.8rem;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-top: 0.5rem;
-}
-
-/* Warning box */
-.warning-box {
-    background: rgba(245,158,11,0.1);
-    border: 1px solid rgba(245,158,11,0.3);
-    border-radius: 6px;
-    padding: 0.6rem 0.8rem;
-    margin-top: 0.5rem;
-    font-size: 0.82rem;
-    color: var(--yellow);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-/* Educational message */
-.edu-msg {
-    background: rgba(59,130,246,0.08);
-    border-left: 3px solid var(--accent);
-    padding: 0.6rem 0.8rem;
-    margin-top: 0.5rem;
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    border-radius: 0 6px 6px 0;
-}
-
-/* Evolve timeline */
-.evolve-controls {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 0.75rem;
-    flex-wrap: wrap;
-}
-.evolve-controls input[type="range"] {
-    flex: 1;
-    min-width: 120px;
-    accent-color: var(--accent);
-}
-
-/* Prime grid */
-.prime-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-}
-.prime-badge {
-    background: rgba(59,130,246,0.12);
-    border: 1px solid rgba(59,130,246,0.25);
-    border-radius: 6px;
-    padding: 0.3rem 0.6rem;
-    font-family: var(--mono);
-    font-size: 0.82rem;
-    text-align: center;
-    line-height: 1.3;
-}
-.prime-badge small { display: block; font-size: 0.68rem; color: var(--text-muted); }
-
-/* Benchmark section */
-.bench-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-.bench-charts canvas {
-    width: 100%;
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-}
-.bench-table-wrap { margin-bottom: 1.5rem; }
-.bench-table-wrap h3 {
-    font-size: 1rem;
-    margin-bottom: 0.75rem;
-    color: var(--text-muted);
-}
-
-/* Diff highlight */
-.diff-changed { background: rgba(34,197,94,0.15); }
-.diff-old { text-decoration: line-through; color: var(--red); opacity: 0.6; }
-
-/* Repair comparison */
-.repair-compare {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-}
-.repair-compare .repair-col h4 {
-    font-size: 0.85rem;
-    margin-bottom: 0.5rem;
-    color: var(--text-muted);
-}
-
-/* Footer */
-footer {
-    border-top: 1px solid var(--card-border);
-    padding: 2rem 1.5rem;
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    margin-top: 4rem;
-}
-footer p { margin-bottom: 0.3rem; }
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 3px; }
-
-/* Table scroll */
-.table-scroll { overflow-x: auto; }
-
-/* Responsive */
-@media (max-width: 768px) {
-    .hero h1 { font-size: 1.8rem; }
-    .playground-grid { grid-template-columns: 1fr; }
-    .bench-charts { grid-template-columns: 1fr; }
-    .repair-compare { grid-template-columns: 1fr; }
-    nav .nav-links { gap: 0.6rem; }
-    nav .nav-links a { font-size: 0.75rem; }
-}
-
-/* Help tooltip */
-.help-btn {
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    border: 1px solid var(--card-border);
-    background: transparent;
-    color: var(--text-muted);
-    font-size: 0.72rem;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-}
-.help-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-/* Evolve panel prominent style */
-.panel-evolve { border-color: var(--accent); box-shadow: 0 0 20px rgba(59,130,246,0.08); }
-.panel-evolve .panel-header { background: rgba(59,130,246,0.06); }
-
-/* Demo-mode banner (temporary home page 2026-05-11 → 2026-05-18) */
-.demo-banner {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 200;
-    background: linear-gradient(90deg, #f59e0b, #d97706);
-    color: #1a1306;
-    font-family: var(--sans);
-    font-size: 0.82rem;
-    line-height: 1.45;
-    padding: 0.5rem 1rem;
-    text-align: center;
-    border-bottom: 1px solid rgba(0,0,0,0.15);
-    box-shadow: 0 1px 8px rgba(0,0,0,0.25);
-}
-.demo-banner strong { font-weight: 700; }
-.demo-banner a {
-    color: #1a1306;
-    font-weight: 600;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-}
-.demo-banner a:hover { text-decoration: none; }
-.demo-banner .sep { opacity: 0.5; margin: 0 0.5rem; }
-body.has-demo-banner { padding-top: 36px; }
-body.has-demo-banner nav { top: 36px; }
-@media (max-width: 600px) {
-    .demo-banner { font-size: 0.72rem; padding: 0.4rem 0.6rem; }
-    body.has-demo-banner { padding-top: 48px; }
-    body.has-demo-banner nav { top: 48px; }
-    .demo-banner .sep { display: none; }
-    .demo-banner .mobile-break { display: block; }
-}
-.demo-banner .mobile-break { display: none; }
-</style>
+        input:focus, textarea:focus {
+            border-color: var(--neural-blue) !important;
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1), 0 0 20px rgba(0, 212, 255, 0.05);
+        }
+    </style>
 </head>
-<body class="has-demo-banner">
-
-<!-- Demo-mode banner: this is a temporary home-page demo (2026-05-11 → 2026-05-18). -->
-<div class="demo-banner" role="status" aria-live="polite">
-    <strong>Demo Mode</strong> — running entirely in your browser (no GPU backend).<span class="sep">|</span><span class="mobile-break"></span>
-    Computations use client-side JS fallbacks.<span class="sep">|</span><span class="mobile-break"></span>
-    <a href="/indexdummy.html">Back to Dr. Hemraj's portfolio →</a>
-</div>
-
-<canvas id="bgCanvas"></canvas>
-
-<!-- Nav -->
-<nav>
-    <span class="nav-brand">DCL CUDA Explorer</span>
-    <div class="nav-links">
-        <a href="#learn">Learn</a>
-        <a href="#workspace">Graph</a>
-        <a href="#playground">Playground</a>
-        <a href="#benchmarks">Benchmarks</a>
-        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark/light mode">&#127769;</button>
-    </div>
-</nav>
-
-<!-- Hero -->
-<header class="hero">
-    <h1>DCL CUDA Explorer</h1>
-    <p class="subtitle">Interactive Dynamic Coprime Labeling with GPU Acceleration</p>
-
-    <div class="gpu-scan-panel" id="gpuScanPanel">
-        <div class="scan-icon" id="scanIcon">&#128270;</div>
-        <button class="scan-btn" id="scanBtn" onclick="scanGpu()">Scan for GPU</button>
-        <div class="scan-result" id="scanResult">
-            <div><span class="label">Backend: </span><span class="value" id="scanBackend">--</span></div>
-            <div><span class="label">Device: </span><span class="value" id="scanDevice">--</span></div>
-            <div><span class="label">Status: </span><span class="value" id="scanStatus">--</span></div>
-        </div>
-    </div>
-
-    <div style="margin-top:1rem">
-        <div class="status-badge" id="statusBadge">
-            <span class="status-dot" id="statusDot"></span>
-            <span id="statusText">Not scanned</span>
-        </div>
-    </div>
-
-</header>
-
-<div class="container">
-
-<!-- Offline Banner -->
-<div class="offline-banner" id="offlineBanner">
-    Running in client mode &mdash; for GPU acceleration, run locally: <code>cargo run -p dcl-web</code>
-</div>
-
-<!-- Learn Section -->
-<section id="learn">
-    <h2 class="section-title">Learn</h2>
-    <div class="learn-grid">
-
-        <details class="learn-card" open>
-            <summary>What is Coprime Labeling?</summary>
-            <div class="learn-body">
-                <ul>
-                    <li>Two integers are <strong>coprime</strong> if <code>gcd(a, b) = 1</code>, meaning they share no common factor other than 1.</li>
-                    <li>A <strong>coprime labeling</strong> assigns positive integers to graph vertices such that adjacent vertices always have coprime labels.</li>
-                    <li>Example: Path graph P&#x2085; with labels <code>[2, 3, 5, 7, 11]</code> &mdash; every adjacent pair is coprime since they are all distinct primes.</li>
-                </ul>
-                <a class="try-link" href="#coprime-check">Try it &rarr;</a>
-            </div>
-        </details>
-
-        <details class="learn-card">
-            <summary>The Power Map g(x) = x&#x1D50;</summary>
-            <div class="learn-body">
-                <ul>
-                    <li>Labels evolve over time: <code>f&#x209C;&#x208A;&#x2081;(v) = f&#x209C;(v)&#x1D50;</code>.</li>
-                    <li>Key theorem: if <code>gcd(a, b) = 1</code> then <code>gcd(a&#x1D50;, b&#x1D50;) = 1</code> &mdash; coprimality is preserved!</li>
-                    <li>This means we can evolve labels indefinitely and the graph structure is maintained.</li>
-                </ul>
-                <a class="try-link" href="#evolve">Try it &rarr;</a>
-            </div>
-        </details>
-
-        <details class="learn-card">
-            <summary>GPU Acceleration</summary>
-            <div class="learn-body">
-                <ul>
-                    <li>DCL operations are <strong>embarrassingly parallel</strong> &mdash; each vertex/edge can be processed independently.</li>
-                    <li>8 CUDA kernels achieving up to <strong>263M ops/s</strong> on commodity hardware (RTX 3050).</li>
-                    <li>Up to <strong>7.9x speedup</strong> over CPU for batch operations at 1M elements.</li>
-                </ul>
-                <a class="try-link" href="#benchmarks">See benchmarks &rarr;</a>
-            </div>
-        </details>
-
-    </div>
-</section>
-
-<!-- Graph Workspace -->
-<section id="workspace">
-    <h2 class="section-title">Graph Workspace</h2>
-    <div class="graph-controls">
-        <button class="btn btn-outline btn-sm preset-btn" data-family="path" data-n="5">P&#x2085;</button>
-        <button class="btn btn-outline btn-sm preset-btn" data-family="cycle" data-n="6">C&#x2086;</button>
-        <button class="btn btn-outline btn-sm preset-btn" data-family="wheel" data-n="5">W&#x2085;</button>
-        <button class="btn btn-outline btn-sm preset-btn" data-family="complete" data-n="4">K&#x2084;</button>
-        <button class="btn btn-outline btn-sm preset-btn" data-family="hypercube" data-n="3">Q&#x2083;</button>
-        <span style="margin-left: 0.5rem;"></span>
-        <label>n: <span id="nVal">5</span></label>
-        <input type="range" min="3" max="20" value="5" id="nSlider">
-        <span style="flex:1"></span>
-        <button class="btn btn-danger btn-sm" id="clearBtn">Clear Graph</button>
-    </div>
-    <div class="svg-container" id="svgContainer">
-        <svg id="graphSvg" viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
-        </svg>
-    </div>
-    <p class="graph-instructions">Click canvas to add vertex &bull; Click two vertices to connect &bull; Double-click to edit label &bull; Right-click to delete</p>
-</section>
-
-<!-- Playground -->
-<section id="playground">
-    <h2 class="section-title">Interactive Playground</h2>
-    <div class="playground-grid">
-
-        <!-- Panel 1: Batch GCD -->
-        <div class="panel" id="gcd-panel">
-            <div class="panel-header">
-                <span class="panel-title"><span class="panel-icon"></span> Batch GCD</span>
-                <button class="help-btn" title="Compute GCD for multiple pairs in parallel on the GPU">?</button>
-            </div>
-            <p class="panel-desc">Compute GCD for multiple integer pairs simultaneously.</p>
-            <div class="panel-body">
-                <textarea id="gcdInput" placeholder="12,8&#10;35,49&#10;97,13">12,8
-35,49
-97,13</textarea>
-                <div style="margin-top:0.5rem;text-align:right;">
-                    <button class="btn btn-primary btn-sm run-btn" id="gcdRunBtn">Run &#x25B6;</button>
+<body class="bg-[var(--dark-base)] text-slate-200 neural-grid">
+    <!-- Scan Line Effect -->
+    <div class="scan-line"></div>
+    
+    <!-- Navigation -->
+    <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--neural-blue)] to-[var(--quantum-purple)] flex items-center justify-center">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-white mono text-sm">DR.HEMRAJ.LAMKUCHE</div>
+                        <div class="text-[10px] text-[var(--neural-blue)] mono">CRYPTOGRAPHER.AI</div>
+                    </div>
                 </div>
-                <div class="results" id="gcdResults"></div>
-            </div>
-            <div class="panel-footer">
-                <span class="timing" id="gcdTiming"></span>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-sm mono text-slate-300 hover:text-white">HOME</a>
+                    <a href="#research" class="nav-link text-sm mono text-slate-300 hover:text-white">RESEARCH</a>
+                    <a href="#expertise" class="nav-link text-sm mono text-slate-300 hover:text-white">EXPERTISE</a>
+                    <a href="#publications" class="nav-link text-sm mono text-slate-300 hover:text-white">PUBLICATIONS</a>
+                    <a href="#contact" class="nav-link text-sm mono text-slate-300 hover:text-white">CONTACT</a>
+                </div>
+                
+                <button id="mobile-menu-btn" class="md:hidden text-white">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
             </div>
         </div>
-
-        <!-- Panel 2: Power Map -->
-        <div class="panel" id="power-panel">
-            <div class="panel-header">
-                <span class="panel-title"><span class="panel-icon"></span> Power Map</span>
-                <button class="help-btn" title="Apply g(x) = x^m (mod N) to a set of labels">?</button>
-            </div>
-            <p class="panel-desc">Apply the power map to evolve labels by one step.</p>
-            <div class="panel-body">
-                <div class="input-row">
-                    <div class="input-group" style="flex:2">
-                        <label>Labels (comma-sep)</label>
-                        <input type="text" id="pmLabels" value="2,3,5,7,11">
-                    </div>
-                    <div class="input-group">
-                        <label>Exponent m</label>
-                        <input type="number" id="pmExp" value="2" min="1">
-                    </div>
-                    <div class="input-group">
-                        <label>Modulus N (optional)</label>
-                        <input type="number" id="pmMod" placeholder="e.g. 65537">
-                    </div>
-                </div>
-                <div style="text-align:right;">
-                    <button class="btn btn-primary btn-sm run-btn" id="pmRunBtn">Run &#x25B6;</button>
-                </div>
-                <div class="results" id="pmResults"></div>
-            </div>
-            <div class="panel-footer">
-                <span class="timing" id="pmTiming"></span>
-            </div>
-        </div>
-
-        <!-- Panel 3: Coprime Check -->
-        <div class="panel" id="coprime-check">
-            <div class="panel-header">
-                <span class="panel-title"><span class="panel-icon"></span> Coprime Check</span>
-                <button class="help-btn" title="Verify that all adjacent vertices have coprime labels">?</button>
-            </div>
-            <p class="panel-desc">Check if a graph labeling satisfies the coprime property.</p>
-            <div class="panel-body">
-                <button class="btn btn-outline btn-sm" id="ccLoadBtn" style="margin-bottom:0.5rem;">Use Current Graph</button>
-                <div class="input-row">
-                    <div class="input-group">
-                        <label>Labels (comma-sep)</label>
-                        <input type="text" id="ccLabels" placeholder="2,3,4,6">
-                    </div>
-                </div>
-                <div class="input-row">
-                    <div class="input-group">
-                        <label>Edges (e.g. 0-1,1-2,2-3)</label>
-                        <input type="text" id="ccEdges" placeholder="0-1,1-2,2-3">
-                    </div>
-                </div>
-                <div style="text-align:right;">
-                    <button class="btn btn-primary btn-sm run-btn" id="ccRunBtn">Run &#x25B6;</button>
-                </div>
-                <div class="results" id="ccResults"></div>
-            </div>
-            <div class="panel-footer">
-                <span class="timing" id="ccTiming"></span>
-            </div>
-        </div>
-
-        <!-- Panel 5: Coprime Repair -->
-        <div class="panel" id="repair-panel">
-            <div class="panel-header">
-                <span class="panel-title"><span class="panel-icon"></span> Coprime Repair</span>
-                <button class="help-btn" title="Automatically fix a broken labeling to make it coprime">?</button>
-            </div>
-            <p class="panel-desc">Fix a non-coprime labeling by finding minimal corrections.</p>
-            <div class="panel-body">
-                <button class="btn btn-outline btn-sm" id="repairLoadBtn" style="margin-bottom:0.5rem;">Load Broken Example</button>
-                <div class="input-row">
-                    <div class="input-group">
-                        <label>Labels (comma-sep)</label>
-                        <input type="text" id="repairLabels" placeholder="4,6,9,10">
-                    </div>
-                </div>
-                <div class="input-row">
-                    <div class="input-group">
-                        <label>Edges (e.g. 0-1,1-2,2-3)</label>
-                        <input type="text" id="repairEdges" placeholder="0-1,1-2,2-3">
-                    </div>
-                </div>
-                <div style="text-align:right;">
-                    <button class="btn btn-primary btn-sm run-btn" id="repairRunBtn">Run &#x25B6;</button>
-                </div>
-                <div class="results" id="repairResults"></div>
-            </div>
-            <div class="panel-footer">
-                <span class="timing" id="repairTiming"></span>
-            </div>
-        </div>
-
-        <!-- Panel 4: Evolve (full width, prominent) -->
-        <div class="panel panel-evolve panel-full" id="evolve">
-            <div class="panel-header">
-                <span class="panel-title"><span class="panel-icon"></span> Evolve</span>
-                <button class="help-btn" title="Watch labels evolve over multiple power-map steps, preserving coprimality">?</button>
-            </div>
-            <p class="panel-desc">Evolve a coprime labeling through multiple power-map iterations. Watch coprimality persist at every step.</p>
-            <div class="panel-body">
-                <div class="input-row">
-                    <div class="input-group">
-                        <label>Graph Preset</label>
-                        <select id="evolvePreset">
-                            <option value="path">Path (P&#x2099;)</option>
-                            <option value="cycle">Cycle (C&#x2099;)</option>
-                            <option value="complete">Complete (K&#x2099;)</option>
-                            <option value="wheel">Wheel (W&#x2099;)</option>
-                        </select>
-                    </div>
-                    <div class="input-group" style="flex:2">
-                        <label>Initial Labels (comma-sep)</label>
-                        <input type="text" id="evolveLabels" value="2,3,5,7,11">
-                    </div>
-                    <div class="input-group">
-                        <label>Exponent m</label>
-                        <input type="number" id="evolveExp" value="2" min="1">
-                    </div>
-                    <div class="input-group">
-                        <label>Modulus (suggest 65537)</label>
-                        <input type="number" id="evolveMod" placeholder="65537">
-                    </div>
-                    <div class="input-group">
-                        <label>Steps: <span id="evolveStepVal">5</span></label>
-                        <input type="range" id="evolveSteps" min="1" max="50" value="5">
-                    </div>
-                </div>
-                <div style="text-align:right;">
-                    <button class="btn btn-primary run-btn" id="evolveRunBtn">Evolve &#x25B6;</button>
-                </div>
-                <div class="results" id="evolveResults"></div>
-            </div>
-            <div class="panel-footer">
-                <span class="timing" id="evolveTiming"></span>
-            </div>
-        </div>
-
-        <!-- Panel 6: Prime Sieve -->
-        <div class="panel" id="sieve-panel">
-            <div class="panel-header">
-                <span class="panel-title"><span class="panel-icon"></span> Prime Sieve</span>
-                <button class="help-btn" title="Generate safe primes for use as coprime labels">?</button>
-            </div>
-            <p class="panel-desc">Generate primes suitable for coprime labels.</p>
-            <div class="panel-body">
-                <div class="input-row">
-                    <div class="input-group">
-                        <label>Count</label>
-                        <input type="number" id="sieveCount" value="20" min="1" max="1000">
-                    </div>
-                    <div class="input-group">
-                        <label>Start Value</label>
-                        <input type="number" id="sieveStart" value="2" min="2">
-                    </div>
-                </div>
-                <div style="text-align:right;">
-                    <button class="btn btn-primary btn-sm run-btn" id="sieveRunBtn">Run &#x25B6;</button>
-                </div>
-                <div class="results" id="sieveResults"></div>
-            </div>
-            <div class="panel-footer">
-                <span class="timing" id="sieveTiming"></span>
-            </div>
-        </div>
-
-        <div></div>
-
-    </div>
-</section>
-
-<!-- Benchmarks -->
-<section id="benchmarks">
-    <h2 class="section-title">Published Results &mdash; GPU Research Paper</h2>
-
-    <div class="bench-charts">
-        <canvas id="chartScaling" width="560" height="340"></canvas>
-        <canvas id="chartThroughput" width="560" height="340"></canvas>
-    </div>
-
-    <div class="bench-table-wrap">
-        <h3>NIST SP 800-22 Randomness Results</h3>
-        <div class="table-scroll">
-            <table class="result-table" id="nistTable">
-                <thead><tr><th>Test</th><th>Result</th></tr></thead>
-                <tbody id="nistBody"></tbody>
-            </table>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-[var(--dark-base)] transform translate-x-full transition-transform duration-300 md:hidden">
+        <div class="flex flex-col items-center justify-center h-full space-y-8">
+            <a href="#home" class="mobile-nav-link text-2xl mono text-slate-300 hover:text-[var(--neural-blue)]">HOME</a>
+            <a href="#research" class="mobile-nav-link text-2xl mono text-slate-300 hover:text-[var(--neural-blue)]">RESEARCH</a>
+            <a href="#expertise" class="mobile-nav-link text-2xl mono text-slate-300 hover:text-[var(--neural-blue)]">EXPERTISE</a>
+            <a href="#publications" class="mobile-nav-link text-2xl mono text-slate-300 hover:text-[var(--neural-blue)]">PUBLICATIONS</a>
+            <a href="#contact" class="mobile-nav-link text-2xl mono text-slate-300 hover:text-[var(--neural-blue)]">CONTACT</a>
         </div>
     </div>
+    
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen hero-gradient relative overflow-hidden flex items-center pt-20">
+        <canvas id="neural-canvas" class="absolute inset-0 z-0"></canvas>
+        
+        <div class="max-w-7xl mx-auto px-6 relative z-10 py-20">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <div class="stagger-1 inline-block mb-6 px-4 py-2 tech-badge rounded-full">
+                        <span class="text-xs mono text-[var(--neural-blue)]">⚡ POST-QUANTUM CRYPTOGRAPHY SPECIALIST</span>
+                    </div>
 
-    <div class="bench-table-wrap">
-        <h3>Brute-Force Search Performance</h3>
-        <div class="table-scroll">
-            <table class="result-table" id="bruteTable">
-                <thead><tr><th>Graph</th><th>n</th><th>Threads</th><th>Time (ms)</th><th>M cand/s</th><th>Found</th></tr></thead>
-                <tbody id="bruteBody"></tbody>
-            </table>
+                    <h1 class="stagger-2 text-5xl md:text-7xl font-black mb-6 leading-tight" style="font-family: 'Inter', sans-serif;">
+                        <span class="block text-white">Dr. Hemraj</span>
+                        <span class="block text-white">Lamkuche</span>
+                    </h1>
+
+                    <div class="stagger-3 mb-8 space-y-2">
+                        <p class="text-xl text-[var(--neural-blue)] mono">// Securing Intelligence</p>
+                        <p class="text-lg text-slate-400 leading-relaxed max-w-xl">
+                            Pioneering lightweight cryptographic systems and AI robustness frameworks at the intersection of quantum computing and machine learning security.
+                        </p>
+                    </div>
+
+                    <div class="stagger-4 flex flex-wrap gap-3 mb-10">
+                        <span class="tech-badge px-4 py-2 rounded-lg text-sm mono">Quantum-Resistant</span>
+                        <span class="tech-badge px-4 py-2 rounded-lg text-sm mono">IoT Security</span>
+                        <span class="tech-badge px-4 py-2 rounded-lg text-sm mono">ML Adversarial</span>
+                        <span class="tech-badge px-4 py-2 rounded-lg text-sm mono">FPGA/ASIC</span>
+                    </div>
+
+                    <div class="stagger-5 flex flex-col sm:flex-row gap-4">
+                        <a href="#research" class="group px-8 py-4 bg-gradient-to-r from-[var(--neural-blue)] to-[var(--quantum-purple)] rounded-lg font-bold text-white mono text-sm hover:shadow-lg hover:shadow-[var(--neural-blue)]/50 transition-all flex items-center justify-center gap-2">
+                            EXPLORE RESEARCH
+                            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="#publications" class="px-8 py-4 glass-morphism rounded-lg font-bold text-white mono text-sm hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+                            VIEW PUBLICATIONS
+                            <i data-lucide="file-text" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="relative aspect-square max-w-md mx-auto">
+                        <!-- 3D DNA Helix -->
+                        <div id="dna-canvas-container" class="absolute inset-0 rounded-2xl overflow-hidden" style="z-index: 1;"></div>
+
+                        <!-- Profile info overlay at bottom -->
+                        <div class="absolute bottom-0 left-0 right-0 p-6 glass-morphism m-4 rounded-lg" style="z-index: 2;">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs mono text-[var(--neural-blue)]">PROFILE.STATUS</span>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-2 h-2 rounded-full bg-[var(--cyber-green)] pulse-glow"></div>
+                                    <span class="text-xs mono">ACTIVE</span>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-bold mono">SENIOR_PROFESSOR</div>
+                            <div class="text-sm text-slate-400">VIT Bhopal University</div>
+                        </div>
+
+                        <!-- Floating Metrics -->
+                        <div class="absolute -top-4 -right-4 glass-morphism px-6 py-4 rounded-xl float-animation" style="z-index: 2;">
+                            <div class="text-3xl font-bold text-[var(--neural-blue)] metric-display">12+</div>
+                            <div class="text-xs mono text-slate-400">YEARS EXP</div>
+                        </div>
+
+                        <div class="absolute -bottom-4 -left-4 glass-morphism px-6 py-4 rounded-xl float-animation" style="z-index: 2; animation-delay: -3s;">
+                            <div class="text-3xl font-bold text-[var(--quantum-purple)] metric-display">450+</div>
+                            <div class="text-xs mono text-slate-400">CITATIONS</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+        
+        <div class="scroll-indicator"></div>
+    </section>
+    
+    <div class="section-divider"></div>
 
-</div>
+    <!-- Featured LinkedIn Posts -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16">
+                <h2 class="section-title text-sm mono text-[var(--neural-blue)] uppercase tracking-widest mb-4">FEATURED_INSIGHTS</h2>
+                <h3 class="text-4xl md:text-5xl font-bold text-white mb-6">Top LinkedIn Posts</h3>
+                <p class="text-lg text-slate-400">Trending insights from my professional network</p>
+            </div>
 
-<!-- Footer -->
-<footer>
-    <p><strong>DCL CUDA Explorer</strong> &mdash; Built with Rust + CUDA + Axum</p>
-    <p>Based on: <em>GPU-Accelerated Dynamic Coprime Labeling</em> (IEEE Trans. Computers, 2026)</p>
-</footer>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Post 1: CVE-2024-6387 -->
+                <a href="https://www.linkedin.com/posts/dr-hemraj-lamkuche-4b760040_csf2-cve-vulnerability-activity-7214294343455547392-nwby" target="_blank" class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 flex flex-col group">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--neural-blue)]/20 to-[var(--quantum-purple)]/20 flex items-center justify-center">
+                            <i data-lucide="linkedin" class="w-5 h-5 text-[var(--neural-blue)]"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs mono text-slate-500">JULY 3, 2024</div>
+                            <div class="text-xs mono text-[var(--neural-blue)]">MOST ENGAGED</div>
+                        </div>
+                    </div>
+                    <h4 class="text-lg font-bold text-white mb-3 leading-snug group-hover:text-[var(--neural-blue)] transition-colors">
+                        CVE-2024-6387: RegreSSHion — Critical OpenSSH Vulnerability
+                    </h4>
+                    <p class="text-sm text-slate-400 mb-6 flex-grow leading-relaxed">
+                        Detailed breakdown of the critical OpenSSH vulnerability affecting glibc-based Linux systems — unauthenticated remote code execution with root privileges.
+                    </p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-1.5">
+                                <i data-lucide="heart" class="w-4 h-4 text-[var(--neural-blue)]"></i>
+                                <span class="text-sm mono text-slate-400">92</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <i data-lucide="message-circle" class="w-4 h-4 text-[var(--quantum-purple)]"></i>
+                                <span class="text-sm mono text-slate-400">7</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-[10px] mono text-[var(--neural-blue)]">#CVE</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-[10px] mono text-[var(--neural-blue)]">#vulnerability</span>
+                        </div>
+                    </div>
+                </a>
 
-<script>
-(function() {
-"use strict";
+                <!-- Post 2: INFLYNX Startup -->
+                <a href="https://www.linkedin.com/posts/dr-hemraj-lamkuche-4b760040_inflynx-activity-7310913696208187392-V1-r" target="_blank" class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 flex flex-col group">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--quantum-purple)]/20 to-[var(--cyber-green)]/20 flex items-center justify-center">
+                            <i data-lucide="linkedin" class="w-5 h-5 text-[var(--quantum-purple)]"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs mono text-slate-500">MAR 27, 2025</div>
+                            <div class="text-xs mono text-[var(--quantum-purple)]">TRENDING</div>
+                        </div>
+                    </div>
+                    <h4 class="text-lg font-bold text-white mb-3 leading-snug group-hover:text-[var(--quantum-purple)] transition-colors">
+                        INFLYNX Recognized Under Startup Odisha Initiative
+                    </h4>
+                    <p class="text-sm text-slate-400 mb-6 flex-grow leading-relaxed">
+                        Celebrated startup recognition under Startup Odisha — one more feather for the team. Building at the intersection of innovation and impact.
+                    </p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-1.5">
+                                <i data-lucide="heart" class="w-4 h-4 text-[var(--quantum-purple)]"></i>
+                                <span class="text-sm mono text-slate-400">66</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <i data-lucide="message-circle" class="w-4 h-4 text-[var(--quantum-purple)]"></i>
+                                <span class="text-sm mono text-slate-400">5</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-[10px] mono text-[var(--quantum-purple)]">#INFLYNX</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-[10px] mono text-[var(--quantum-purple)]">#startup</span>
+                        </div>
+                    </div>
+                </a>
 
-/* =============================================================
-   DCL CUDA Explorer - Client JavaScript
-   ============================================================= */
+                <!-- Post 3: GPT & Bard -->
+                <a href="https://www.linkedin.com/posts/dr-hemraj-lamkuche-4b760040_cybersecurity-hacking-ai-activity-7045113813611724800-WZQ2" target="_blank" class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 flex flex-col group">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--cyber-green)]/20 to-[var(--neural-blue)]/20 flex items-center justify-center">
+                            <i data-lucide="linkedin" class="w-5 h-5 text-[var(--cyber-green)]"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs mono text-slate-500">MAR 24, 2023</div>
+                            <div class="text-xs mono text-[var(--cyber-green)]">POPULAR</div>
+                        </div>
+                    </div>
+                    <h4 class="text-lg font-bold text-white mb-3 leading-snug group-hover:text-[var(--cyber-green)] transition-colors">
+                        GPT & Bard: AI-Powered Cybersecurity Defense
+                    </h4>
+                    <p class="text-sm text-slate-400 mb-6 flex-grow leading-relaxed">
+                        How OpenAI's GPT and Google's Bard can identify and mitigate cyber threats — detecting phishing patterns, analyzing malware code, and developing secure policies.
+                    </p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-1.5">
+                                <i data-lucide="heart" class="w-4 h-4 text-[var(--cyber-green)]"></i>
+                                <span class="text-sm mono text-slate-400">46</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <i data-lucide="message-circle" class="w-4 h-4 text-[var(--cyber-green)]"></i>
+                                <span class="text-sm mono text-slate-400">4</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-[10px] mono text-[var(--cyber-green)]">#AI</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-[10px] mono text-[var(--cyber-green)]">#cybersecurity</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
 
-// ---- Global State ----
-window.currentGraph = { vertices: [], edges: [] };
-var gpuStatus = { available: false, backend: 'cpu' };
-var serverOnline = false;
-var selectedVertex = null;
-var dragVertex = null;
-var dragOffsetX = 0, dragOffsetY = 0;
-var nextId = 0;
-var PRIMES = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97];
+            <div class="mt-10 text-center">
+                <a href="https://www.linkedin.com/in/dr-hemraj-lamkuche-4b760040/recent-activity/all/" target="_blank" class="inline-flex items-center gap-2 px-8 py-4 glass-morphism rounded-lg mono text-sm text-white hover:bg-white/10 transition-all group">
+                    VIEW ALL POSTS ON LINKEDIN
+                    <i data-lucide="external-link" class="w-4 h-4 text-slate-400 group-hover:text-[var(--neural-blue)] transition-colors"></i>
+                </a>
+            </div>
+        </div>
+    </section>
 
-// ---- Utility: safe DOM builders ----
-function el(tag, attrs, children) {
-    var e = document.createElement(tag);
-    if (attrs) Object.keys(attrs).forEach(function(k) {
-        if (k === 'className') e.className = attrs[k];
-        else if (k === 'textContent') e.textContent = attrs[k];
-        else if (k === 'style' && typeof attrs[k] === 'object') Object.assign(e.style, attrs[k]);
-        else e.setAttribute(k, attrs[k]);
-    });
-    if (children) {
-        if (!Array.isArray(children)) children = [children];
-        children.forEach(function(c) {
-            if (typeof c === 'string') e.appendChild(document.createTextNode(c));
-            else if (c) e.appendChild(c);
+    <div class="section-divider"></div>
+
+    <!-- Research Focus Section -->
+    <section id="research" class="py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16">
+                <h2 class="section-title text-sm mono text-[var(--neural-blue)] uppercase tracking-widest mb-4">RESEARCH_DOMAINS</h2>
+                <h3 class="text-4xl md:text-5xl font-bold text-white mb-6">AI-Era Cryptography</h3>
+                <p class="text-lg text-slate-400 max-w-3xl">
+                    Developing next-generation cryptographic primitives that withstand both quantum computing threats and AI-powered adversarial attacks.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Research Card 1 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[var(--neural-blue)] to-transparent opacity-10 rounded-bl-full"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--neural-blue)]/20 to-[var(--quantum-purple)]/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="cpu" class="w-7 h-7 text-[var(--neural-blue)]"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3 mono">Post-Quantum Algorithms</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Designing and implementing NIST-compliant lattice-based and code-based cryptosystems optimized for resource-constrained environments.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--neural-blue)]">CRYSTALS-Kyber</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--neural-blue)]">ML-KEM</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--neural-blue)]">HQC</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Research Card 2 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[var(--quantum-purple)] to-transparent opacity-10 rounded-bl-full"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--quantum-purple)]/20 to-[var(--cyber-green)]/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="brain" class="w-7 h-7 text-[var(--quantum-purple)]"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3 mono">AI Security & Robustness</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Adversarial ML defense mechanisms, prompt injection mitigation, and cryptographic authentication for large language models.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--quantum-purple)]">LLM Security</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--quantum-purple)]">Adversarial ML</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--quantum-purple)]">Model Watermarking</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Research Card 3 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[var(--cyber-green)] to-transparent opacity-10 rounded-bl-full"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--cyber-green)]/20 to-[var(--neural-blue)]/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="radio" class="w-7 h-7 text-[var(--cyber-green)]"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3 mono">Lightweight IoT Crypto</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Hardware-optimized ciphers (SAL, SHC, CSL) with FPGA/ASIC implementations for medical IoT and edge computing devices.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--cyber-green)]">FPGA</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--cyber-green)]">Medical IoT</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--cyber-green)]">Edge Security</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Research Card 4 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[var(--neural-blue)] to-transparent opacity-10 rounded-bl-full"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--neural-blue)]/20 to-[var(--quantum-purple)]/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="microscope" class="w-7 h-7 text-[var(--neural-blue)]"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3 mono">Medical Imaging Security</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Hybrid deep learning architectures for CBCT analysis with HIPAA-compliant encryption and DNA-based long-term storage solutions.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--neural-blue)]">CBCT</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--neural-blue)]">DNA Storage</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--neural-blue)]">HIPAA</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Research Card 5 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[var(--quantum-purple)] to-transparent opacity-10 rounded-bl-full"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--quantum-purple)]/20 to-[var(--cyber-green)]/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="git-branch" class="w-7 h-7 text-[var(--quantum-purple)]"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3 mono">Blockchain & DLT</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Quantum-resistant consensus mechanisms and smart contract security auditing for next-generation distributed systems.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--quantum-purple)]">Consensus</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--quantum-purple)]">Smart Contracts</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--quantum-purple)]">ZKP</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Research Card 6 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[var(--cyber-green)] to-transparent opacity-10 rounded-bl-full"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--cyber-green)]/20 to-[var(--neural-blue)]/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="shield-alert" class="w-7 h-7 text-[var(--cyber-green)]"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3 mono">Indigenous Knowledge Systems</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Exploring cryptographic principles in ancient texts and integrating traditional knowledge with modern post-quantum research.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--cyber-green)]">IKS Research</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--cyber-green)]">Cultural Heritage</span>
+                            <span class="px-2 py-1 bg-white/5 rounded text-xs mono text-[var(--cyber-green)]">Interdisciplinary</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="section-divider"></div>
+
+    <!-- Expertise Timeline -->
+    <section id="expertise" class="py-24 bg-[var(--dark-elevated)] relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16">
+                <h2 class="section-title text-sm mono text-[var(--neural-blue)] uppercase tracking-widest mb-4">TECHNICAL_STACK</h2>
+                <h3 class="text-4xl md:text-5xl font-bold text-white mb-6">Core Competencies</h3>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- Left Column: Technical Skills -->
+                <div class="space-y-8">
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <h4 class="text-xl font-bold text-white mb-6 mono flex items-center gap-3">
+                            <i data-lucide="code-2" class="w-5 h-5 text-[var(--neural-blue)]"></i>
+                            Cryptographic Design
+                        </h4>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm mono text-slate-400">Symmetric Ciphers (Feistel, SPN)</span>
+                                    <span class="text-sm mono text-[var(--neural-blue)]">Expert</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-[var(--neural-blue)] to-[var(--quantum-purple)] rounded-full" style="width: 95%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm mono text-slate-400">Post-Quantum (Lattice, Code-based)</span>
+                                    <span class="text-sm mono text-[var(--neural-blue)]">Advanced</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-[var(--neural-blue)] to-[var(--quantum-purple)] rounded-full" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm mono text-slate-400">Cryptanalysis (Differential, Linear)</span>
+                                    <span class="text-sm mono text-[var(--neural-blue)]">Expert</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-[var(--neural-blue)] to-[var(--quantum-purple)] rounded-full" style="width: 88%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm mono text-slate-400">Hardware Security (FPGA/ASIC)</span>
+                                    <span class="text-sm mono text-[var(--neural-blue)]">Advanced</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-[var(--neural-blue)] to-[var(--quantum-purple)] rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <h4 class="text-xl font-bold text-white mb-6 mono flex items-center gap-3">
+                            <i data-lucide="zap" class="w-5 h-5 text-[var(--quantum-purple)]"></i>
+                            AI & Machine Learning
+                        </h4>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm mono text-slate-400">Deep Learning (PyTorch, TensorFlow)</span>
+                                    <span class="text-sm mono text-[var(--quantum-purple)]">Advanced</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-[var(--quantum-purple)] to-[var(--cyber-green)] rounded-full" style="width: 82%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm mono text-slate-400">Adversarial ML & Robustness</span>
+                                    <span class="text-sm mono text-[var(--quantum-purple)]">Expert</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-[var(--quantum-purple)] to-[var(--cyber-green)] rounded-full" style="width: 87%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm mono text-slate-400">Computer Vision (Medical Imaging)</span>
+                                    <span class="text-sm mono text-[var(--quantum-purple)]">Advanced</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-[var(--quantum-purple)] to-[var(--cyber-green)] rounded-full" style="width: 80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column: Career Timeline -->
+                <div class="space-y-8">
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <h4 class="text-xl font-bold text-white mb-8 mono flex items-center gap-3">
+                            <i data-lucide="briefcase" class="w-5 h-5 text-[var(--cyber-green)]"></i>
+                            Career Trajectory
+                        </h4>
+                        <div class="space-y-8 research-timeline pl-6 relative">
+                            <div class="relative">
+                                <div class="absolute -left-[25px] top-2 w-4 h-4 rounded-full bg-[var(--neural-blue)] border-4 border-[var(--dark-elevated)]"></div>
+                                <div class="mb-2">
+                                    <span class="text-xs mono text-[var(--neural-blue)]">2023 - PRESENT</span>
+                                </div>
+                                <h5 class="text-lg font-bold text-white mb-2">Senior Assistant Professor</h5>
+                                <p class="text-sm text-slate-400 mb-2">VIT Bhopal University</p>
+                                <p class="text-xs text-slate-500">Leading PQC research, PI for SPEAR Grant on LLM security</p>
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="absolute -left-[25px] top-2 w-4 h-4 rounded-full bg-[var(--quantum-purple)] border-4 border-[var(--dark-elevated)]"></div>
+                                <div class="mb-2">
+                                    <span class="text-xs mono text-[var(--quantum-purple)]">2015 - 2019</span>
+                                </div>
+                                <h5 class="text-lg font-bold text-white mb-2">Ph.D. Computer Science</h5>
+                                <p class="text-sm text-slate-400 mb-2">Symbiosis International University</p>
+                                <p class="text-xs text-slate-500">Thesis: Lightweight Block Cipher with Pipelined Feistel Structure</p>
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="absolute -left-[25px] top-2 w-4 h-4 rounded-full bg-[var(--cyber-green)] border-4 border-[var(--dark-elevated)]"></div>
+                                <div class="mb-2">
+                                    <span class="text-xs mono text-[var(--cyber-green)]">2013 - 2015</span>
+                                </div>
+                                <h5 class="text-lg font-bold text-white mb-2">M.Tech Computer Science</h5>
+                                <p class="text-sm text-slate-400 mb-2">SRTMU Nanded</p>
+                                <p class="text-xs text-slate-500">Specialized in Information Security & Cryptography</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <h4 class="text-xl font-bold text-white mb-6 mono flex items-center gap-3">
+                            <i data-lucide="award" class="w-5 h-5 text-[var(--neural-blue)]"></i>
+                            Key Achievements
+                        </h4>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-[var(--cyber-green)] mt-1 flex-shrink-0"></i>
+                                <p class="text-sm text-slate-300">45+ peer-reviewed publications in top-tier journals</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-[var(--cyber-green)] mt-1 flex-shrink-0"></i>
+                                <p class="text-sm text-slate-300">3 patented lightweight cipher designs (SAL, SHC, CSL)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-[var(--cyber-green)] mt-1 flex-shrink-0"></i>
+                                <p class="text-sm text-slate-300">SPEAR Grant PI for LLM security research (₹5L+)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-[var(--cyber-green)] mt-1 flex-shrink-0"></i>
+                                <p class="text-sm text-slate-300">Trained IAS/IPS officers in cybersecurity via YASHADA</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-[var(--cyber-green)] mt-1 flex-shrink-0"></i>
+                                <p class="text-sm text-slate-300">Incubated 3 tech startups in blockchain & IoT security</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="section-divider"></div>
+
+    <!-- Publications Section -->
+    <section id="publications" class="py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16">
+                <h2 class="section-title text-sm mono text-[var(--neural-blue)] uppercase tracking-widest mb-4">RESEARCH_OUTPUT</h2>
+                <h3 class="text-4xl md:text-5xl font-bold text-white mb-6">Featured Publications</h3>
+                <p class="text-lg text-slate-400">Recent contributions to cryptography and AI security</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-8 mb-12">
+                <!-- Publication 1 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="px-3 py-1 bg-[var(--neural-blue)]/20 text-[var(--neural-blue)] text-xs font-bold mono rounded-full">IEEE ACCESS 2024</span>
+                        <i data-lucide="external-link" class="w-5 h-5 text-slate-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3 leading-tight">
+                        SHC: 8-bit Compact and Efficient S-Box Structure for Lightweight Cryptography
+                    </h4>
+                    <p class="text-sm text-slate-400 mb-4 flex-grow">
+                        Novel S-box design achieving optimal nonlinearity with minimal hardware footprint for IoT devices. Published in IEEE Access with significant industry impact.
+                    </p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="quote" class="w-4 h-4 text-[var(--neural-blue)]"></i>
+                            <span class="text-xs mono text-slate-500">CITATIONS: 23</span>
+                        </div>
+                        <a href="https://ieeexplore.ieee.org/document/10410243" target="_blank" class="text-sm mono text-[var(--neural-blue)] hover:text-white transition-colors flex items-center gap-2">
+                            READ PAPER <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Publication 2 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="px-3 py-1 bg-[var(--quantum-purple)]/20 text-[var(--quantum-purple)] text-xs font-bold mono rounded-full">IACR ePRINT 2024</span>
+                        <i data-lucide="external-link" class="w-5 h-5 text-slate-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3 leading-tight">
+                        Deep Learning Based Analysis of Key Scheduling Algorithm of Advanced Ciphers
+                    </h4>
+                    <p class="text-sm text-slate-400 mb-4 flex-grow">
+                        Pioneering work using neural networks to analyze cryptographic key schedules, revealing patterns invisible to traditional cryptanalysis methods.
+                    </p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="quote" class="w-4 h-4 text-[var(--quantum-purple)]"></i>
+                            <span class="text-xs mono text-slate-500">CITATIONS: 18</span>
+                        </div>
+                        <a href="https://eprint.iacr.org/2024/272" target="_blank" class="text-sm mono text-[var(--quantum-purple)] hover:text-white transition-colors flex items-center gap-2">
+                            READ PAPER <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Publication 3 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="px-3 py-1 bg-[var(--cyber-green)]/20 text-[var(--cyber-green)] text-xs font-bold mono rounded-full">CONFERENCE 2024</span>
+                        <i data-lucide="external-link" class="w-5 h-5 text-slate-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3 leading-tight">
+                        Lightweight Cipher SAL: Design, Analysis, and FPGA Implementation
+                    </h4>
+                    <p class="text-sm text-slate-400 mb-4 flex-grow">
+                        A novel 64-bit block cipher with 128-bit key optimized for resource-constrained devices, demonstrating superior performance on Xilinx FPGAs.
+                    </p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="quote" class="w-4 h-4 text-[var(--cyber-green)]"></i>
+                            <span class="text-xs mono text-slate-500">CITATIONS: 31</span>
+                        </div>
+                        <a href="#" class="text-sm mono text-[var(--cyber-green)] hover:text-white transition-colors flex items-center gap-2">
+                            READ PAPER <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Publication 4 -->
+                <div class="card-hover bg-[var(--dark-elevated)] rounded-2xl p-8 flex flex-col">
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="px-3 py-1 bg-[var(--neural-blue)]/20 text-[var(--neural-blue)] text-xs font-bold mono rounded-full">SPRINGER 2023</span>
+                        <i data-lucide="external-link" class="w-5 h-5 text-slate-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3 leading-tight">
+                        Post-Quantum Cryptography for IoT: Challenges and Implementation Strategies
+                    </h4>
+                    <p class="text-sm text-slate-400 mb-4 flex-grow">
+                        Comprehensive analysis of implementing NIST PQC candidates on resource-constrained IoT platforms with practical benchmarks and optimization techniques.
+                    </p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="quote" class="w-4 h-4 text-[var(--neural-blue)]"></i>
+                            <span class="text-xs mono text-slate-500">CITATIONS: 42</span>
+                        </div>
+                        <a href="#" class="text-sm mono text-[var(--neural-blue)] hover:text-white transition-colors flex items-center gap-2">
+                            READ PAPER <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Research Metrics -->
+            <div class="grid md:grid-cols-4 gap-6 mb-12">
+                <div class="glass-morphism rounded-xl p-6 text-center">
+                    <div class="text-4xl font-bold text-[var(--neural-blue)] mb-2 metric-display">45+</div>
+                    <div class="text-sm mono text-slate-400">PUBLICATIONS</div>
+                </div>
+                <div class="glass-morphism rounded-xl p-6 text-center">
+                    <div class="text-4xl font-bold text-[var(--quantum-purple)] mb-2 metric-display">450+</div>
+                    <div class="text-sm mono text-slate-400">CITATIONS</div>
+                </div>
+                <div class="glass-morphism rounded-xl p-6 text-center">
+                    <div class="text-4xl font-bold text-[var(--cyber-green)] mb-2 metric-display">18</div>
+                    <div class="text-sm mono text-slate-400">H-INDEX</div>
+                </div>
+                <div class="glass-morphism rounded-xl p-6 text-center">
+                    <div class="text-4xl font-bold text-[var(--neural-blue)] mb-2 metric-display">3</div>
+                    <div class="text-sm mono text-slate-400">PATENTS</div>
+                </div>
+            </div>
+            
+            <!-- Academic Profiles -->
+            <div class="flex flex-wrap items-center justify-center gap-6">
+                <a href="https://scholar.google.com/citations?user=sqNVq48AAAAJ" target="_blank" class="glass-morphism px-8 py-4 rounded-xl hover:bg-white/5 transition-all flex items-center gap-3 group">
+                    <i data-lucide="graduation-cap" class="w-5 h-5 text-[var(--neural-blue)]"></i>
+                    <span class="mono text-sm text-white group-hover:text-[var(--neural-blue)] transition-colors">GOOGLE SCHOLAR</span>
+                    <i data-lucide="external-link" class="w-4 h-4 text-slate-400"></i>
+                </a>
+                <a href="https://www.researchgate.net/profile/Hemraj-Lamkuche" target="_blank" class="glass-morphism px-8 py-4 rounded-xl hover:bg-white/5 transition-all flex items-center gap-3 group">
+                    <i data-lucide="flask" class="w-5 h-5 text-[var(--quantum-purple)]"></i>
+                    <span class="mono text-sm text-white group-hover:text-[var(--quantum-purple)] transition-colors">RESEARCHGATE</span>
+                    <i data-lucide="external-link" class="w-4 h-4 text-slate-400"></i>
+                </a>
+                <a href="https://orcid.org" target="_blank" class="glass-morphism px-8 py-4 rounded-xl hover:bg-white/5 transition-all flex items-center gap-3 group">
+                    <i data-lucide="fingerprint" class="w-5 h-5 text-[var(--cyber-green)]"></i>
+                    <span class="mono text-sm text-white group-hover:text-[var(--cyber-green)] transition-colors">ORCID</span>
+                    <i data-lucide="external-link" class="w-4 h-4 text-slate-400"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <div class="section-divider"></div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-[var(--dark-elevated)] relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="section-title text-sm mono text-[var(--neural-blue)] uppercase tracking-widest mb-4">CONNECT</h2>
+                    <h3 class="text-4xl md:text-5xl font-bold text-white mb-6">Let's Collaborate</h3>
+                    <p class="text-lg text-slate-400 mb-8">
+                        Open to research collaborations, PhD supervision, industry consultations, and speaking engagements on cryptography and AI security.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="glass-morphism rounded-xl p-6 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-lg bg-[var(--neural-blue)]/20 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="mail" class="w-6 h-6 text-[var(--neural-blue)]"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs mono text-slate-400 mb-1">EMAIL</div>
+                                <a href="mailto:hemrajshobharamlamkuche@vitbhopal.ac.in" class="text-white hover:text-[var(--neural-blue)] transition-colors mono text-sm">
+                                    hemrajshobharamlamkuche@vitbhopal.ac.in
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-morphism rounded-xl p-6 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-lg bg-[var(--quantum-purple)]/20 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="map-pin" class="w-6 h-6 text-[var(--quantum-purple)]"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs mono text-slate-400 mb-1">LOCATION</div>
+                                <div class="text-white mono text-sm">
+                                    VIT Bhopal University<br/>
+                                    Bhopal-Indore Highway, Sehore, MP, India
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-morphism rounded-xl p-6 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-lg bg-[var(--cyber-green)]/20 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="linkedin" class="w-6 h-6 text-[var(--cyber-green)]"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs mono text-slate-400 mb-1">PROFESSIONAL NETWORK</div>
+                                <a href="https://linkedin.com/in/dr-hemraj-lamkuche-4b760040" target="_blank" class="text-white hover:text-[var(--cyber-green)] transition-colors mono text-sm flex items-center gap-2">
+                                    LinkedIn Profile <i data-lucide="external-link" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 pt-8 border-t border-white/10">
+                        <div class="text-sm mono text-slate-400 mb-4">CONNECT ON</div>
+                        <div class="flex gap-4">
+                            <a href="https://github.com" target="_blank" class="w-12 h-12 rounded-lg glass-morphism flex items-center justify-center hover:bg-white/10 transition-all group">
+                                <i data-lucide="github" class="w-5 h-5 text-slate-400 group-hover:text-white"></i>
+                            </a>
+                            <a href="https://twitter.com" target="_blank" class="w-12 h-12 rounded-lg glass-morphism flex items-center justify-center hover:bg-white/10 transition-all group">
+                                <i data-lucide="twitter" class="w-5 h-5 text-slate-400 group-hover:text-white"></i>
+                            </a>
+                            <a href="https://youtube.com" target="_blank" class="w-12 h-12 rounded-lg glass-morphism flex items-center justify-center hover:bg-white/10 transition-all group">
+                                <i data-lucide="youtube" class="w-5 h-5 text-slate-400 group-hover:text-white"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-morphism rounded-2xl p-8">
+                    <form class="space-y-6">
+                        <div>
+                            <label class="block text-xs mono text-slate-400 mb-2 uppercase">NAME</label>
+                            <input type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--neural-blue)] transition-colors mono" placeholder="Your name" />
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs mono text-slate-400 mb-2 uppercase">EMAIL</label>
+                            <input type="email" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--neural-blue)] transition-colors mono" placeholder="your@email.com" />
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs mono text-slate-400 mb-2 uppercase">SUBJECT</label>
+                            <input type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--neural-blue)] transition-colors mono" placeholder="Research collaboration" />
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs mono text-slate-400 mb-2 uppercase">MESSAGE</label>
+                            <textarea rows="5" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--neural-blue)] transition-colors mono resize-none" placeholder="Your message..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-gradient-to-r from-[var(--neural-blue)] to-[var(--quantum-purple)] rounded-lg py-4 font-bold text-white mono hover:shadow-lg hover:shadow-[var(--neural-blue)]/50 transition-all flex items-center justify-center gap-2 group">
+                            SEND MESSAGE
+                            <i data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </form>
+                    <p class="mt-6 text-xs text-slate-500 text-center mono">
+                        // This form requires backend integration (Formspree, Netlify Forms, etc.)
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--neural-blue)] to-[var(--quantum-purple)] flex items-center justify-center">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-white mono text-sm">DR.HEMRAJ.LAMKUCHE</div>
+                        <div class="text-[10px] text-slate-400 mono">© 2026 ALL RIGHTS RESERVED</div>
+                    </div>
+                </div>
+                
+                <div class="text-xs mono text-slate-500 text-center md:text-right">
+                    CRAFTED WITH <span class="text-[var(--neural-blue)]">◆</span> FOR THE AI ERA<br/>
+                    VIT BHOPAL UNIVERSITY • SCHOOL OF COMPUTING
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('translate-x-full');
         });
-    }
-    return e;
-}
-
-function clearEl(e) { while (e.firstChild) e.removeChild(e.firstChild); }
-
-function makeTable(headers, rows, opts) {
-    opts = opts || {};
-    var table = el('table', { className: 'result-table' });
-    var thead = el('thead');
-    var headRow = el('tr');
-    headers.forEach(function(h) { headRow.appendChild(el('th', { textContent: h })); });
-    thead.appendChild(headRow);
-    table.appendChild(thead);
-    var tbody = el('tbody');
-    rows.forEach(function(row, ri) {
-        var tr = el('tr');
-        if (opts.highlightRow === ri) tr.className = 'highlight-row';
-        row.forEach(function(cell) {
-            if (typeof cell === 'object' && cell.nodeType) {
-                var td = el('td');
-                td.appendChild(cell);
-                tr.appendChild(td);
-            } else if (typeof cell === 'object' && cell.html !== undefined) {
-                var td = el('td');
-                if (cell.cls) td.className = cell.cls;
-                td.textContent = cell.text || '';
-                if (cell.badge) td.appendChild(makeBadge(cell.badge.text, cell.badge.cls));
-                tr.appendChild(td);
+        
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('translate-x-full');
+            });
+        });
+        
+        // Navigation scroll effect
+        let lastScroll = 0;
+        const nav = document.getElementById('main-nav');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                nav.classList.add('glass-morphism', 'shadow-2xl');
             } else {
-                var td = el('td');
-                td.textContent = String(cell);
-                tr.appendChild(td);
+                nav.classList.remove('glass-morphism', 'shadow-2xl');
             }
+            
+            lastScroll = currentScroll;
         });
-        tbody.appendChild(tr);
-    });
-    table.appendChild(tbody);
-    return table;
-}
-
-function makeBadge(text, cls) {
-    return el('span', { className: 'badge ' + (cls || 'badge-info'), textContent: text });
-}
-
-function showResults(id, content) {
-    var container = document.getElementById(id);
-    clearEl(container);
-    if (typeof content === 'string') {
-        container.textContent = content;
-    } else if (content) {
-        container.appendChild(content);
-    }
-    container.classList.add('show');
-}
-
-// ---- API Helpers ----
-function fetchApi(endpoint, body) {
-    return fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    }).then(function(res) {
-        if (!res.ok) throw new Error('API error ' + res.status);
-        return res.json();
-    });
-}
-
-function fetchGet(endpoint) {
-    return fetch(endpoint).then(function(res) {
-        if (!res.ok) throw new Error('API error ' + res.status);
-        return res.json();
-    });
-}
-
-// ---- Math helpers ----
-function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while(b){ var t=b; b=a%b; a=t; } return a; }
-function isPrimeLocal(n) { if(n<2) return false; for(var i=2;i*i<=n;i++) if(n%i===0) return false; return true; }
-
-// ---- GPU Scan ----
-function scanGpu() {
-    var panel = document.getElementById('gpuScanPanel');
-    var btn = document.getElementById('scanBtn');
-    var result = document.getElementById('scanResult');
-    var icon = document.getElementById('scanIcon');
-
-    // Set scanning state
-    panel.className = 'gpu-scan-panel scanning';
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> Scanning...';
-    icon.textContent = '\u23F3'; // hourglass
-    result.className = 'scan-result';
-
-    fetchGet('/api/health')
-        .then(function(health) {
-            gpuStatus = health || {};
-            gpuStatus.available = health.gpu_available || health.cuda_available || false;
-            serverOnline = true;
-
-            var backendEl = document.getElementById('scanBackend');
-            var deviceEl = document.getElementById('scanDevice');
-            var statusEl = document.getElementById('scanStatus');
-
-            if (gpuStatus.available) {
-                // GPU found
-                panel.className = 'gpu-scan-panel gpu-found';
-                icon.textContent = '\uD83D\uDE80'; // rocket
-                btn.innerHTML = '\u2705 GPU Detected — Ready';
-                backendEl.textContent = 'CUDA GPU';
-                backendEl.className = 'value gpu';
-                deviceEl.textContent = health.device_name || 'Unknown GPU';
-                deviceEl.className = 'value gpu';
-                statusEl.textContent = 'All operations will use GPU acceleration';
-                statusEl.className = 'value gpu';
-            } else {
-                // CPU fallback
-                panel.className = 'gpu-scan-panel cpu-mode';
-                icon.textContent = '\uD83D\uDCBB'; // laptop
-                btn.innerHTML = '\u26A0\uFE0F CPU Mode — No GPU Found';
-                backendEl.textContent = 'CPU (fallback)';
-                backendEl.className = 'value cpu';
-                deviceEl.textContent = 'No CUDA-capable GPU detected';
-                deviceEl.className = 'value cpu';
-                statusEl.textContent = 'All operations will run on CPU (slower but functional)';
-                statusEl.className = 'value cpu';
-            }
-
-            result.className = 'scan-result show';
-            updateStatusBadge(health);
-            document.getElementById('offlineBanner').classList.remove('show');
-            document.querySelectorAll('.run-btn').forEach(function(b) { b.disabled = false; });
-        })
-        .catch(function() {
-            // No server — run in client mode
-            panel.className = 'gpu-scan-panel cpu-mode';
-            icon.textContent = '\uD83D\uDCBB';
-            btn.textContent = 'Client Mode \u2014 Ready';
-            btn.disabled = false;
-
-            var backendEl = document.getElementById('scanBackend');
-            var deviceEl = document.getElementById('scanDevice');
-            var statusEl = document.getElementById('scanStatus');
-            backendEl.textContent = 'Browser (client-side)';
-            backendEl.className = 'value cpu';
-            deviceEl.textContent = 'All computations run locally in your browser';
-            deviceEl.className = 'value cpu';
-            statusEl.textContent = 'GCD, Power Map, and Evolution demos fully functional';
-            statusEl.className = 'value cpu';
-
-            result.className = 'scan-result show';
-            document.getElementById('offlineBanner').classList.remove('show');
-            var dot = document.getElementById('statusDot');
-            var txt = document.getElementById('statusText');
-            dot.className = 'status-dot active';
-            txt.textContent = 'Client Mode \u2014 Browser';
-        });
-}
-
-// ---- Status ----
-function updateStatusBadge(health) {
-    var dot = document.getElementById('statusDot');
-    var txt = document.getElementById('statusText');
-    if (health && (health.gpu_available || health.cuda_available)) {
-        dot.className = 'status-dot active';
-        txt.textContent = 'GPU Active \u2014 ' + (health.device_name || 'CUDA');
-    } else {
-        dot.className = 'status-dot';
-        txt.textContent = 'CPU Mode (fallback)';
-    }
-}
-
-function showOfflineBanner() {
-    document.getElementById('offlineBanner').classList.add('show');
-    document.getElementById('statusText').textContent = 'Offline';
-    document.querySelectorAll('.run-btn').forEach(function(b) { b.disabled = true; });
-}
-
-function showTiming(elId, data) {
-    var container = document.getElementById(elId);
-    if (!container) return;
-    clearEl(container);
-    var parts = [];
-    if (data && data.time_us != null) parts.push('\u23F1 ' + data.time_us + '\u00B5s');
-    else if (data && data.time_ms != null) parts.push('\u23F1 ' + data.time_ms + 'ms');
-    if (data && data.backend) parts.push(data.backend === 'cuda' ? 'GPU' : 'CPU');
-    else if (gpuStatus.available) parts.push('GPU');
-    else parts.push('CPU');
-    container.textContent = parts.join(' | ');
-}
-
-// ---- Panel 1: Batch GCD ----
-function runGcd() {
-    var text = document.getElementById('gcdInput').value.trim();
-    var lines = text.split('\n').filter(function(l) { return l.trim(); });
-    var pairs = lines.map(function(l) {
-        var p = l.split(',').map(Number);
-        return [p[0]||0, p[1]||0];
-    });
-
-    function renderGcdResults(data) {
-        var results = data.results || pairs.map(function(p) { return { a: p[0], b: p[1], gcd: gcd(p[0], p[1]) }; });
-        var rows = results.map(function(r) {
-            var g = r.gcd != null ? r.gcd : gcd(r.a, r.b);
-            var cop = g === 1;
-            return [r.a, r.b, g, makeBadge(cop ? 'YES' : 'NO', cop ? 'badge-pass' : 'badge-fail')];
-        });
-        var table = makeTable(['a', 'b', 'gcd(a,b)', 'Coprime?'], rows);
-        showResults('gcdResults', table);
-        showTiming('gcdTiming', data);
-    }
-
-    fetchApi('/api/gcd', { pairs: pairs })
-        .then(renderGcdResults)
-        .catch(function() {
-            renderGcdResults({ results: pairs.map(function(p) { return { a: p[0], b: p[1], gcd: gcd(p[0], p[1]) }; }), time_us: 0, backend: 'local' });
-        });
-}
-
-// ---- Panel 2: Power Map ----
-function runPowerMap() {
-    var labels = document.getElementById('pmLabels').value.split(',').map(Number).filter(function(n) { return !isNaN(n); });
-    var m = parseInt(document.getElementById('pmExp').value) || 2;
-    var modVal = document.getElementById('pmMod').value.trim();
-    var body = { labels: labels, exponent: m };
-    if (modVal) body.modulus = parseInt(modVal);
-
-    function renderPmResults(data) {
-        var before = data.before || labels;
-        var after = data.after || data.results || [];
-        var U64MAX = 18446744073709551615;
-        var hasOverflow = false;
-        var frag = document.createDocumentFragment();
-        var rows = after.map(function(v, i) {
-            var display = v;
-            var isOvf = false;
-            if (v === U64MAX || String(v) === '18446744073709551615') {
-                display = 'OVERFLOW';
-                isOvf = true;
-                hasOverflow = true;
-            } else if (v > 1e9) {
-                display = Number(v).toExponential(2);
-            }
-            var afterTd = el('td', isOvf ? { className: 'overflow-cell' } : {}, [String(display)]);
-            return ['v' + i, before[i] || labels[i], afterTd];
-        });
-        var table = makeTable(['Vertex', 'Before', 'After'], rows);
-        frag.appendChild(table);
-        if (hasOverflow) {
-            var warnBox = el('div', { className: 'warning-box' }, ['Overflow detected! Large exponents can exceed 64-bit range. ']);
-            var retryBtn = el('button', { className: 'btn btn-sm btn-outline' }, ['Retry with modulus 65537']);
-            retryBtn.addEventListener('click', function() {
-                document.getElementById('pmMod').value = '65537';
-                runPowerMap();
-            });
-            warnBox.appendChild(retryBtn);
-            frag.appendChild(warnBox);
+        
+        // Neural Network Canvas Animation
+        const canvas = document.getElementById('neural-canvas');
+        const ctx = canvas.getContext('2d');
+        let animationId;
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
-        showResults('pmResults', frag);
-        showTiming('pmTiming', data);
-    }
-
-    fetchApi('/api/power-map', body)
-        .then(renderPmResults)
-        .catch(function() {
-            var mod = modVal ? BigInt(modVal) : null;
-            var after = labels.map(function(l) {
-                var r = BigInt(l) ** BigInt(m);
-                if (mod) r = r % mod;
-                return Number(r > BigInt(Number.MAX_SAFE_INTEGER) ? BigInt('18446744073709551615') : r);
-            });
-            renderPmResults({ before: labels, after: after, time_us: 0, backend: 'local' });
-        });
-}
-
-// ---- Panel 3: Coprime Check ----
-function loadGraphForCheck() {
-    var g = window.currentGraph;
-    if (!g.vertices.length) return;
-    document.getElementById('ccLabels').value = g.vertices.map(function(v) { return v.label; }).join(',');
-    document.getElementById('ccEdges').value = g.edges.map(function(e) { return e.u + '-' + e.v; }).join(',');
-}
-
-function runCoprimeCheck() {
-    var labels = document.getElementById('ccLabels').value.split(',').map(Number).filter(function(n) { return !isNaN(n); });
-    var edgeStrs = document.getElementById('ccEdges').value.split(',').filter(function(s) { return s.includes('-'); });
-    var edges = edgeStrs.map(function(s) { var p = s.split('-').map(Number); return [p[0], p[1]]; });
-
-    function renderCcResults(data) {
-        var edgeResults = data.edges || data.results || [];
-        var violations = 0;
-        var frag = document.createDocumentFragment();
-        var rows = edgeResults.map(function(e) {
-            var cop = e.coprime !== false && (e.gcd === 1 || e.coprime === true);
-            if (!cop) violations++;
-            var lu = e.label_u != null ? e.label_u : labels[e.u];
-            var lv = e.label_v != null ? e.label_v : labels[e.v];
-            var g = e.gcd != null ? e.gcd : gcd(lu, lv);
-            return [
-                '(v' + e.u + ', v' + e.v + ')',
-                lu + ', ' + lv,
-                g,
-                makeBadge(cop ? '\u2713' : '\u2717', cop ? 'badge-pass' : 'badge-fail')
-            ];
-        });
-        var table = makeTable(['Edge', 'Labels', 'GCD', 'Coprime?'], rows);
-        frag.appendChild(table);
-        if (violations === 0) {
-            frag.appendChild(el('div', { className: 'summary-badge badge-pass', style: 'margin-top:0.75rem' }, ['All Coprime']));
-        } else {
-            frag.appendChild(el('div', { className: 'summary-badge badge-fail', style: 'margin-top:0.75rem' }, [violations + ' violation' + (violations > 1 ? 's' : '')]));
-            edgeResults.filter(function(e) { return e.coprime === false || (e.gcd != null && e.gcd !== 1); }).forEach(function(e) {
-                var lu = e.label_u != null ? e.label_u : labels[e.u];
-                var lv = e.label_v != null ? e.label_v : labels[e.v];
-                var g = e.gcd != null ? e.gcd : gcd(lu, lv);
-                frag.appendChild(el('div', { className: 'edu-msg' }, [
-                    'Edge (v' + e.u + ', v' + e.v + ') has labels ' + lu + ' and ' + lv + '. gcd(' + lu + ',' + lv + ')=' + g + ', not coprime.'
-                ]));
-            });
-        }
-        showResults('ccResults', frag);
-        showTiming('ccTiming', data);
-        renderGraph();
-    }
-
-    fetchApi('/api/coprime-check', { labels: labels, edges: edges })
-        .then(renderCcResults)
-        .catch(function() {
-            var localEdges = edges.map(function(e) {
-                return { u: e[0], v: e[1], label_u: labels[e[0]], label_v: labels[e[1]], gcd: gcd(labels[e[0]], labels[e[1]]), coprime: gcd(labels[e[0]], labels[e[1]]) === 1 };
-            });
-            renderCcResults({ edges: localEdges, time_us: 0, backend: 'local' });
-        });
-}
-
-// ---- Panel 4: Evolve ----
-var evolveData = null;
-var evolveInterval = null;
-var evolveRow = 0;
-
-document.getElementById('evolveSteps').addEventListener('input', function() {
-    document.getElementById('evolveStepVal').textContent = this.value;
-});
-
-function runEvolve() {
-    var labels = document.getElementById('evolveLabels').value.split(',').map(Number).filter(function(n) { return !isNaN(n); });
-    var m = parseInt(document.getElementById('evolveExp').value) || 2;
-    var steps = parseInt(document.getElementById('evolveSteps').value) || 5;
-    var modVal = document.getElementById('evolveMod').value.trim();
-    var preset = document.getElementById('evolvePreset').value;
-    var body = { labels: labels, exponent: m, steps: steps, graph_family: preset };
-    if (modVal) body.modulus = parseInt(modVal);
-
-    function handleEvolveData(data) {
-        evolveData = data.steps || data.history || [];
-        evolveRow = 0;
-        renderEvolveTable();
-        showTiming('evolveTiming', data);
-    }
-
-    fetchApi('/api/evolve', body)
-        .then(handleEvolveData)
-        .catch(function() {
-            var mod = modVal ? BigInt(modVal) : null;
-            var stepData = [{ labels: labels.slice(), coprime: true }];
-            for (var s = 0; s < steps; s++) {
-                var prev = stepData[stepData.length - 1].labels;
-                var next = prev.map(function(l) {
-                    var r = BigInt(l) ** BigInt(m);
-                    if (mod) r = r % mod;
-                    return Number(r > BigInt(Number.MAX_SAFE_INTEGER) ? r % (mod || BigInt('18446744073709551615')) : r);
-                });
-                stepData.push({ labels: next, coprime: true });
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        
+        class Neuron {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 1;
+                this.connections = [];
             }
-            handleEvolveData({ steps: stepData, time_us: 0, backend: 'local' });
-        });
-}
-
-function fmtLabel(v) {
-    if (typeof v === 'string') v = parseFloat(v);
-    if (v > 1e9) return Number(v).toExponential(1);
-    return String(v);
-}
-
-function renderEvolveTable() {
-    if (!evolveData || !evolveData.length) return;
-    var numV = (evolveData[0].labels || evolveData[0]).length || 0;
-    var headers = ['t'];
-    for (var i = 0; i < numV; i++) headers.push('v' + i);
-    headers.push('Coprime?');
-
-    var rows = evolveData.map(function(row, idx) {
-        var labs = row.labels || row;
-        var cells = [String(idx)];
-        if (Array.isArray(labs)) labs.forEach(function(l) { cells.push(fmtLabel(l)); });
-        var cop = row.coprime !== false;
-        cells.push(makeBadge(cop ? 'YES' : 'NO', cop ? 'badge-pass' : 'badge-fail'));
-        return cells;
-    });
-
-    var frag = document.createDocumentFragment();
-    var scrollDiv = el('div', { className: 'table-scroll' });
-    var table = makeTable(headers, rows, { highlightRow: evolveRow });
-    scrollDiv.appendChild(table);
-    frag.appendChild(scrollDiv);
-
-    // Controls
-    var controls = el('div', { className: 'evolve-controls' });
-    var playBtn = el('button', { className: 'btn btn-outline btn-sm', id: 'evolvePlayBtn' }, [evolveInterval ? '\u23F8 Pause' : '\u25B6 Play']);
-    playBtn.addEventListener('click', toggleEvolvePlay);
-    controls.appendChild(playBtn);
-
-    var timeline = document.createElement('input');
-    timeline.type = 'range';
-    timeline.min = '0';
-    timeline.max = String(evolveData.length - 1);
-    timeline.value = String(evolveRow);
-    timeline.id = 'evolveTimeline';
-    timeline.addEventListener('input', function() { scrubEvolve(this.value); });
-    controls.appendChild(timeline);
-
-    controls.appendChild(el('span', { style: 'font-family:var(--mono);font-size:0.8rem' }, ['Step ' + evolveRow + '/' + (evolveData.length - 1)]));
-    frag.appendChild(controls);
-
-    showResults('evolveResults', frag);
-}
-
-function scrubEvolve(val) {
-    evolveRow = parseInt(val);
-    renderEvolveTable();
-}
-
-function toggleEvolvePlay() {
-    if (evolveInterval) {
-        clearInterval(evolveInterval);
-        evolveInterval = null;
-        var btn = document.getElementById('evolvePlayBtn');
-        if (btn) btn.textContent = '\u25B6 Play';
-        return;
-    }
-    var btn = document.getElementById('evolvePlayBtn');
-    if (btn) btn.textContent = '\u23F8 Pause';
-    evolveInterval = setInterval(function() {
-        if (!evolveData) { clearInterval(evolveInterval); evolveInterval = null; return; }
-        evolveRow++;
-        if (evolveRow >= evolveData.length) evolveRow = 0;
-        renderEvolveTable();
-    }, 1000);
-}
-
-// ---- Panel 5: Repair ----
-function loadBrokenExample() {
-    document.getElementById('repairLabels').value = '4,6,9,10';
-    document.getElementById('repairEdges').value = '0-1,1-2,2-3';
-}
-
-function runRepair() {
-    var labels = document.getElementById('repairLabels').value.split(',').map(Number).filter(function(n) { return !isNaN(n); });
-    var edgeStrs = document.getElementById('repairEdges').value.split(',').filter(function(s) { return s.includes('-'); });
-    var edges = edgeStrs.map(function(s) { var p = s.split('-').map(Number); return [p[0], p[1]]; });
-
-    function renderRepairResults(data) {
-        var original = data.original || labels;
-        var repaired = data.repaired || data.new_labels || labels;
-        var changes = data.changes || [];
-        var changedVerts = {};
-        changes.forEach(function(c) { changedVerts[c.vertex] = true; });
-
-        var frag = document.createDocumentFragment();
-        var compare = el('div', { className: 'repair-compare' });
-
-        // Original column
-        var origCol = el('div', { className: 'repair-col' });
-        origCol.appendChild(el('h4', {}, ['Original']));
-        var origRows = original.map(function(l, i) {
-            var td = el('td');
-            td.textContent = String(l);
-            if (changedVerts[i]) td.className = 'diff-old';
-            return ['v' + i, td];
-        });
-        origCol.appendChild(makeTable(['Vertex', 'Label'], origRows));
-        compare.appendChild(origCol);
-
-        // Repaired column
-        var repCol = el('div', { className: 'repair-col' });
-        repCol.appendChild(el('h4', {}, ['Repaired']));
-        var repArr = Array.isArray(repaired) ? repaired : original;
-        var repRows = repArr.map(function(l, i) {
-            var td = el('td');
-            td.textContent = String(l);
-            if (changedVerts[i]) td.className = 'diff-changed';
-            return ['v' + i, td];
-        });
-        repCol.appendChild(makeTable(['Vertex', 'Label'], repRows));
-        compare.appendChild(repCol);
-        frag.appendChild(compare);
-
-        changes.forEach(function(c) {
-            frag.appendChild(el('div', { className: 'edu-msg' }, [
-                'v' + c.vertex + ': ' + c.old_label + ' \u2192 ' + c.new_label + ' (' + (c.reason || 'now coprime') + ')'
-            ]));
-        });
-
-        showResults('repairResults', frag);
-        showTiming('repairTiming', data);
-    }
-
-    fetchApi('/api/repair', { labels: labels, edges: edges })
-        .then(renderRepairResults)
-        .catch(function() {
-            var repaired = labels.slice();
-            var changes = [];
-            edges.forEach(function(e) {
-                var u = e[0], v = e[1];
-                if (gcd(repaired[u], repaired[v]) !== 1) {
-                    var candidate = repaired[v] + 1;
-                    while (gcd(repaired[u], candidate) !== 1) candidate++;
-                    changes.push({ vertex: v, old_label: repaired[v], new_label: candidate, reason: 'gcd was ' + gcd(labels[u], labels[v]) + ', now coprime' });
-                    repaired[v] = candidate;
-                }
-            });
-            renderRepairResults({ original: labels, repaired: repaired, changes: changes, time_us: 0, backend: 'local' });
-        });
-}
-
-// ---- Panel 6: Prime Sieve ----
-function runSieve() {
-    var count = parseInt(document.getElementById('sieveCount').value) || 20;
-    var start = parseInt(document.getElementById('sieveStart').value) || 2;
-
-    function renderSieveResults(data) {
-        var primes = data.primes || [];
-        var grid = el('div', { className: 'prime-grid' });
-        primes.forEach(function(p) {
-            var halfP = (p - 1) / 2;
-            var isSafe = Number.isInteger(halfP) && halfP > 1 && isPrimeLocal(halfP);
-            var badge = el('div', { className: 'prime-badge' }, [String(p)]);
-            if (isSafe) badge.appendChild(el('small', {}, ['safe: (' + halfP + ')']));
-            grid.appendChild(badge);
-        });
-        showResults('sieveResults', grid);
-        showTiming('sieveTiming', data);
-    }
-
-    fetchApi('/api/prime-sieve', { count: count, start: start })
-        .then(renderSieveResults)
-        .catch(function() {
-            var primes = [];
-            var n = start;
-            while (primes.length < count) { if (isPrimeLocal(n)) primes.push(n); n++; }
-            renderSieveResults({ primes: primes, time_us: 0, backend: 'local' });
-        });
-}
-
-// ---- Graph Workspace ----
-var svgNS = 'http://www.w3.org/2000/svg';
-var SVG_W = 700, SVG_H = 450;
-
-function clearGraph() {
-    window.currentGraph = { vertices: [], edges: [] };
-    nextId = 0;
-    selectedVertex = null;
-    renderGraph();
-}
-
-document.getElementById('clearBtn').addEventListener('click', clearGraph);
-
-// Presets
-document.querySelectorAll('.preset-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-        var family = this.dataset.family;
-        var n = parseInt(document.getElementById('nSlider').value);
-        document.querySelectorAll('.preset-btn').forEach(function(b) { b.classList.remove('active'); });
-        this.classList.add('active');
-        loadPreset(family, n);
-    });
-});
-
-document.getElementById('nSlider').addEventListener('input', function() {
-    document.getElementById('nVal').textContent = this.value;
-    var activeBtn = document.querySelector('.preset-btn.active');
-    if (activeBtn) loadPreset(activeBtn.dataset.family, parseInt(this.value));
-});
-
-function loadPreset(family, n) {
-    fetchGet('/api/graph-presets?family=' + family + '&n=' + n)
-        .then(function(data) {
-            if (data && data.vertices) {
-                window.currentGraph = data;
-                nextId = data.vertices.length;
-            } else {
-                generateLocalPreset(family, n);
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
             }
-            forceLayout();
-            renderGraph();
-        })
-        .catch(function() {
-            generateLocalPreset(family, n);
-            forceLayout();
-            renderGraph();
-        });
-}
-
-function generateLocalPreset(family, n) {
-    var verts = [];
-    var edges = [];
-    for (var i = 0; i < n; i++) {
-        verts.push({ id: i, label: PRIMES[i % PRIMES.length], x: SVG_W / 2 + 150 * Math.cos(2 * Math.PI * i / n), y: SVG_H / 2 + 150 * Math.sin(2 * Math.PI * i / n) });
-    }
-    if (family === 'path') {
-        for (var i = 0; i < n - 1; i++) edges.push({ u: i, v: i + 1 });
-    } else if (family === 'cycle') {
-        for (var i = 0; i < n; i++) edges.push({ u: i, v: (i + 1) % n });
-    } else if (family === 'complete') {
-        for (var i = 0; i < n; i++) for (var j = i + 1; j < n; j++) edges.push({ u: i, v: j });
-    } else if (family === 'wheel') {
-        verts[0].x = SVG_W / 2; verts[0].y = SVG_H / 2;
-        for (var i = 1; i < n; i++) {
-            edges.push({ u: 0, v: i });
-            if (i < n - 1) edges.push({ u: i, v: i + 1 });
-        }
-        if (n > 2) edges.push({ u: n - 1, v: 1 });
-    } else if (family === 'hypercube') {
-        var dim = n;
-        var numV = 1 << dim;
-        verts = [];
-        for (var i = 0; i < numV; i++) {
-            verts.push({ id: i, label: PRIMES[i % PRIMES.length], x: SVG_W / 2 + 150 * Math.cos(2 * Math.PI * i / numV), y: SVG_H / 2 + 150 * Math.sin(2 * Math.PI * i / numV) });
-        }
-        for (var i = 0; i < numV; i++) {
-            for (var d = 0; d < dim; d++) {
-                var j = i ^ (1 << d);
-                if (j > i) edges.push({ u: i, v: j });
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 212, 255, 0.6)';
+                ctx.fill();
+                
+                // Glow effect
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#00d4ff';
+                ctx.fill();
+                ctx.shadowBlur = 0;
             }
         }
-    }
-    window.currentGraph = { vertices: verts, edges: edges };
-    nextId = verts.length;
-}
-
-function forceLayout() {
-    var g = window.currentGraph;
-    if (!g.vertices.length) return;
-    var n = g.vertices.length;
-    g.vertices.forEach(function(v, i) {
-        if (v.x == null || v.y == null) {
-            v.x = SVG_W / 2 + 150 * Math.cos(2 * Math.PI * i / n);
-            v.y = SVG_H / 2 + 150 * Math.sin(2 * Math.PI * i / n);
+        
+        const neurons = [];
+        const neuronCount = Math.floor((canvas.width * canvas.height) / 15000);
+        
+        for (let i = 0; i < neuronCount; i++) {
+            neurons.push(new Neuron(
+                Math.random() * canvas.width,
+                Math.random() * canvas.height
+            ));
         }
-    });
-    var k = Math.sqrt((SVG_W * SVG_H) / (n + 1));
-    for (var iter = 0; iter < 100; iter++) {
-        var dx = new Float64Array(n);
-        var dy = new Float64Array(n);
-        for (var i = 0; i < n; i++) {
-            for (var j = i + 1; j < n; j++) {
-                var ddx = g.vertices[i].x - g.vertices[j].x;
-                var ddy = g.vertices[i].y - g.vertices[j].y;
-                var dist = Math.sqrt(ddx * ddx + ddy * ddy) || 1;
-                var force = k * k / dist;
-                var fx = ddx / dist * force;
-                var fy = ddy / dist * force;
-                dx[i] += fx; dy[i] += fy;
-                dx[j] -= fx; dy[j] -= fy;
-            }
-        }
-        g.edges.forEach(function(e) {
-            var ii = e.u, jj = e.v;
-            if (ii >= n || jj >= n) return;
-            var ddx = g.vertices[ii].x - g.vertices[jj].x;
-            var ddy = g.vertices[ii].y - g.vertices[jj].y;
-            var dist = Math.sqrt(ddx * ddx + ddy * ddy) || 1;
-            var force = dist * dist / k;
-            var fx = ddx / dist * force;
-            var fy = ddy / dist * force;
-            dx[ii] -= fx; dy[ii] -= fy;
-            dx[jj] += fx; dy[jj] += fy;
-        });
-        var temp = Math.max(1, 50 * (1 - iter / 100));
-        for (var i = 0; i < n; i++) {
-            var d = Math.sqrt(dx[i] * dx[i] + dy[i] * dy[i]) || 1;
-            g.vertices[i].x += dx[i] / d * Math.min(d, temp);
-            g.vertices[i].y += dy[i] / d * Math.min(d, temp);
-            g.vertices[i].x = Math.max(30, Math.min(SVG_W - 30, g.vertices[i].x));
-            g.vertices[i].y = Math.max(30, Math.min(SVG_H - 30, g.vertices[i].y));
-        }
-    }
-}
-
-function renderGraph() {
-    var svg = document.getElementById('graphSvg');
-    while (svg.firstChild) svg.removeChild(svg.firstChild);
-    var g = window.currentGraph;
-
-    // Draw edges
-    g.edges.forEach(function(e) {
-        var va = g.vertices.find(function(v) { return v.id === e.u; });
-        var vb = g.vertices.find(function(v) { return v.id === e.v; });
-        if (!va || !vb) return;
-        var cop = gcd(va.label, vb.label) === 1;
-        var line = document.createElementNS(svgNS, 'line');
-        line.setAttribute('x1', va.x);
-        line.setAttribute('y1', va.y);
-        line.setAttribute('x2', vb.x);
-        line.setAttribute('y2', vb.y);
-        line.setAttribute('stroke', cop ? '#22c55e' : '#ef4444');
-        line.setAttribute('stroke-width', '2');
-        if (!cop) line.setAttribute('stroke-dasharray', '6,4');
-        line.addEventListener('contextmenu', function(ev) {
-            ev.preventDefault();
-            g.edges = g.edges.filter(function(ed) { return !(ed.u === e.u && ed.v === e.v); });
-            renderGraph();
-        });
-        svg.appendChild(line);
-    });
-
-    // Draw vertices
-    g.vertices.forEach(function(v) {
-        var group = document.createElementNS(svgNS, 'g');
-        group.setAttribute('transform', 'translate(' + v.x + ',' + v.y + ')');
-        group.style.cursor = 'pointer';
-
-        var circle = document.createElementNS(svgNS, 'circle');
-        circle.setAttribute('r', '24');
-        circle.setAttribute('fill', selectedVertex === v.id ? '#2563eb' : '#3b82f6');
-        circle.setAttribute('stroke', selectedVertex === v.id ? '#93c5fd' : '#1e40af');
-        circle.setAttribute('stroke-width', '2');
-        group.appendChild(circle);
-
-        var text = document.createElementNS(svgNS, 'text');
-        text.setAttribute('text-anchor', 'middle');
-        text.setAttribute('dy', '0.35em');
-        text.setAttribute('fill', '#fff');
-        text.setAttribute('font-family', "'JetBrains Mono', monospace");
-        text.setAttribute('font-size', v.label > 999 ? '10' : '13');
-        text.setAttribute('font-weight', '600');
-        text.textContent = v.label > 1e6 ? Number(v.label).toExponential(0) : String(v.label);
-        group.appendChild(text);
-
-        group.addEventListener('mousedown', function(ev) {
-            if (ev.button === 2) return;
-            ev.stopPropagation();
-            dragVertex = v.id;
-            var svgRect = svg.getBoundingClientRect();
-            var scale = SVG_W / svgRect.width;
-            dragOffsetX = (ev.clientX - svgRect.left) * scale - v.x;
-            dragOffsetY = (ev.clientY - svgRect.top) * scale - v.y;
-        });
-
-        group.addEventListener('click', function(ev) {
-            ev.stopPropagation();
-            if (selectedVertex !== null && selectedVertex !== v.id) {
-                toggleEdge(selectedVertex, v.id);
-                selectedVertex = null;
-            } else if (selectedVertex === v.id) {
-                selectedVertex = null;
-            } else {
-                selectedVertex = v.id;
-            }
-            renderGraph();
-        });
-
-        group.addEventListener('dblclick', function(ev) {
-            ev.stopPropagation();
-            var newLabel = prompt('New label for vertex ' + v.id + ':', v.label);
-            if (newLabel !== null && !isNaN(parseInt(newLabel))) {
-                v.label = parseInt(newLabel);
-                renderGraph();
-            }
-        });
-
-        group.addEventListener('contextmenu', function(ev) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            g.edges = g.edges.filter(function(e) { return e.u !== v.id && e.v !== v.id; });
-            g.vertices = g.vertices.filter(function(vert) { return vert.id !== v.id; });
-            if (selectedVertex === v.id) selectedVertex = null;
-            renderGraph();
-        });
-
-        svg.appendChild(group);
-    });
-}
-
-function toggleEdge(u, v) {
-    var g = window.currentGraph;
-    var idx = g.edges.findIndex(function(e) { return (e.u === u && e.v === v) || (e.u === v && e.v === u); });
-    if (idx >= 0) {
-        g.edges.splice(idx, 1);
-    } else {
-        g.edges.push({ u: Math.min(u, v), v: Math.max(u, v) });
-    }
-}
-
-// SVG mouse events
-(function() {
-    var svg = document.getElementById('graphSvg');
-
-    svg.addEventListener('mousemove', function(ev) {
-        if (dragVertex == null) return;
-        var g = window.currentGraph;
-        var v = g.vertices.find(function(vert) { return vert.id === dragVertex; });
-        if (!v) return;
-        var rect = svg.getBoundingClientRect();
-        var scale = SVG_W / rect.width;
-        v.x = Math.max(30, Math.min(SVG_W - 30, (ev.clientX - rect.left) * scale - dragOffsetX));
-        v.y = Math.max(30, Math.min(SVG_H - 30, (ev.clientY - rect.top) * scale - dragOffsetY));
-        renderGraph();
-    });
-
-    svg.addEventListener('mouseup', function() { dragVertex = null; });
-    svg.addEventListener('mouseleave', function() { dragVertex = null; });
-
-    svg.addEventListener('click', function(ev) {
-        if (ev.target !== svg) return;
-        var rect = svg.getBoundingClientRect();
-        var scale = SVG_W / rect.width;
-        var x = (ev.clientX - rect.left) * scale;
-        var y = (ev.clientY - rect.top) * scale;
-        var g = window.currentGraph;
-        var usedLabels = {};
-        g.vertices.forEach(function(v) { usedLabels[v.label] = true; });
-        var label = 2;
-        for (var pi = 0; pi < PRIMES.length; pi++) {
-            if (!usedLabels[PRIMES[pi]]) { label = PRIMES[pi]; break; }
-        }
-        g.vertices.push({ id: nextId++, label: label, x: x, y: y });
-        selectedVertex = null;
-        renderGraph();
-    });
-
-    svg.addEventListener('contextmenu', function(ev) { ev.preventDefault(); });
-})();
-
-// ---- Wire up buttons ----
-document.getElementById('gcdRunBtn').addEventListener('click', runGcd);
-document.getElementById('pmRunBtn').addEventListener('click', runPowerMap);
-document.getElementById('ccLoadBtn').addEventListener('click', loadGraphForCheck);
-document.getElementById('ccRunBtn').addEventListener('click', runCoprimeCheck);
-document.getElementById('repairLoadBtn').addEventListener('click', loadBrokenExample);
-document.getElementById('repairRunBtn').addEventListener('click', runRepair);
-document.getElementById('evolveRunBtn').addEventListener('click', runEvolve);
-document.getElementById('sieveRunBtn').addEventListener('click', runSieve);
-
-// ---- Benchmarks ----
-var FALLBACK_BENCH = {
-    scaling: {
-        sizes: ['1K', '10K', '100K', '1M'],
-        operations: {
-            'GCD': { gpu: [0.05, 0.2, 1.2, 8], cpu: [0.3, 3, 30, 63] },
-            'Power Map': { gpu: [0.04, 0.15, 0.9, 6], cpu: [0.2, 2, 20, 47] },
-            'Sieve': { gpu: [0.06, 0.3, 1.5, 10], cpu: [0.4, 4, 40, 55] }
-        }
-    },
-    throughput: [
-        { kernel: 'batch_gcd', ops_per_sec: 263000000 },
-        { kernel: 'power_map', ops_per_sec: 210000000 },
-        { kernel: 'coprime_check', ops_per_sec: 195000000 },
-        { kernel: 'prime_sieve', ops_per_sec: 180000000 },
-        { kernel: 'evolve', ops_per_sec: 155000000 },
-        { kernel: 'label_repair', ops_per_sec: 140000000 },
-        { kernel: 'brute_search', ops_per_sec: 120000000 },
-        { kernel: 'nist_random', ops_per_sec: 98000000 }
-    ],
-    nist: [
-        { test: 'Frequency (Monobit)', pass: true },
-        { test: 'Block Frequency', pass: true },
-        { test: 'Runs', pass: true },
-        { test: 'Longest Run of Ones', pass: true },
-        { test: 'Binary Matrix Rank', pass: true },
-        { test: 'DFT (Spectral)', pass: true },
-        { test: 'Non-overlapping Template', pass: true },
-        { test: 'Overlapping Template', pass: true },
-        { test: 'Universal Statistical', pass: false },
-        { test: 'Linear Complexity', pass: true },
-        { test: 'Serial', pass: true },
-        { test: 'Approximate Entropy', pass: true },
-        { test: 'Cumulative Sums', pass: true },
-        { test: 'Random Excursions', pass: true },
-        { test: 'Random Excursions Variant', pass: true }
-    ],
-    brute_force: [
-        { graph: 'Path P_8', n: 8, threads: 256, time_ms: 12.4, mcand_s: 82.3, found: true },
-        { graph: 'Cycle C_10', n: 10, threads: 512, time_ms: 45.1, mcand_s: 71.2, found: true },
-        { graph: 'Complete K_6', n: 6, threads: 256, time_ms: 8.7, mcand_s: 95.1, found: true },
-        { graph: 'Wheel W_8', n: 8, threads: 256, time_ms: 23.6, mcand_s: 78.4, found: true },
-        { graph: 'Petersen', n: 10, threads: 512, time_ms: 67.3, mcand_s: 65.8, found: true }
-    ]
-};
-
-function loadBenchmarks() {
-    fetchGet('/api/benchmarks')
-        .then(function(data) { renderBenchmarks(data); })
-        .catch(function() { renderBenchmarks(FALLBACK_BENCH); });
-}
-
-function renderBenchmarks(data) {
-    if (!data) data = FALLBACK_BENCH;
-    renderScalingChart(data.scaling || FALLBACK_BENCH.scaling);
-    renderThroughputChart(data.throughput || FALLBACK_BENCH.throughput);
-    renderNistTable(data.nist || FALLBACK_BENCH.nist);
-    renderBruteTable(data.brute_force || FALLBACK_BENCH.brute_force);
-}
-
-function renderScalingChart(scaling) {
-    var canvas = document.getElementById('chartScaling');
-    var ctx = canvas.getContext('2d');
-    var dpr = window.devicePixelRatio || 1;
-    canvas.width = 560 * dpr;
-    canvas.height = 340 * dpr;
-    ctx.scale(dpr, dpr);
-    canvas.style.width = '100%';
-    canvas.style.height = 'auto';
-
-    var W = 560, H = 340;
-    ctx.fillStyle = '#1e293b';
-    ctx.fillRect(0, 0, W, H);
-
-    ctx.fillStyle = '#e2e8f0';
-    ctx.font = 'bold 13px system-ui, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('GPU vs CPU Scaling', W / 2, 22);
-
-    var sizes = scaling.sizes || ['1K', '10K', '100K', '1M'];
-    var ops = scaling.operations || FALLBACK_BENCH.scaling.operations;
-    var opNames = Object.keys(ops);
-    var op = ops[opNames[0]] || { gpu: [1, 2, 3, 4], cpu: [2, 4, 6, 8] };
-    var allVals = (op.gpu || []).concat(op.cpu || []);
-    var maxVal = Math.max.apply(null, allVals.concat([1]));
-
-    var marginL = 55, marginR = 20, marginT = 40, marginB = 55;
-    var chartW = W - marginL - marginR;
-    var chartH = H - marginT - marginB;
-
-    ctx.strokeStyle = '#475569';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(marginL, marginT);
-    ctx.lineTo(marginL, H - marginB);
-    ctx.lineTo(W - marginR, H - marginB);
-    ctx.stroke();
-
-    var groupW = chartW / sizes.length;
-    var barW = groupW * 0.3;
-
-    sizes.forEach(function(size, i) {
-        var x = marginL + i * groupW + groupW / 2;
-        var gpuH = ((op.gpu || [])[i] || 0) / maxVal * chartH;
-        ctx.fillStyle = '#3b82f6';
-        ctx.fillRect(x - barW - 2, H - marginB - gpuH, barW, gpuH);
-        var cpuH = ((op.cpu || [])[i] || 0) / maxVal * chartH;
-        ctx.fillStyle = '#64748b';
-        ctx.fillRect(x + 2, H - marginB - cpuH, barW, cpuH);
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = '11px system-ui, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(size, x, H - marginB + 18);
-        var gpuV = (op.gpu || [])[i] || 1;
-        var cpuV = (op.cpu || [])[i] || 1;
-        if (cpuV > gpuV) {
-            ctx.fillStyle = '#22c55e';
-            ctx.font = 'bold 10px monospace';
-            ctx.fillText((cpuV / gpuV).toFixed(1) + 'x', x, H - marginB - Math.max(gpuH, cpuH) - 5);
-        }
-    });
-
-    ctx.fillStyle = '#3b82f6';
-    ctx.fillRect(W - 120, marginT + 5, 10, 10);
-    ctx.fillStyle = '#e2e8f0';
-    ctx.font = '11px system-ui, sans-serif';
-    ctx.textAlign = 'left';
-    ctx.fillText('GPU', W - 106, marginT + 14);
-    ctx.fillStyle = '#64748b';
-    ctx.fillRect(W - 120, marginT + 22, 10, 10);
-    ctx.fillStyle = '#e2e8f0';
-    ctx.fillText('CPU', W - 106, marginT + 31);
-
-    ctx.save();
-    ctx.translate(15, H / 2);
-    ctx.rotate(-Math.PI / 2);
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '11px system-ui, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Time (ms) \u2014 ' + opNames[0], 0, 0);
-    ctx.restore();
-
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '11px system-ui, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Problem Size', W / 2, H - 5);
-}
-
-function renderThroughputChart(throughput) {
-    var canvas = document.getElementById('chartThroughput');
-    var ctx = canvas.getContext('2d');
-    var dpr = window.devicePixelRatio || 1;
-    canvas.width = 560 * dpr;
-    canvas.height = 340 * dpr;
-    ctx.scale(dpr, dpr);
-    canvas.style.width = '100%';
-    canvas.style.height = 'auto';
-
-    var W = 560, H = 340;
-    ctx.fillStyle = '#1e293b';
-    ctx.fillRect(0, 0, W, H);
-
-    ctx.fillStyle = '#e2e8f0';
-    ctx.font = 'bold 13px system-ui, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Kernel Throughput (M ops/s)', W / 2, 22);
-
-    var items = throughput || FALLBACK_BENCH.throughput;
-    var maxOps = Math.max.apply(null, items.map(function(i) { return i.ops_per_sec || 0; }).concat([1]));
-
-    var marginL = 130, marginR = 60, marginT = 38, marginB = 15;
-    var chartW = W - marginL - marginR;
-    var barH = Math.min(28, (H - marginT - marginB) / items.length - 4);
-
-    items.forEach(function(item, i) {
-        var y = marginT + i * (barH + 4);
-        var mops = (item.ops_per_sec || 0) / 1e6;
-        var w = (mops / (maxOps / 1e6)) * chartW;
-
-        var grad = ctx.createLinearGradient(marginL, 0, marginL + w, 0);
-        grad.addColorStop(0, '#3b82f6');
-        grad.addColorStop(1, '#8b5cf6');
-        ctx.fillStyle = grad;
-        ctx.fillRect(marginL, y, w, barH);
-
-        ctx.fillStyle = '#e2e8f0';
-        ctx.font = '11px monospace';
-        ctx.textAlign = 'right';
-        ctx.fillText(item.kernel || ('kernel_' + i), marginL - 8, y + barH / 2 + 4);
-
-        ctx.fillStyle = '#94a3b8';
-        ctx.textAlign = 'left';
-        ctx.fillText(mops.toFixed(0) + 'M', marginL + w + 6, y + barH / 2 + 4);
-    });
-}
-
-function renderNistTable(nist) {
-    var tbody = document.getElementById('nistBody');
-    clearEl(tbody);
-    var passCount = 0;
-    var items = nist || FALLBACK_BENCH.nist;
-    items.forEach(function(t) {
-        if (t.pass) passCount++;
-        var tr = el('tr');
-        tr.appendChild(el('td', { textContent: t.test }));
-        var td = el('td');
-        td.appendChild(makeBadge(t.pass ? 'PASS' : 'FAIL', t.pass ? 'badge-pass' : 'badge-fail'));
-        tr.appendChild(td);
-        tbody.appendChild(tr);
-    });
-    var total = items.length;
-    var summaryRow = el('tr');
-    summaryRow.style.fontWeight = '700';
-    summaryRow.style.borderTop = '2px solid var(--card-border)';
-    summaryRow.appendChild(el('td', { textContent: 'Summary' }));
-    var summaryTd = el('td');
-    summaryTd.appendChild(makeBadge(passCount + '/' + total + ' PASS (' + Math.round(passCount / total * 100) + '%)', 'badge-info'));
-    summaryRow.appendChild(summaryTd);
-    tbody.appendChild(summaryRow);
-}
-
-function renderBruteTable(brute) {
-    var tbody = document.getElementById('bruteBody');
-    clearEl(tbody);
-    (brute || FALLBACK_BENCH.brute_force).forEach(function(r) {
-        var tr = el('tr');
-        tr.appendChild(el('td', { textContent: r.graph }));
-        tr.appendChild(el('td', { textContent: String(r.n) }));
-        tr.appendChild(el('td', { textContent: String(r.threads) }));
-        tr.appendChild(el('td', { textContent: String(r.time_ms) }));
-        tr.appendChild(el('td', { textContent: String(r.mcand_s) }));
-        var td = el('td');
-        td.appendChild(makeBadge(r.found ? 'YES' : 'NO', r.found ? 'badge-pass' : 'badge-fail'));
-        tr.appendChild(td);
-        tbody.appendChild(tr);
-    });
-}
-
-// ---- Init ----
-function initApp() {
-    // Auto-scan GPU on page load
-    scanGpu();
-    loadBenchmarks();
-    generateLocalPreset('path', 5);
-    forceLayout();
-    renderGraph();
-}
-
-document.addEventListener('DOMContentLoaded', initApp);
-
-// ---- Theme Toggle ----
-// Note: toggleTheme and scanGpu are both invoked from inline onclick= handlers
-// in the markup. Because this entire script lives inside an IIFE, function
-// declarations are not on `window` and inline handlers can't see them. The
-// `window.x = x` lines below expose only what the HTML needs, keeping the
-// closure isolation otherwise intact.
-function toggleTheme() {
-    var html = document.documentElement;
-    var current = html.getAttribute('data-theme') || 'dark';
-    var next = current === 'dark' ? 'light' : 'dark';
-    html.setAttribute('data-theme', next);
-    try { localStorage.setItem('dcl-theme', next); } catch (e) { /* private mode */ }
-    var btn = document.getElementById('themeToggle');
-    btn.textContent = next === 'dark' ? '\uD83C\uDF19' : '\u2600\uFE0F';
-    // Restart particle colors
-    if (window.bgParticles) {
-        window.bgParticles.forEach(function(p) {
-            var rgb = getComputedStyle(document.documentElement).getPropertyValue('--particle-color').trim();
-            p.rgb = rgb;
-        });
-    }
-}
-
-// Expose the two functions called from inline onclick= attributes in the HTML.
-window.toggleTheme = toggleTheme;
-window.scanGpu = scanGpu;
-
-// Restore saved theme
-(function() {
-    try {
-        var saved = localStorage.getItem('dcl-theme');
-        if (saved === 'light' || saved === 'dark') {
-            document.documentElement.setAttribute('data-theme', saved);
-            var btn = document.getElementById('themeToggle');
-            if (btn) btn.textContent = saved === 'dark' ? '\uD83C\uDF19' : '\u2600\uFE0F';
-        }
-    } catch (e) { /* localStorage may be blocked (private mode, etc.) \u2014 fall back to default theme */ }
-})();
-
-// ---- 3D Particle Network Background ----
-(function() {
-    var canvas = document.getElementById('bgCanvas');
-    if (!canvas) return;
-    var ctx = canvas.getContext('2d');
-    var particles = [];
-    var PARTICLE_COUNT = 60;
-    var CONNECT_DIST = 150;
-    var mouse = { x: -1000, y: -1000 };
-
-    function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    document.addEventListener('mousemove', function(e) {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-    });
-
-    function Particle() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.z = Math.random() * 200 + 50; // depth for 3D effect
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
-        this.vz = (Math.random() - 0.5) * 0.3;
-        this.size = Math.random() * 2 + 1;
-    }
-
-    for (var i = 0; i < PARTICLE_COUNT; i++) {
-        particles.push(new Particle());
-    }
-    window.bgParticles = particles;
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        var style = getComputedStyle(document.documentElement);
-        var rgb = style.getPropertyValue('--particle-color').trim() || '59,130,246';
-
-        for (var i = 0; i < particles.length; i++) {
-            var p = particles[i];
-
-            // Update position
-            p.x += p.vx;
-            p.y += p.vy;
-            p.z += p.vz;
-
-            // Boundary wrap
-            if (p.x < 0) p.x = canvas.width;
-            if (p.x > canvas.width) p.x = 0;
-            if (p.y < 0) p.y = canvas.height;
-            if (p.y > canvas.height) p.y = 0;
-            if (p.z < 20) p.vz = Math.abs(p.vz);
-            if (p.z > 250) p.vz = -Math.abs(p.vz);
-
-            // 3D perspective projection
-            var scale = 200 / (200 + p.z);
-            var sx = (p.x - canvas.width / 2) * scale + canvas.width / 2;
-            var sy = (p.y - canvas.height / 2) * scale + canvas.height / 2;
-            var sz = p.size * scale;
-
-            // Mouse interaction — particles near mouse glow brighter
-            var dx = sx - mouse.x;
-            var dy = sy - mouse.y;
-            var dist = Math.sqrt(dx * dx + dy * dy);
-            var glow = dist < 200 ? (1 - dist / 200) * 0.5 : 0;
-
-            // Draw particle
-            var alpha = (0.3 + glow) * scale;
-            ctx.beginPath();
-            ctx.arc(sx, sy, sz, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(' + rgb + ',' + alpha + ')';
-            ctx.fill();
-
-            // Connect nearby particles with lines
-            for (var j = i + 1; j < particles.length; j++) {
-                var q = particles[j];
-                var qscale = 200 / (200 + q.z);
-                var qx = (q.x - canvas.width / 2) * qscale + canvas.width / 2;
-                var qy = (q.y - canvas.height / 2) * qscale + canvas.height / 2;
-                var ddx = sx - qx;
-                var ddy = sy - qy;
-                var d = Math.sqrt(ddx * ddx + ddy * ddy);
-                if (d < CONNECT_DIST) {
-                    var lineAlpha = (1 - d / CONNECT_DIST) * 0.15 * Math.min(scale, qscale);
-                    ctx.beginPath();
-                    ctx.moveTo(sx, sy);
-                    ctx.lineTo(qx, qy);
-                    ctx.strokeStyle = 'rgba(' + rgb + ',' + lineAlpha + ')';
-                    ctx.lineWidth = 0.5;
-                    ctx.stroke();
+        
+        function drawConnections() {
+            for (let i = 0; i < neurons.length; i++) {
+                for (let j = i + 1; j < neurons.length; j++) {
+                    const dx = neurons[i].x - neurons[j].x;
+                    const dy = neurons[i].y - neurons[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 150) {
+                        const opacity = (1 - distance / 150) * 0.3;
+                        ctx.beginPath();
+                        ctx.moveTo(neurons[i].x, neurons[i].y);
+                        ctx.lineTo(neurons[j].x, neurons[j].y);
+                        ctx.strokeStyle = `rgba(0, 212, 255, ${opacity})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
                 }
             }
         }
-
-        requestAnimationFrame(animate);
-    }
-
-    animate();
-})();
-
-})();
-</script>
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            drawConnections();
+            
+            neurons.forEach(neuron => {
+                neuron.update();
+                neuron.draw();
+            });
+            
+            animationId = requestAnimationFrame(animate);
+        }
+        
+        animate();
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all cards
+        document.querySelectorAll('.card-hover').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+    <script type="module" src="js/dna/main.js"></script>
 </body>
+
 </html>
