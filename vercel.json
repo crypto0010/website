@@ -35,6 +35,17 @@
       "permanent": false
     },
     {
+      "source": "/carpooling/",
+      "has": [
+        {
+          "type": "host",
+          "value": "drhemraj.in"
+        }
+      ],
+      "destination": "https://www.drhemraj.in/carpooling/",
+      "permanent": false
+    },
+    {
       "source": "/dcl-web",
       "destination": "/dcl-web/",
       "permanent": true
