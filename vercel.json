@@ -1,0 +1,71 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:path((?!carpooling(?:/|$)).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.drhemraj.in"
+        }
+      ],
+      "destination": "https://drhemraj.in/:path",
+      "permanent": true
+    },
+    {
+      "source": "/carpooling/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "drhemraj.in"
+        }
+      ],
+      "destination": "https://www.drhemraj.in/carpooling/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/carpooling",
+      "has": [
+        {
+          "type": "host",
+          "value": "drhemraj.in"
+        }
+      ],
+      "destination": "https://www.drhemraj.in/carpooling",
+      "permanent": false
+    },
+    {
+      "source": "/dcl-web",
+      "destination": "/dcl-web/",
+      "permanent": true
+    },
+    {
+      "source": "/galaxy",
+      "destination": "/galaxy/",
+      "permanent": true
+    },
+    {
+      "source": "/vittbi",
+      "destination": "/vittbi/",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/carpooling",
+      "destination": "https://carpooling-weld-iota.vercel.app/carpooling"
+    },
+    {
+      "source": "/carpooling/",
+      "destination": "https://carpooling-weld-iota.vercel.app/carpooling"
+    },
+    {
+      "source": "/carpooling/:path*",
+      "destination": "https://carpooling-weld-iota.vercel.app/carpooling/:path*"
+    },
+    {
+      "source": "/:name([^/.]+)",
+      "destination": "/:name.html"
+    }
+  ]
+}
